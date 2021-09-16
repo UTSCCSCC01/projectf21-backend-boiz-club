@@ -7,4 +7,4 @@
 |Tony Chen|chento24|1005994872|tonyc.chen@mail.utoronto.ca|Discord or email|Hugh Mini#1107|
 |Mark (LiangShu) Chen|chenl146|1006161519|liangshu.chen@mail.utoronto.ca|Discord or email|SaltyNerd#6928|
 ---
-**Discord Chat/Server Invite :** [https://discord.gg/zWw7mu4v3t]
+**Discord Chat/Server Invite :** [https://discord.gg/BhX3zRmJfd]
