@@ -19,5 +19,6 @@ jobs:
       script:
         - npm ci
         - npm install --global expo-cli
+        - yarn add expo
         - npx expo login -u $EXPO_USERNAME -p $EXPO_PASSWORD
         - npx expo publish --non-interactive
