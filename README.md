@@ -1,9 +1,7 @@
-# projectf21-backend-boiz-club
-
-# PAWSUP
+# Pawsup
 
 ## Motivation
-PAWSUP is a platform that serves as a middleman between private pet caretakers and pet owners. Pet caretakers can provide services such as pet walking, pet boarding, and pet sitting.  
+Pawsup is a platform that serves as a middleman between private pet caretakers and pet owners. Pet caretakers can provide services such as pet walking, pet boarding, and pet sitting.  
 
 Unlike large corporations like PetSmart who offer services in a one to many fashion where they will take care of many other pets at the same time, PAWSUP focuses on a one to one service between the caretaker and the pet so pet owners can be assured that their precious pet is getting the undivided attention it needs.  
 
