@@ -32,7 +32,7 @@ node server.js
 ## Contribution
 This repository consists of three core branches:
 #### 1. `main`
-This branch consists of only fully developed and tested features. After a feature is fully tested in the `test` branch, only then it can be merged into `main`.
+This branch consists of only fully developed and tested features. After a feature is fully tested in the `test` branch, only then it can be merged into `main`. Additionally, commits should be squashed before merging into `main`.
 
 #### 2. `test` (Created from `main`)
 This branch is used for integration testing. After an isolated feature is tested in `dev`, it can be merged into `test`
