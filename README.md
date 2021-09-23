@@ -15,18 +15,22 @@ List of tools/dependencies used:
 - React Native
 - [Expo](https://docs.expo.dev/get-started/installation/) (Installation Instructions)
 
-To start the development server (After following the Expo installation instructions)
+To start the development server (After following the Expo installation instructions):
 ```bash
+cd frontend # change directory to frontend
 expo start # OR: npm start
 ```
 ### Backend
 List of tools/dependencies used:
 - node.js
 - express.js
+- [Docker](https://docs.docker.com/get-docker/) (Installation Instructions)
 
-To start the backend server
+To start the backend server (After installing Docker):
 ```bash
-node server.js
+cd backend # change directory to backend
+docker build -t pawsup . # build dockerfile and tag it "pawsup"
+docker container run --name pawsup-container -p <port>:8080 pawsup # run container and expose the <port> port externally
 ```
 
 ## Contribution
