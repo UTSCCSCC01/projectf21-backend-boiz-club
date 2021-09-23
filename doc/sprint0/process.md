@@ -1,29 +1,61 @@
 # Process
 
-## How did you organize the team? Which tools did you use, if any?
+## How did you organize the team?
 
-* When recruiting team members, we have decided to choose members by experience in Software Development. 
+When recruiting team members, we have decided to choose members by experience in Software Development. 
 To keep the work load balanced, we have decided to form a team consisting of 3 members that have experience 
 in Back-End Software Development and 3 memebers that have experience in Front-End Software Development.
-* Team Roles are divided as follows:
-    * Back-End Team:
-        * Tanzim Ahmed
-        * Steven Hans Limantoro
-        * Krutik Tejalkumar Shah
-    * Front-End Team:
-        * Payam Yektamaram
-        * Tony Chen
-        * Mark (LiangShu) Chen
-* The primary method of contact that we have agreed upon is Discord, which supports both messaging and voice calls. 
-Discord allows us to form groups and organize the group into multiple channels, such as a front-end channel for 
-front-end related questions/answers and a back-end channel for back-end related question/answers. This keeps work 
-organized and easy to find for the respective team members. Discord also gives us access to many helpful applications, 
-such as discord bots. Using the discord calendar bot "Sesh", we are able to schedule events such as meetings by voting. 
-It also notifies us on the time of the scheduled event to remind everyone of the event.
-* Sprint Roles are divided as follows:
-    * Tanzim Ahmed - process.md
-    * Steven Hans Limantoro - competitions.md
-    * Krutik Tejalkumar Shah - Backend Skeleton
-    * Payam Yektamaram - personas, UI/UX prototype, team-contract, done.md, front-end skeleton
-    * Tony Chen - Readme.md, UI/UX prototype
-    * Mark (LiangShu) Chen - UI/UX prototype
+
+Team Roles are divided as follows:
+* Back-End Team:
+    * Tanzim Ahmed
+    * Steven Hans Limantoro
+    * Krutik Tejalkumar Shah
+* Front-End Team:
+    * Payam Yektamaram
+    * Tony Chen
+    * Mark (LiangShu) Chen
+
+
+Sprint Tasks are divided as follows:
+* Tanzim Ahmed - Process.md
+* Steven Hans Limantoro - Competition.md
+* Krutik Tejalkumar Shah - Back-End Skeleton
+* Payam Yektamaram - Personas, UI/UX prototype,
+team-contract, Done.md, Front-End skeleton
+* Tony Chen - Readme.md, UI/UX prototype
+* Mark (LiangShu) Chen - UI/UX prototype
+* Shared Roles: Product Backlog
+
+
+## Which tools did you use, if any?
+* The primary method of contact that we have agreed upon is Discord, which supports both messaging and voice 
+calls. Discord allows us to form groups and organize the group into multiple channels, such as a front-end channel
+for front-end related questions/answers and a back-end channel for back-end related question/answers. This keeps
+work organized and easy to find for the respective team members. Discord also gives us access to many helpful
+applications, such as discord bots. Using the discord calendar bot "Sesh", we are able to schedule events such
+as meetings by voting. It also notifies us on the time of the scheduled event to remind everyone of the event.
+* Figma was used to design the UI/UX prototype. Figma gives us access to hundreads of UI templates that we are
+able to use to create the prototype for our project.
+* Canva was used to create personas.
+
+## How did you make decisions?
+* For scheduled meetings, we had to make sure to pick a time when everyone is availabe. So, first we eliminated
+all the possibilities where someone could not make it through discussion on Discord. Afterwards, we held a vote
+on Discord to choose between the timings where everyone was available.
+* When choosing a project to work on, we first collected all the information that we can find about the project
+and listed them so that everyone can have an opinion on each project. Then, as a group, we discussed which
+project seemed the most useful based on the information collected and if the project in question was able to
+be completed within the time frame we have base on the level of experience that we have in Software Development.
+
+## How frequently did you meet?
+We hold meetings every other day of the week, typically at 8pm as voted by majority of the group. However, if
+need be, we hold meetings during important informational events such as meetings with start up owners or in
+the case a group member requests an urgent meeting.
+
+Meetings:
+
+* Sept 17th - Decide on which project we would like to work on, discuss requirements for sprint 0 and divide work
+* Sept 20th - Discuss and decide on the tech used for Front-End Development and Back-End Development
+* Sept 21st - Meet with product owners of PawsUp and discuss features of the application in depth
+* Sept 22nd - Discuss and complete Product Backlog on Jira
