@@ -11,7 +11,7 @@ This project is for the mobile application of PAWSUP.
 
 ## Installation
 ### Frontend
-List of tools used:
+List of tools/dependencies used:
 - React Native
 - [Expo](https://docs.expo.dev/get-started/installation/) (Installation Instructions)
 
@@ -20,9 +20,13 @@ To start the development server (After following the Expo installation instructi
 expo start # OR: npm start
 ```
 ### Backend
-List of tools used:
-```
-!!!TODO!!!
+List of tools/dependencies used:
+- node.js
+- express.js
+
+To start the backend server (After following the Expo installation instructions)
+```bash
+node server.js
 ```
 
 ## Contribution
