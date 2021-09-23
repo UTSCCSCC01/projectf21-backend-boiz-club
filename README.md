@@ -24,7 +24,7 @@ List of tools/dependencies used:
 - node.js
 - express.js
 
-To start the backend server (After following the Expo installation instructions)
+To start the backend server
 ```bash
 node server.js
 ```
