@@ -14,7 +14,10 @@ Sarah Gallagher, 26 years old, is the proud owner of a cat named "Milo" which me
 
 David is a 31-year old Toronto native and has been working as an animal care worker at Toronto Animal Services for over 15 years. David's greatest joy in life is taking care of pets. As an animal care worker, he trains, and feeds many different animals like cats and dogs. In his spare time, he often offers freelance services to take care of other people's pets. 
 
-## No Name - Admin
+## Christine Crawford - Admin
+
+Christine has been working as an administrator at PawsUp. In her day-to-day job, she is in charge of ensuring pet owners are identified by government ID so that each owner is accountable for their pets. Christine is also in charge of approving/disapproving products and services from the marketplace to maintain Pawsup as a trustworthy and reliable platform that provides unique services. In his spare time.
+
 <br />
 
 # Key Scenarios
@@ -27,6 +30,11 @@ Sarah installs the app from the app store and creates an account. However, she n
 David has nothing planned for the weekend and wants to put an advertisement out that he is offering animal caregiving services. David usually prints and posts flyers to attract customers however he hasn't been having luck with this strategy as of late. He remembers that his co-worker Bastel used to offer services on this app called "Pawsup". 
 
 He installs the app from the app store and creates an account. He gains the ability to post on the services board after getting his account verified by uploading a piece of government identification. He makes a post that he is available to look after small and medium-sized dogs this weekend. The following day he opens the app and checks the messages section where he notices that he has several requests for his services. He approves all three requests and is super excited to take care of the animals.
+
+## Christine Verifies Pet Owners, and Regulates Store Products and Services
+Christine is back at work during a busy monday morning. She has two main tasks, verify pet owners using their government id and to regulate the store for products and services such that Pawsup mantains its reputation as a trustworthy and reliable platform that provides unique services.
+
+Having worked for many years, Christine understands that customers always come first. With that in mind, she begins work by first checking the list of pet owners (potential customers) that have requested verification to get instant access to all of PawsUp services. She then reviews the information provided by the pet owner and approves or disapproves their verification request. Verification is very important at PawsUp as it allows pet owners to be held accountable for their pets. Once the customers are delt with, Christine shifts her focus to the products and services. With first glance, she isolates all the duplicate products and services that are listed by providers. She verifies the quality of the products and services and removes the least qualified ones, ensuring products and services are unique and high qulity. Ensuring products and services are uniue allows small start ups that provide high quality work to be recognized.
 
 # Key Principles
 
