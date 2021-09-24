@@ -29,18 +29,19 @@ team-contract, Done.md, Front-End skeleton
 
 
 ## Which tools did you use, if any?
-* The primary method of contact that we have agreed upon is Discord, which supports both messaging and voice 
-calls. Discord allows us to form groups and organize the group into multiple channels, such as a front-end channel
-for front-end related questions/answers and a back-end channel for back-end related question/answers. This keeps
-work organized and easy to find for the respective team members. Discord also gives us access to many helpful
-applications, such as discord bots. Using the discord calendar bot "Sesh", we are able to schedule events such
-as meetings by voting. It also notifies us on the time of the scheduled event to remind everyone of the event.
-* Figma was used to design the UI/UX prototype. Figma gives us access to hundreads of UI templates that we are
-able to use to create the prototype for our project.
+* The primary method of contact that we have agreed upon is Discord, which supports both messaging and voice calls.
+ Discord allows us to form groups and organize the group into multiple channels, such as a front-end channel for 
+ front-end related questions/answers and a back-end channel for back-end related question/answers. This keepswork 
+ organized and easy to find for the respective team members. 
+* Discord also gives us access to many helpful applications, such as discord bots. Using the discord calendar bot 
+"Sesh", we are able to schedule events such as meetings by voting. It also notifies us on the time of the scheduled 
+event to remind everyone of the event.
+* Figma was used to design the UI/UX prototype. Figma gives us access to hundreads of UI templates that we are able 
+to use to create the prototype for our project.
 * Canva was used to create personas.
 
 ## How did you make decisions?
-* For scheduled meetings, we had to make sure to pick a time when everyone is availabe. So, first we eliminated
+* When scheduled meetings, we had to make sure to pick a time when everyone is availabe. So, first we eliminated
 all the possibilities where someone could not make it through discussion on Discord. Afterwards, we held a vote
 on Discord to choose between the timings where everyone was available.
 * When choosing a project to work on, we first collected all the information that we can find about the project
