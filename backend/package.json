@@ -1,15 +1,14 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "description": "Backend endpoitn for Pawsup",
+  "description": "Backend API for Pawsup",
   "main": "server.js",
-  "scripts": {
-  },
+  "scripts": {},
   "author": "",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.19.0",
     "express": "^4.17.1",
-    "mongodb": "^2.2.16"
+    "mongodb": "^4.1.2"
   }
 }
