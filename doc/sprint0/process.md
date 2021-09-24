@@ -19,7 +19,7 @@ Team Roles are divided as follows:
 
 Sprint Tasks are divided as follows:
 * Tanzim Ahmed - Process.md
-* Steven Hans Limantoro - Competition.md
+* Steven Hans Limantoro - Competition.md, Persona
 * Krutik Tejalkumar Shah - Back-End Skeleton
 * Payam Yektamaram - Personas, UI/UX prototype,
 team-contract, Done.md, Front-End skeleton
