@@ -2,17 +2,19 @@ const express = require("express");
 const { urlencoded } = require('body-parser');
 const { MongoClient, ServerApiVersion } = require('mongodb');
 
-const username = process.env.DB_USER
-const passwd = process.env.DB_PASSWORD
-const uri = "mongodb+srv://" + username + ":" + passwd + "@data.psveh.mongodb.net/dev_pawsup?retryWrites=true&w=majority";
+const username = process.env.DB_USER;
+const passwd = process.env.DB_PASSWORD;
+const db_name = process.env.DB_NAME;
+
+const uri = `mongodb+srv://${username}:${passwd}@data.psveh.mongodb.net/${db_name}?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion?.v1 });
 
-let dev_db;
+let db;
 let test_collection;
 
 client.connect(err => {
-	dev_db = client.db("dev_pawsup")
-	test_collection = dev_db.collection("test");
+	db = client.db(db_name)
+	test_collection = db.collection("test");
 	// perform actions on the collection object
 });
 
