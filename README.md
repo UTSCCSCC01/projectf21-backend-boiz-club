@@ -26,7 +26,7 @@ List of tools/dependencies used:
 
 **Note**: You need to have the `env.txt` file in order to run the backend, please email [Payam Yektamaram](mailto:payam.yektamaram@mail.utoronto.ca). 
 
-To start the backend server (After installing Docker):
+To start the backend server (after installing Docker) and adding `env.txt` under `backend` directory:
 ```bash
 cd backend # change directory to backend
 docker build -t pawsup . # build dockerfile and tag it "pawsup"
