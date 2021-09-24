@@ -34,7 +34,7 @@ He installs the app from the app store and creates an account. He gains the abil
 ## Christine Verifies Pet Owners, and Regulates Store Products and Services
 Christine is back at work during a busy monday morning. She has two main tasks, verify pet owners using their government id and to regulate the store for products and services such that Pawsup mantains its reputation as a trustworthy and reliable platform that provides unique services.
 
-Having worked for many years, Christine understands that customers always come first. With that in mind, she begins work by first checking the list of pet owners (potential customers) that have requested verification to get instant access to all of PawsUp services. 
+Having worked for many years, Christine understands that customers always come first. With that in mind, she begins work by first checking the list of pet owners (potential customers) that have requested verification to get instant access to all of PawsUp services. She then reviews the information provided by the pet owner and approves or disapproves their verification request. Verification is very important at PawsUp as it allows pet owners to be held accountable for their pets. Once the customers are delt with, Christine shifts her focus to the products and services. With first glance, she isolates all the duplicate products and services that are listed by providers. She verifies the quality of the products and services and removes the least qualified ones, ensuring products and services are unique and high qulity. Ensuring products and services are uniue allows small start ups that provide high quality work to be recognized.
 
 # Key Principles
 
