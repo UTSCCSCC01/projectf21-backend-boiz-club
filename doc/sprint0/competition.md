@@ -1,4 +1,4 @@
-Competitive Analysis
+# Competitive Analysis
 
 The project will primarily target younger people -- young adults to middle-aged people. The priority is aimed towards students since they are more likely to own
 pets during their time in university. The project is also suitable for young people who have a really stable job and travel often, so that they can leave their
