@@ -18,11 +18,11 @@ Team Roles are divided as follows:
 
 
 Sprint Tasks are divided as follows:
-* Tanzim Ahmed - Process.md
-* Steven Hans Limantoro - Competition.md, Persona, Criteria of Satisfaction (CoS)
-* Krutik Tejalkumar Shah - Back-End Skeleton
-* Payam Yektamaram - Personas, UI/UX prototype,
-team-contract, Done.md, Front-End skeleton
+* Tanzim Ahmed - Process.md, Summary.md, Personas
+* Steven Hans Limantoro - Competition.md, Personas
+* Krutik Tejalkumar Shah - Back-End Skeleton (setup)
+* Payam Yektamaram - Summary.md, Personas, UI/UX prototype,
+team-contract, Done.md, Front-End skeleton (setup)
 * Tony Chen - Readme.md, UI/UX prototype
 * Mark (LiangShu) Chen - UI/UX prototype
 * Shared Roles: Product Backlog
@@ -60,3 +60,24 @@ Meetings:
 * Sept 20th - Discuss and decide on the tech used for Front-End Development and Back-End Development
 * Sept 21st - Meet with product owners of PawsUp and discuss features of the application in depth
 * Sept 22nd - Discuss and complete Product Backlog on Jira
+* Sept 23nd - Review finished tasks and help others with their unfinished tasks
+
+## How did you define priority and/or points of user stories?
+
+Priority of user stories is defined using the following process:
+* Meet with product owners and discuss the core features of the application and prioritize them first.
+* Meet with team members and and argue which remaining features are vital to the application and makes application unique
+    * Priotiry is given by strength of argument
+* Prioritize stories that enhance user experience (for both customer and service providers)
+
+## What lessons should you take forward to the next phase?
+* Things that we have done well this phase:
+    * A voting system on Discord to choose meeting times. This is important because not everyone lives in the same time zone,
+    so we need to set times where everyone is able to make it to the meeting.
+    * Having arguments over priority of user stories. Everyone has different opinions and it is worth listening to them 
+    so that we can choose what is best as a team.
+
+* Things we can do better moving forward:
+    * Start as early as possible. Starting early not only ensures that tasks are complete on time, but also allows us to make time
+    for refinement.
+    * Divide work as early as possible. This ensures that no task is left untouched and everyone in the team has something to do.
