@@ -14,7 +14,7 @@ Sarah Gallagher, 26 years old, is the proud owner of a cat named "Milo" which me
 
 David is a 31-year old Toronto native and has been working as an animal care worker at Toronto Animal Services for over 15 years. David's greatest joy in life is taking care of pets. As an animal care worker, he trains, and feeds many different animals like cats and dogs. In his spare time, he often offers freelance services to take care of other people's pets. 
 
-## Malcom West - Admin
+## No Name - Admin
 <br />
 
 # Key Scenarios
@@ -32,3 +32,6 @@ He installs the app from the app store and creates an account. He gains the abil
 
 ## Simplicity Over Pazazz
 It is easy to get carried away when working on a project however it is vital to stick the product backlog and not add extra features that are not essential to the product. There is no need to overcomplicate things in hopes of impressing future users of the software. It is vital we satisfy user needs by providing the most simple application that can encapsulate all the project requirements.
+
+## Core Functionality First
+It is tempting as a developer to constantly want to work on the most interesting and exciting tasks. However, we mustn't ignore the priority of our backlog in hopes of personal fulfillment. Our responsibility as a team is to deliver the most crucial functionality before we start dabbling in making everything look like a work of art. It is vital we do not get tempted to work on non-crucial tasks and forgot what tasks are of utmost priority to both users and the product owners.
