@@ -24,11 +24,13 @@ List of tools/dependencies used:
 - express.js
 - [Docker](https://docs.docker.com/get-docker/) (Installation Instructions)
 
-To start the backend server (After installing Docker):
+**Note**: You need to have the `env.txt` file in order to run the backend, please email [Payam Yektamaram](mailto:payam.yektamaram@mail.utoronto.ca). 
+
+To start the backend server (after installing Docker) and adding `env.txt` under `backend` directory:
 ```bash
 cd backend # change directory to backend
 docker build -t pawsup . # build dockerfile and tag it "pawsup"
-docker container run --name pawsup-container -p <port>:8080 pawsup # run container and expose the <port> port externally
+docker container run --env-file env.txt --name pawsup-container -p <port>:8080 pawsup # run container and expose the <port> port externally
 ```
 
 ## Contribution
