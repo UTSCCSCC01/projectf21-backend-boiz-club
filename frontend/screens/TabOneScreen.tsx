@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { StyleSheet, Button, Alert } from 'react-native';
-import getHealth from '../services/backend';
+import {getHealth, addItem} from '../services/backend';
 
 import EditScreenInfo from '../components/EditScreenInfo';
 import { Text, View } from '../components/Themed';
@@ -12,6 +12,7 @@ export default function TabOneScreen({ navigation }: RootTabScreenProps<'TabOne'
       <Text style={styles.title}>Pawsup</Text>
       <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
       <Button title="Check Health of Backend" onPress={async () => Alert.alert(await getHealth())} />
+      <Button title="Add Item to Backend" onPress={async () => Alert.alert(await addItem())} />
     </View>
   );
 }
