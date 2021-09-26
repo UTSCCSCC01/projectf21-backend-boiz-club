@@ -11,4 +11,3 @@ async function addItem () {
 }
 
 export {getHealth, addItem}
-export {getHealth, addItem}
