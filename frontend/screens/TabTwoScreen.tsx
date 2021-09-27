@@ -4,7 +4,7 @@ import { StyleSheet, Button } from 'react-native';
 import EditScreenInfo from '../components/EditScreenInfo';
 import { Text, View } from '../components/Themed';
 import { useAppSelector, useAppDispatch } from '../hooks/react-redux'
-import {increment, decrement, incrementByAmount} from '../stores/counter'
+import {increment, decrement, incrementByAmount} from '../redux/counter'
 
 export default function TabTwoScreen() {
   // The `state` arg is correctly typed as `RootState` already
