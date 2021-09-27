@@ -1,14 +1,14 @@
 import * as React from 'react';
-import {StyleSheet, Button} from 'react-native';
+import { StyleSheet, Button } from 'react-native';
 
 import EditScreenInfo from '@/components/EditScreenInfo';
-import {Text, View} from '@/components/Themed';
-import {useAppSelector, useAppDispatch} from '@/hooks/react-redux';
-import {increment, decrement, incrementByAmount} from '@/stores/counter';
+import { Text, View } from '@/components/Themed';
+import { useAppSelector, useAppDispatch } from '@/hooks/react-redux';
+import { increment, decrement, incrementByAmount } from '@/stores/counter';
 
 export default function TabTwoScreen() {
   // The `state` arg is correctly typed as `RootState` already
-  const count = useAppSelector(state => state.counter.value);
+  const count = useAppSelector((state) => state.counter.value);
   const dispatch = useAppDispatch();
   return (
     <View style={styles.container}>

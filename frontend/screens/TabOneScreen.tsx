@@ -1,16 +1,16 @@
 import * as React from 'react';
-import {StyleSheet, Button, Alert} from 'react-native';
-import {getHealth, addItem} from '@/services/backend';
+import { StyleSheet, Button, Alert } from 'react-native';
+import { getHealth, addItem } from '@/services/backend';
 
 import EditScreenInfo from '@/components/EditScreenInfo';
-import {Text, View} from '@/components/Themed';
-import {RootTabScreenProps} from '@/types';
-import {useAppSelector} from '@/hooks/react-redux';
+import { Text, View } from '@/components/Themed';
+import { RootTabScreenProps } from '@/types';
+import { useAppSelector } from '@/hooks/react-redux';
 
 export default function TabOneScreen({
   navigation,
 }: RootTabScreenProps<'TabOne'>) {
-  const count = useAppSelector(state => state.counter.value);
+  const count = useAppSelector((state) => state.counter.value);
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Pawsup</Text>
