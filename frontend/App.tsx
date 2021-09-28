@@ -5,11 +5,12 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import useCachedResources from '@/hooks/useCachedResources';
 import useColorScheme from '@/hooks/useColorScheme';
 import Navigation from '@/navigation';
+import StorybookUIRoot from './storybook';
 
 import store from '@/redux';
 import { Provider } from 'react-redux';
 
-export default function App() {
+const App = () => {
   const isLoadingComplete = useCachedResources();
   const colorScheme = useColorScheme();
 
@@ -25,4 +26,6 @@ export default function App() {
       </SafeAreaProvider>
     );
   }
-}
+};
+
+export default process.env.LOAD_STORYBOOK === 'true' ? StorybookUIRoot : App;
