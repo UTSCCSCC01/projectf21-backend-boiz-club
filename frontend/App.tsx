@@ -8,6 +8,7 @@ import Navigation from '@/navigation';
 import StorybookUIRoot from './storybook';
 
 import store from '@/redux';
+import Constants from 'expo-constants';
 import { Provider } from 'react-redux';
 
 const App = () => {
@@ -28,4 +29,4 @@ const App = () => {
   }
 };
 
-export default process.env.LOAD_STORYBOOK === 'true' ? StorybookUIRoot : App;
+export default Constants.manifest?.extra.LOAD_STORYBOOK ? StorybookUIRoot : App;
