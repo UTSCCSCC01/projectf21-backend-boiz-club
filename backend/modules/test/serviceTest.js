@@ -5,8 +5,8 @@ const ApiError = require("../../error/ApiError");
 
 module.exports = {
   /**
-   * Checks creates a Test
-   * @param {Object} body - test body
+   * Checks and creates a Test
+   * @param {Object} body - Request body
    */
   testBody: async (body) => {
     const { message } = body;

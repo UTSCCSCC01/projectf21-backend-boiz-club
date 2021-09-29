@@ -14,8 +14,8 @@ const Test = mongoose.model("Test", testSchema);
 
 module.exports = {
   /**
-   * Creates new user
-   * @param {Object} body - user credentials
+   * Creates new Test
+   * @param {Object} body - Request body
    */
   postTest: async (body) => {
     const { message } = body;

@@ -10,7 +10,7 @@ const payloadSchema = Joi.object().keys({
 });
 
 module.exports = (app) => {
-  // Route for post create new test if message in payload is "Dont fail"
+  // Route for creating a new Test if message in payload is "Dont fail"
   app.post("/test", async (req, res, next) => {
     try {
       // Validate payload
