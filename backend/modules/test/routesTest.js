@@ -4,7 +4,7 @@ const testService = require('./serviceTest');
 
 const ApiError = require('../../error/ApiError');
 
-const {body, validationResult, checkSchema} = require('express-validator');
+const {validationResult, checkSchema} = require('express-validator');
 
 const testSchema = {
   message: {
