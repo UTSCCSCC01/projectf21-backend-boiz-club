@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, Text, Button, HStack, useColorModeValue } from 'native-base';
+import { View, Text, Button, HStack } from 'native-base';
 
 import EditScreenInfo from '@/components/EditScreenInfo';
 import { useAppSelector, useAppDispatch } from '@/hooks/react-redux';
@@ -10,13 +10,9 @@ export default function Services() {
   const count = useAppSelector((state) => state.counter.value);
   const dispatch = useAppDispatch();
 
-  const colorScheme = useColorModeValue('black', 'white');
-
   return (
     <View flex={1} alignItems="center" justifyContent="center">
-      <Text fontSize="2xl" style={{ color: colorScheme }}>
-        Services
-      </Text>
+      <Text fontSize="2xl">Services</Text>
       <View marginY={30} height={1} width="80%" />
       <EditScreenInfo path="/screens/Services.tsx" />
       <Text>{`Global Counter Variable :${count}`}</Text>

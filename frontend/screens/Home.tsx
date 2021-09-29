@@ -8,6 +8,7 @@ import EditScreenInfo from '@/components/EditScreenInfo';
 
 export default function Home() {
   const count = useAppSelector((state) => state.counter.value);
+
   return (
     <View flex={1} alignItems="center" justifyContent="center">
       <Text fontSize="lg" bold>
