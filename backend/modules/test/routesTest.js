@@ -4,13 +4,21 @@ const testService = require('./serviceTest');
 
 const ApiError = require('../../error/ApiError');
 
-const {body, validationResult} = require('express-validator');
+const {body, validationResult, checkSchema} = require('express-validator');
+
+const testSchema = {
+  message: {
+    notEmpty: true,
+    // escape: true, // Escapes symbols
+    errorMessage: 'Please enter a valid message',
+  },
+};
 
 module.exports = (app) => {
   // Route for creating a new Test if message in payload is "Dont fail"
   app.post('/test',
       // Validate & sanitize payload
-      body('message').escape().notEmpty().withMessage('Please enter a message'),
+      checkSchema(testSchema),
       // Handle request
       async (req, res, next) => {
         try {
@@ -20,7 +28,7 @@ module.exports = (app) => {
             throw ApiError.badRequestError('Bad request', errors.array());
           }
           // Process data
-          const result = await testService.testBody(body);
+          const result = await testService.testBody(req.body);
           res.json(result);
         } catch (error) {
           next(error);
