@@ -2,9 +2,11 @@
 
 const ApiError = require('./ApiError');
 module.exports = (err, req, res, next) => {
-  console.log('Error: ', err);
+  console.error('Error: ', err);
   if (err instanceof ApiError) {
-    res.status(err.code).json({status: err.code, message: err.message});
+    res.status(err.code).json({status: err.code,
+      message: err.message,
+      errors: err.errors});
     return;
   } else if (err instanceof SyntaxError) {
     res.status(400).json({status: 400, message: 'Invalid payload'});
