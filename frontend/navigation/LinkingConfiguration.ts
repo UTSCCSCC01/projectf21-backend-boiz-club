@@ -15,14 +15,29 @@ const linking: LinkingOptions<RootStackParamList> = {
     screens: {
       Root: {
         screens: {
-          TabOne: {
+          Home: {
             screens: {
-              TabOneScreen: 'one',
+              HomeScreen: 'home',
             },
           },
-          TabTwo: {
+          Services: {
             screens: {
-              TabTwoScreen: 'two',
+              ServicesScreen: 'services',
+            },
+          },
+          Store: {
+            screens: {
+              StoreScreen: 'store',
+            },
+          },
+          Account: {
+            screens: {
+              AccountScreen: 'store',
+            },
+          },
+          Cart: {
+            screens: {
+              CartScreen: 'cart',
             },
           },
         },
