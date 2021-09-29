@@ -1,50 +1,30 @@
 import * as React from 'react';
-import { StyleSheet, Button, Alert } from 'react-native';
+import { View, Button, HStack, Text } from 'native-base';
 import { getHealth, addItem } from '@/services/backend';
 
-import EditScreenInfo from '@/components/EditScreenInfo';
-import { Text, View } from '@/components/Themed';
 import { RootTabScreenProps } from '@/types';
 import { useAppSelector } from '@/hooks/react-redux';
+import { Alert } from 'react-native';
+import EditScreenInfo from '@/components/EditScreenInfo';
 
 export default function TabOneScreen({
   navigation,
 }: RootTabScreenProps<'TabOne'>) {
   const count = useAppSelector((state) => state.counter.value);
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Pawsup</Text>
-      <Text>{`Global Counter Variable :${count}`}</Text>
-      <View
-        style={styles.separator}
-        lightColor="#eee"
-        darkColor="rgba(255,255,255,0.1)"
-      />
-      <Button
-        title="Check Health of Backend"
-        onPress={async () => Alert.alert(await getHealth())}
-      />
-      <Button
-        title="Add Item to Backend"
-        onPress={async () => Alert.alert(await addItem())}
-      />
+    <View flex={1} alignItems="center" justifyContent="center">
+      <Text fontSize="lg" bold>Pawsup</Text>
+      <Text fontSize="md">{`Global Counter Variable :${count}`}</Text>
+      <View marginY={30} height={1} width="80%" />
+      <EditScreenInfo path="/screens/TabOneScreen.tsx" />
+      <HStack space={2}>
+        <Button onPress={async () => Alert.alert(await getHealth())}>
+          Check Health of Backend
+        </Button>
+        <Button onPress={async () => Alert.alert(await addItem())}>
+          Add Item to Backend
+        </Button>
+      </HStack>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
-  },
-});

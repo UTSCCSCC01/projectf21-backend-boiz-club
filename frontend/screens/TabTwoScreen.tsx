@@ -1,8 +1,7 @@
 import * as React from 'react';
-import { StyleSheet, Button } from 'react-native';
+import { View, Text, Button, HStack } from 'native-base';
 
 import EditScreenInfo from '@/components/EditScreenInfo';
-import { Text, View } from '@/components/Themed';
 import { useAppSelector, useAppDispatch } from '@/hooks/react-redux';
 import { increment, decrement, incrementByAmount } from '@/redux/counter';
 
@@ -11,35 +10,16 @@ export default function TabTwoScreen() {
   const count = useAppSelector((state) => state.counter.value);
   const dispatch = useAppDispatch();
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Tab Two</Text>
-      <View
-        style={styles.separator}
-        lightColor="#eee"
-        darkColor="rgba(255,255,255,0.1)"
-      />
+    <View flex={1} alignItems="center" justifyContent="center">
+      <Text fontSize="2xl">Tab Two</Text>
+      <View marginY={30} height={1} width="80%" />
       <EditScreenInfo path="/screens/TabTwoScreen.tsx" />
       <Text>{`Global Counter Variable :${count}`}</Text>
-      <Button title={'+'} onPress={() => dispatch(increment())} />
-      <Button title={'-'} onPress={() => dispatch(decrement())} />
-      <Button title={'+33'} onPress={() => dispatch(incrementByAmount(33))} />
+      <HStack space={3}>
+        <Button onPress={() => dispatch(increment())}>+</Button>
+        <Button onPress={() => dispatch(decrement())}> -</Button>
+        <Button onPress={() => dispatch(incrementByAmount(33))}> +33 </Button>
+      </HStack>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
-  },
-});
