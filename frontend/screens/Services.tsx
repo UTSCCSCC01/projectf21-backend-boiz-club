@@ -15,7 +15,7 @@ export default function Services() {
   return (
     <View flex={1} alignItems="center" justifyContent="center">
       <Text fontSize="2xl" style={{ color: colorScheme }}>
-        Tab Two
+        Services
       </Text>
       <View marginY={30} height={1} width="80%" />
       <EditScreenInfo path="/screens/Services.tsx" />
