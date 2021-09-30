@@ -23,10 +23,7 @@ module.exports = {
       } else {
         const details = {
           'timestamp': otpInstance.created_at,
-<<<<<<< HEAD
           'email': email,
-=======
->>>>>>> 055a40a (BAC-32 feat: service to send email containing OTP)
           'message': 'OTP has been successfully sent to the user',
           'otp_id': otpInstance.id,
         };
@@ -36,27 +33,5 @@ module.exports = {
         return encryptedDetails;
       }
     });
-<<<<<<< HEAD
-
-    /*
-    try {
-      await transporter.sendMail(emailTemplate);
-      const details = {
-        'timestamp': otpInstance.created_at,
-        'check': email,
-        'message': 'OTP has been successfully sent to the user',
-        'otp_id': otpInstance.id,
-      };
-
-      const encryptedDetails = CryptoJS.AES.encrypt(
-          JSON.stringify(details), process.env.PASSPHRASE);
-
-      return encryptedDetails;
-    } catch (error) {
-      throw ApiError.badRequestError('Failed to send the email', error);
-    }
-    */
-=======
->>>>>>> 055a40a (BAC-32 feat: service to send email containing OTP)
   },
 };
