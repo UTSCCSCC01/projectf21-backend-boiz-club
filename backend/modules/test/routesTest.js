@@ -36,7 +36,7 @@ module.exports = (app) => {
       },
   );
   app.get('/health',
-      async (res)=>{
+      async (req, res)=>{
         res.json({message: 'Server is running'});
       },
   );
