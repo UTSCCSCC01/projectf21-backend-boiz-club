@@ -17,6 +17,7 @@ module.exports = {
       } else {
         const details = {
           'timestamp': otpInstance.created_at,
+          'check': email,
           'message': 'OTP has been successfully sent to the user',
           'otp_id': otpInstance.id,
         };
