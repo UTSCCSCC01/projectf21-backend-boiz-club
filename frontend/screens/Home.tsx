@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { View, Button, HStack, Text } from 'native-base';
-import { getHealth, addItem } from '@/services/backend';
+import { getHealth } from '@/services/backend';
 
 import { useAppSelector } from '@/hooks/react-redux';
 import { Alert } from 'react-native';
@@ -20,9 +20,6 @@ export default function Home() {
       <HStack space={2}>
         <Button onPress={async () => Alert.alert(await getHealth())}>
           Check Health of Backend
-        </Button>
-        <Button onPress={async () => Alert.alert(await addItem())}>
-          Add Item to Backend
         </Button>
       </HStack>
     </View>
