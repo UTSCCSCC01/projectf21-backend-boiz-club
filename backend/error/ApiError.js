@@ -1,8 +1,22 @@
 module.exports = class ApiError {
-  constructor(code, message) {
+  /**
+   *
+   * @param {Number} code  http status code
+   * @param {String} message error message
+   * @param {Array} errors express-validator errors array
+   */
+  constructor(code, message, errors) {
     (this.code = code), (this.message = message);
+    this.errors = errors? errors:[];
   }
-  static badRequestError(message) {
-    return new ApiError(400, message);
+
+  /**
+   *
+   * @param {String} message error message
+   * @param {Array} errors express-validator errors array
+   * @return {ApiError}
+   */
+  static badRequestError(message, errors) {
+    return new ApiError(400, message, errors);
   }
 };

@@ -1,7 +1,7 @@
 // All data processing related to test
 
-const testDal = require("./dalTest");
-const ApiError = require("../../error/ApiError");
+const testDal = require('./dalTest');
+const ApiError = require('../../error/ApiError');
 
 module.exports = {
   /**
@@ -9,9 +9,9 @@ module.exports = {
    * @param {Object} body - Request body
    */
   testBody: async (body) => {
-    const { message } = body;
-    if (message === "Dont fail") {
+    const {message} = body;
+    if (message === 'Dont fail') {
       return testDal.postTest(body);
-    } else throw ApiError.badRequestError("Program failed successfully");
+    } else throw ApiError.badRequestError('Program failed successfully');
   },
 };
