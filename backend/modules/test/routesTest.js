@@ -33,5 +33,11 @@ module.exports = (app) => {
         } catch (error) {
           next(error);
         }
-      });
+      },
+  );
+  app.get('/health',
+      async (req, res)=>{
+        res.json({message: 'Server is running'});
+      },
+  );
 };
