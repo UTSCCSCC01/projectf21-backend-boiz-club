@@ -23,7 +23,10 @@ module.exports = {
       } else {
         const details = {
           'timestamp': otpInstance.created_at,
+<<<<<<< HEAD
           'email': email,
+=======
+>>>>>>> 055a40a (BAC-32 feat: service to send email containing OTP)
           'message': 'OTP has been successfully sent to the user',
           'otp_id': otpInstance.id,
         };
@@ -33,6 +36,7 @@ module.exports = {
         return encryptedDetails;
       }
     });
+<<<<<<< HEAD
 
     /*
     try {
@@ -52,5 +56,7 @@ module.exports = {
       throw ApiError.badRequestError('Failed to send the email', error);
     }
     */
+=======
+>>>>>>> 055a40a (BAC-32 feat: service to send email containing OTP)
   },
 };
