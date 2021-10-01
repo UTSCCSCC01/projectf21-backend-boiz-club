@@ -68,7 +68,6 @@ module.exports = {
    */
   isEmailUnique: async (email) => {
     const result = await UserCredential.find({email});
-    console.log('isEmailUnique', result);
     return result.length == 0;
   },
   /**
@@ -78,7 +77,6 @@ module.exports = {
    */
   isUsernameUnique: async (username) => {
     const result = await User.find({username});
-    console.log('isUsernameUnique', result);
     return result.length == 0;
   },
   /**
