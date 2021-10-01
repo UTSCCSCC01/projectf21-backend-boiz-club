@@ -29,7 +29,7 @@ const userSchema = new Schema({
   },
   authentication_lvl: {
     type: String,
-    enum: ['unverified', 'verified'],
+    enum: ['unverified', 'verified', 'admin'],
     default: 'unverified',
   },
 }, {timestamps: true, versionKey: false});
