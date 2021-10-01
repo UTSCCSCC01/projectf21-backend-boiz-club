@@ -1,8 +1,10 @@
-const createUserService = require('./serviceCreateUser');
+const userService = require('../services/serviceUser');
 const ApiError = require('../../error/ApiError');
-
 const {validationResult, checkSchema} = require('express-validator');
 
+const pathPrefix = '/api/v1';
+
+// Start Registration
 const registrationSchema = {
   username: {
     isAlphanumeric: {
@@ -11,7 +13,7 @@ const registrationSchema = {
     },
     custom: {
       options: (value) => {
-        return createUserService.isUsernameUnique(value).then((unique) => {
+        return userService.isUsernameUnique(value).then((unique) => {
           if (!unique) {
             return Promise.reject(
                 new Error('Username already in use'),
@@ -30,7 +32,7 @@ const registrationSchema = {
     },
     custom: {
       options: (value) => {
-        return createUserService.isEmailUnique(value).then((unique) => {
+        return userService.isEmailUnique(value).then((unique) => {
           if (!unique) {
             return Promise.reject(
                 new Error('Email already in use'),
@@ -49,7 +51,7 @@ const registrationSchema = {
 };
 module.exports = (app) => {
   // Route for registering a new user
-  app.post('/api/v1/users',
+  app.post(pathPrefix+'/users',
       checkSchema(registrationSchema),
       async (req, res, next) => {
         const {body} = req;
@@ -58,16 +60,12 @@ module.exports = (app) => {
           if (!errors.isEmpty()) {
             throw ApiError.badRequestError('Bad request', errors.array());
           }
-          const result = await createUserService.registerUser(body);
+          const result = await userService.registerUser(body);
           res.json(result);
         } catch (error) {
           next(error);
         }
       },
   );
-
-  // Development code
-  // app.get('/nukeUserCredential', ()=>{
-  //   userService.nukeUserCredential();
-  // });
 };
+// End Registration

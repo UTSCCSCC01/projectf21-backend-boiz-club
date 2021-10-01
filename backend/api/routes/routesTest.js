@@ -1,9 +1,6 @@
 // Routes related to test
-
-const testService = require('./serviceTest');
-
+const testService = require('../services/serviceTest');
 const ApiError = require('../../error/ApiError');
-
 const {validationResult, checkSchema} = require('express-validator');
 
 const testSchema = {

@@ -1,6 +1,5 @@
 // All data processing related to test
-
-const testDal = require('./dalTest');
+const testDal = require('../repositories/dalTest');
 const ApiError = require('../../error/ApiError');
 
 module.exports = {

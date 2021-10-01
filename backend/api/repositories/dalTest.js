@@ -1,16 +1,6 @@
 // All queries related to test
 
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
-
-const testSchema = new Schema({
-  message: {
-    type: String,
-    required: true,
-  },
-});
-
-const Test = mongoose.model('Test', testSchema);
+const Test = require('../models/modelTest');
 
 module.exports = {
   /**

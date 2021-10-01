@@ -1,4 +1,4 @@
-const createUserDal = require('./dalCreateUser');
+const userDal = require('../repositories/dalUser');
 module.exports = {
   /**
    *
@@ -6,7 +6,7 @@ module.exports = {
    * @return {Boolean} whether the email is unique inside database
    */
   isEmailUnique: async (email) => {
-    return createUserDal.isEmailUnique(email);
+    return userDal.isEmailUnique(email);
   },
   /**
   *
@@ -14,18 +14,13 @@ module.exports = {
   * @return {Boolean} whether the username is unique inside database
   */
   isUsernameUnique: async (username) => {
-    return createUserDal.isUsernameUnique(username);
+    return userDal.isUsernameUnique(username);
   },
   /**
      * Registers a new user
      * @param {Object} body - user credentials
   */
   registerUser: async (body) => {
-    return createUserDal.registerUser(body);
+    return userDal.createUser(body);
   },
-
-  // Developement code
-  // nukeUserCredential: async ()=>{
-  //   return userDal.nukeUserCredential();
-  // },
 };
