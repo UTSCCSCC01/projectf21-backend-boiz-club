@@ -1,4 +1,4 @@
-const userService = require('./serviceCreateUser');
+const createUserService = require('./serviceCreateUser');
 const ApiError = require('../../error/ApiError');
 
 const {validationResult, checkSchema} = require('express-validator');
@@ -11,7 +11,7 @@ const registrationSchema = {
     },
     custom: {
       options: (value) => {
-        return userService.isUsernameUnique(value).then((unique) => {
+        return createUserService.isUsernameUnique(value).then((unique) => {
           if (!unique) {
             return Promise.reject(
                 new Error('Username already in use'),
@@ -30,7 +30,7 @@ const registrationSchema = {
     },
     custom: {
       options: (value) => {
-        return userService.isEmailUnique(value).then((unique) => {
+        return createUserService.isEmailUnique(value).then((unique) => {
           if (!unique) {
             return Promise.reject(
                 new Error('Email already in use'),
@@ -58,7 +58,7 @@ module.exports = (app) => {
           if (!errors.isEmpty()) {
             throw ApiError.badRequestError('Bad request', errors.array());
           }
-          const result = await userService.registerUser(body);
+          const result = await createUserService.registerUser(body);
           res.json(result);
         } catch (error) {
           next(error);

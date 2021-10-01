@@ -1,4 +1,4 @@
-const userDal = require('./dalCreateUser');
-const userRoutes = require('./routesCreateUser');
-const userService =require('./serviceCreateUser');
-module.exports={userDal, userRoutes, userService};
+const createUserDal = require('./dalCreateUser');
+const createUserRoutes = require('./routesCreateUser');
+const createUserService =require('./serviceCreateUser');
+module.exports={createUserDal, createUserRoutes, createUserService};
