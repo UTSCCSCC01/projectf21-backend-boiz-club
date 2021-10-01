@@ -49,7 +49,7 @@ const registrationSchema = {
 };
 module.exports = (app) => {
   // Route for registering a new user
-  app.post('/v1/user',
+  app.post('/v1/users',
       checkSchema(registrationSchema),
       async (req, res, next) => {
         const {body} = req;
