@@ -33,5 +33,24 @@ module.exports = {
         return encryptedDetails;
       }
     });
+
+    /*
+    try {
+      await transporter.sendMail(emailTemplate);
+      const details = {
+        'timestamp': otpInstance.created_at,
+        'check': email,
+        'message': 'OTP has been successfully sent to the user',
+        'otp_id': otpInstance.id,
+      };
+
+      const encryptedDetails = CryptoJS.AES.encrypt(
+          JSON.stringify(details), process.env.PASSPHRASE);
+
+      return encryptedDetails;
+    } catch (error) {
+      throw ApiError.badRequestError('Failed to send the email', error);
+    }
+    */
   },
 };
