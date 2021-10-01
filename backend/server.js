@@ -5,7 +5,6 @@ const express = require('express');
 const {urlencoded} = require('body-parser');
 const mongoose = require('mongoose');
 const errorHandler = require('./error/api-error-handler');
-require('dotenv/config');
 
 const server = express();
 
@@ -19,7 +18,7 @@ const dbURI = `mongodb+srv://${username}:${passwd}@data.psveh.mongodb.net/${dbNa
 mongoose
     .connect(dbURI, {useNewUrlParser: true, useUnifiedTopology: true})
     .then(() =>
-      server.listen(port, () => {
+      server.listen(port, '0.0.0.0', () => {
         console.log('We are live on ' + port);
       }),
     )
