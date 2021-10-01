@@ -3,7 +3,7 @@
  * https://reactnavigation.org/docs/getting-started
  *
  */
-import { FontAwesome } from '@expo/vector-icons';
+import { FontAwesome, FontAwesome5 } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import {
   NavigationContainer,
@@ -18,14 +18,17 @@ import Colors from '@/constants/Colors';
 import useColorScheme from '@/hooks/useColorScheme';
 import ModalScreen from '@/screens/ModalScreen';
 import NotFoundScreen from '@/screens/NotFoundScreen';
-import TabOneScreen from '@/screens/TabOneScreen';
-import TabTwoScreen from '@/screens/TabTwoScreen';
+import Home from '@/screens/Home';
+import Services from '@/screens/Services';
+import Store from '@/screens/Store';
 import {
   RootStackParamList,
   RootTabParamList,
   RootTabScreenProps,
 } from '@/types';
 import LinkingConfiguration from './LinkingConfiguration';
+import Account from '@/screens/Account';
+import Cart from '@/screens/Cart';
 
 export default function Navigation({
   colorScheme,
@@ -79,17 +82,17 @@ function BottomTabNavigator() {
 
   return (
     <BottomTab.Navigator
-      initialRouteName="TabOne"
+      initialRouteName="Home"
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme].tint,
       }}
     >
       <BottomTab.Screen
-        name="TabOne"
-        component={TabOneScreen}
-        options={({ navigation }: RootTabScreenProps<'TabOne'>) => ({
-          title: 'Tab One',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+        name="Home"
+        component={Home}
+        options={({ navigation }: RootTabScreenProps<'Home'>) => ({
+          title: 'Home',
+          tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
           headerRight: () => (
             <Pressable
               onPress={() => navigation.navigate('Modal')}
@@ -108,11 +111,37 @@ function BottomTabNavigator() {
         })}
       />
       <BottomTab.Screen
-        name="TabTwo"
-        component={TabTwoScreen}
+        name="Services"
+        component={Services}
         options={{
-          title: 'Tab Two',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          title: 'Services',
+          tabBarIcon: ({ color }) => <TabBarIcon name="dog" color={color} />,
+        }}
+      />
+      <BottomTab.Screen
+        name="Store"
+        component={Store}
+        options={{
+          title: 'Store',
+          tabBarIcon: ({ color }) => <TabBarIcon name="store" color={color} />,
+        }}
+      />
+      <BottomTab.Screen
+        name="Account"
+        component={Account}
+        options={{
+          title: 'Account',
+          tabBarIcon: ({ color }) => <TabBarIcon name="user" color={color} />,
+        }}
+      />
+      <BottomTab.Screen
+        name="Cart"
+        component={Cart}
+        options={{
+          title: 'Cart',
+          tabBarIcon: ({ color }) => (
+            <TabBarIcon name="shopping-cart" color={color} />
+          ),
         }}
       />
     </BottomTab.Navigator>
@@ -123,8 +152,8 @@ function BottomTabNavigator() {
  * You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
  */
 function TabBarIcon(props: {
-  name: React.ComponentProps<typeof FontAwesome>['name'];
+  name: React.ComponentProps<typeof FontAwesome5>['name'];
   color: string;
 }) {
-  return <FontAwesome size={30} style={{ marginBottom: -3 }} {...props} />;
+  return <FontAwesome5 size={30} style={{ marginBottom: -3 }} {...props} />;
 }
