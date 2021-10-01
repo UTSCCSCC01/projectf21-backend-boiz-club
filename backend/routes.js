@@ -1,7 +1,8 @@
 // All routes
-const routes = require('./api/routes');
+const test = require('./modules/test');
+const user = require('./modules/user');
 
 module.exports = (app) => {
-  routes.testRoutes(app);
-  routes.userRoutes(app);
+  test.testRoutes(app);
+  user.userRoutes(app);
 };
