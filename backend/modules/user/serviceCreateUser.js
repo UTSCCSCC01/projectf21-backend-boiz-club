@@ -1,4 +1,4 @@
-const userDal = require('./dalUser');
+const userDal = require('./dalCreateUser');
 module.exports = {
   /**
    *

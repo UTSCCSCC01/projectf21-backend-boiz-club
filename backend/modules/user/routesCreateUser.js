@@ -1,4 +1,4 @@
-const userService = require('./serviceUser');
+const userService = require('./serviceCreateUser');
 const ApiError = require('../../error/ApiError');
 
 const {validationResult, checkSchema} = require('express-validator');
@@ -49,7 +49,7 @@ const registrationSchema = {
 };
 module.exports = (app) => {
   // Route for registering a new user
-  app.post('/v1/users',
+  app.post('/api/v1/users',
       checkSchema(registrationSchema),
       async (req, res, next) => {
         const {body} = req;
