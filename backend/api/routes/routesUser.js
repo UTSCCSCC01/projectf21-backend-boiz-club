@@ -1,6 +1,7 @@
 const userService = require('../services/serviceUser');
 const ApiError = require('../../error/ApiError');
 const {validationResult, checkSchema} = require('express-validator');
+const jwt = require('jsonwebtoken');
 
 const pathPrefix = '/api/v1';
 
@@ -49,9 +50,9 @@ const registrationSchema = {
     bail: true,
   },
 };
-module.exports = (app) => {
-  // Route for registering a new user
-  app.post(pathPrefix+'/users',
+
+const register = (app) => {
+  app.post(pathPrefix+'/users/register',
       checkSchema(registrationSchema),
       async (req, res, next) => {
         const {body} = req;
@@ -69,3 +70,52 @@ module.exports = (app) => {
   );
 };
 // End Registration
+
+// Start Login
+const loginSchema = {
+  email: {
+    normalizeEmail: true,
+    isEmail: {
+      errorMessage: 'Please enter a valid email address',
+      bail: true,
+    },
+  },
+  password: {
+    notEmpty: true,
+    errorMessage: 'Password cannot be empty',
+    bail: true,
+  },
+};
+
+const login = (app) => {
+  app.post(
+      pathPrefix+'/users/login',
+      checkSchema(loginSchema),
+      async (req, res, next) => {
+        const {body} = req;
+        try {
+          const errors = validationResult(req);
+          if (!errors.isEmpty()) {
+            throw ApiError.badRequestError('Bad request', errors.array());
+          }
+          const user = await userService.getUserByCredentials(body);
+          const token = jwt.sign(
+              {user_id: user._id,
+                username: user.username,
+                authentication_lvl: user.authentication_lvl,
+              },
+              process.env.TOKEN_SECRET);
+          res.header('auth-tken', token).send(user);
+        } catch (error) {
+          next(error);
+        }
+      },
+  );
+};
+
+
+module.exports = (app) => {
+  // Route for registering a new user
+  register(app);
+  login(app);
+};

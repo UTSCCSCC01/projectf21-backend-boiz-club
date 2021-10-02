@@ -37,7 +37,6 @@ module.exports = {
     hash.update(password);
     const saltedHash = hash.digest('base64');
     const userCred = new UserCredential({
-      username,
       email,
       password: saltedHash,
       user_id: userID,
@@ -46,6 +45,15 @@ module.exports = {
     await userCred.save();
     return user.save();
   },
+
+  getCredential: async (email) => {
+    return await UserCredential.findOne({email: email});
+  },
+
+  getUser: async (userId) => {
+    return await User.findOne({_id: userId});
+  },
+
 };
 
 
