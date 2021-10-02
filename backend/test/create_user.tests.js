@@ -121,4 +121,28 @@ describe('Create User Test', () => {
           done();
         });
   });
+  it('Should return a 400 status due to empty pass', (done) => {
+    const badUser = {
+      email: 'newemail@gmail.com',
+      username: 'nottest',
+      password: '',
+    };
+    const error = {
+      'value': '',
+      'msg': 'Password cannot be empty',
+      'param': 'password',
+      'location': 'body',
+    };
+    chai.request(server)
+        .post(ApiPrefix+'/users')
+        .send(badUser)
+        .end((err, res) => {
+          res.should.have.status(400);
+          res.body.should.be.a('object');
+          res.body.should.have.property('message').eql('Bad request');
+          res.body.errors.should.be.a('array');
+          res.body.errors.should.include.something.that.deep.equals(error);
+          done();
+        });
+  });
 });
