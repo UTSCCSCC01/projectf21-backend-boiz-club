@@ -1,7 +1,7 @@
 const userService = require('../services/serviceUser');
 const ApiError = require('../../error/ApiError');
 const {validationResult, checkSchema} = require('express-validator');
-const constants= require('../../constants')
+const constants= require('../../constants');
 
 const pathPrefix = constants.ApiPrefix;
 
