@@ -1,8 +1,9 @@
 const userService = require('../services/serviceUser');
 const ApiError = require('../../error/ApiError');
 const {validationResult, checkSchema} = require('express-validator');
+const constants= require('../../constants')
 
-const pathPrefix = '/api/v1';
+const pathPrefix = constants.ApiPrefix;
 
 // Start Registration
 const registrationSchema = {
