@@ -117,26 +117,26 @@ const UserButtons = ({showVerifyModal, setShowVerifyModal}) => (
 )
 
 const VerifyAccountModal = ({visible, setVisible}) => {
-    const [file, setFile] = useState("Upload File");
+    const [file, setFile] = useState("");
 
     const pickDocument = async () => {
-        await DocumentPicker.getDocumentAsync().then(resp => setFile(resp.type == "success" ? resp.name : "Upload File"));
+        await DocumentPicker.getDocumentAsync().then(resp => setFile(resp.type == "success" ? resp.name : ""));
     }
 
     useEffect(() => {
-        setFile("Upload File")
+        setFile("")
     }, [])
 
     return (
         <Modal isOpen={visible} onClose={() => setVisible(false)} size="xs">
             <Modal.Content>
-                <Modal.CloseButton onPress={() => setFile("Upload File")}/>
+                <Modal.CloseButton onPress={() => setFile("")}/>
                 <Modal.Header>
                     Verify Account
                 </Modal.Header>
                 <Modal.Body>
                     <Button onPress={pickDocument}>
-                        {file}
+                        {file == "" ? "Upload File" : file}
                     </Button>
                 </Modal.Body>
                 <Modal.Footer>
@@ -144,7 +144,7 @@ const VerifyAccountModal = ({visible, setVisible}) => {
                         <Button variant="ghost" colorScheme="blueGray"
                                 onPress={() => {
                                     setVisible(false)
-                                    setFile("Upload File")
+                                    setFile("")
                                 }}>
                             Cancel
                         </Button>
