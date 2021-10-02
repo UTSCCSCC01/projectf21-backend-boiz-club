@@ -1,12 +1,17 @@
 import * as React from 'react';
-import {Text, Row, Column, Button, Avatar} from 'native-base';
+import {Text, Row, Column, Button, Avatar, Modal} from 'native-base';
 import {FontAwesome5} from "@expo/vector-icons";
+import * as DocumentPicker from 'expo-document-picker';
+import {useEffect, useState} from "react";
 
 export default function Account() {
+    // Modal shown when user wants to upload government identification
+    const [showVerifyModal, setShowVerifyModal] = useState(false);
+
     return (
         <Column size={2} space={10} alignItems="center" padding="10">
             <UserDetails/>
-            <UserButtons/>
+            <UserButtons {...{showVerifyModal, setShowVerifyModal}}/>
         </Column>
     );
 }
@@ -39,7 +44,7 @@ const UserDetails = () => (
     </>
 )
 
-const UserButtons = () => (
+const UserButtons = ({showVerifyModal, setShowVerifyModal}) => (
     <>
         <Row>
             <Button size="lg" key="personalInformationBtn" width="70%" style={{justifyContent: "flex-start"}}
@@ -63,14 +68,21 @@ const UserButtons = () => (
             </Button>
         </Row>
         <Row>
-            <Button size="lg" key="verifyAccountBtn" width="70%" style={{justifyContent: "flex-start"}} marginBottom={7}
-                    startIcon={<FontAwesome5 style={{color: "white"}} name="user-check"
-                                             size={18}/>}
-                    endIcon={<FontAwesome5 style={{color: "white"}} name="chevron-right"
-                                           size={18}/>}
+            <Button
+                size="lg"
+                key="verifyAccountBtn"
+                width="70%"
+                onPress={() => setShowVerifyModal(true)}
+                marginBottom={7}
+                style={{justifyContent: "flex-start"}}
+                startIcon={<FontAwesome5 style={{color: "white"}} name="user-check"
+                                         size={18}/>}
+                endIcon={<FontAwesome5 style={{color: "white"}} name="chevron-right"
+                                       size={18}/>}
             >
                 Verify Account
             </Button>
+            <VerifyAccountModal visible={showVerifyModal} setVisible={setShowVerifyModal}/>
         </Row>
         <Row>
             <Button size="lg" key="notificationsBtn" width="70%" style={{justifyContent: "flex-start"}} marginBottom={7}
@@ -103,3 +115,44 @@ const UserButtons = () => (
         </Row>
     </>
 )
+
+const VerifyAccountModal = ({visible, setVisible}) => {
+    const [file, setFile] = useState("Upload File");
+
+    const pickDocument = async () => {
+        await DocumentPicker.getDocumentAsync().then(resp => setFile(resp.type == "success" ? resp.name : "Upload File"));
+    }
+
+    useEffect(() => {
+        setFile("Upload File")
+    }, [])
+
+    return (
+        <Modal isOpen={visible} onClose={() => setVisible(false)} size="xs">
+            <Modal.Content>
+                <Modal.CloseButton onPress={() => setFile("Upload File")}/>
+                <Modal.Header>
+                    Verify Account
+                </Modal.Header>
+                <Modal.Body>
+                    <Button onPress={pickDocument}>
+                        {file}
+                    </Button>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button.Group space={2}>
+                        <Button variant="ghost" colorScheme="blueGray"
+                                onPress={() => {
+                                    setVisible(false)
+                                    setFile("Upload File")
+                                }}>
+                            Cancel
+                        </Button>
+                        <Button onPress={() => setVisible(false)}>
+                            Save
+                        </Button>
+                    </Button.Group>
+                </Modal.Footer>
+            </Modal.Content>
+        </Modal>)
+}
