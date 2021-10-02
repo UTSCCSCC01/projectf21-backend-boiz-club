@@ -1,4 +1,7 @@
+const ApiError = require('../../error/ApiError');
 const userDal = require('../repositories/dalUser');
+const crypto = require('crypto');
+
 module.exports = {
   /**
    *
@@ -22,5 +25,21 @@ module.exports = {
   */
   registerUser: async (body) => {
     return userDal.createUser(body);
+  },
+  /**
+     * Registers a new user
+     * @param {Object} body - user login credentials
+  */
+  getUserByCredentials: async (body) => {
+    const cred = await userDal.getCredential(body.email);
+    if (!cred) {
+      throw ApiError.badRequestError('Invalid credentials');
+    }
+    const hash = crypto.createHmac('sha512', cred.salt);
+    hash.update(body.password);
+    const saltedHash = hash.digest('base64');
+    if (saltedHash != cred.password) {
+      throw ApiError.badRequestError('Invalid credentials');
+    } else return await userDal.getUser(cred.user_id);
   },
 };
