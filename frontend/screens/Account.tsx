@@ -1,8 +1,13 @@
 import * as React from 'react';
-import {Text, Row, Column, Button, Avatar, Modal} from 'native-base';
+import {Text, Row, Column, Button, Avatar, Modal, useToast} from 'native-base';
 import {FontAwesome5} from "@expo/vector-icons";
 import * as DocumentPicker from 'expo-document-picker';
 import {useEffect, useState} from "react";
+
+type AccountProps = {
+    showVerifyModal: boolean,
+    setShowVerifyModal: (x: boolean) => void
+}
 
 export default function Account() {
     // Modal shown when user wants to upload government identification
@@ -44,7 +49,7 @@ const UserDetails = () => (
     </>
 )
 
-const UserButtons = ({showVerifyModal, setShowVerifyModal}) => (
+const UserButtons = ({showVerifyModal, setShowVerifyModal}: AccountProps) => (
     <>
         <Row>
             <Button size="lg" key="personalInformationBtn" width="70%" style={{justifyContent: "flex-start"}}
@@ -82,7 +87,7 @@ const UserButtons = ({showVerifyModal, setShowVerifyModal}) => (
             >
                 Verify Account
             </Button>
-            <VerifyAccountModal visible={showVerifyModal} setVisible={setShowVerifyModal}/>
+            <VerifyAccountModal {...{showVerifyModal, setShowVerifyModal}}/>
         </Row>
         <Row>
             <Button size="lg" key="notificationsBtn" width="70%" style={{justifyContent: "flex-start"}} marginBottom={7}
@@ -116,8 +121,9 @@ const UserButtons = ({showVerifyModal, setShowVerifyModal}) => (
     </>
 )
 
-const VerifyAccountModal = ({visible, setVisible}) => {
+const VerifyAccountModal = ({showVerifyModal, setShowVerifyModal}: AccountProps) => {
     const [file, setFile] = useState("");
+    const toast = useToast();
 
     const pickDocument = async () => {
         await DocumentPicker.getDocumentAsync().then(resp => setFile(resp.type == "success" ? resp.name : ""));
@@ -127,28 +133,50 @@ const VerifyAccountModal = ({visible, setVisible}) => {
         setFile("")
     }, [])
 
+    const onPressSaveId = () => {
+        setShowVerifyModal(false)
+
+        if (file !== "")
+            toast.show({
+                status: "success",
+                title: "Verification request has been sent.",
+                placement: "top"
+            })
+    }
+
+    const onPressCancel = () => {
+        setShowVerifyModal(false)
+    }
+
     return (
-        <Modal isOpen={visible} onClose={() => setVisible(false)} size="xs">
+        <Modal isOpen={showVerifyModal} onClose={() => setShowVerifyModal(false)} size="md">
             <Modal.Content>
                 <Modal.CloseButton onPress={() => setFile("")}/>
                 <Modal.Header>
                     Verify Account
                 </Modal.Header>
                 <Modal.Body>
-                    <Button onPress={pickDocument}>
-                        {file == "" ? "Upload File" : file}
-                    </Button>
+                    <Column space={3}>
+                        <Text>
+                            Upload any legal canadian government issued identification like a passport, driving license,
+                            or health card.
+                        </Text>
+                        <Text bold>
+                            Note: All data is encrypted and your images will be stored safely and
+                            in accordance with security standards.
+                        </Text>
+                        <Button onPress={pickDocument}>
+                            {file == "" ? "Upload File" : file}
+                        </Button>
+                    </Column>
                 </Modal.Body>
                 <Modal.Footer>
                     <Button.Group space={2}>
                         <Button variant="ghost" colorScheme="blueGray"
-                                onPress={() => {
-                                    setVisible(false)
-                                    setFile("")
-                                }}>
+                                onPress={onPressCancel}>
                             Cancel
                         </Button>
-                        <Button onPress={() => setVisible(false)}>
+                        <Button onPress={onPressSaveId}>
                             Save
                         </Button>
                     </Button.Group>
