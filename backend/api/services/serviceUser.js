@@ -39,7 +39,7 @@ module.exports = {
     hash.update(body.password);
     const saltedHash = hash.digest('base64');
     if (saltedHash != cred.password) {
-      return ApiError.badRequestError('Invalid credentials');
+      throw ApiError.badRequestError('Invalid credentials');
     } else return await userDal.getUser(cred.user_id);
   },
 };
