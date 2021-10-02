@@ -102,7 +102,6 @@ const login = (app) => {
           const token = jwt.sign(
               {user_id: user._id,
                 username: user.username,
-                authentication_lvl: user.authentication_lvl,
               },
               process.env.TOKEN_SECRET);
           res.header('auth-tken', token).send(user);
