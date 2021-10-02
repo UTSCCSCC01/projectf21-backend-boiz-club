@@ -1,15 +1,16 @@
 const jwt = require('jsonwebtoken');
-const ApiError = req('../../error/ApiError');
+const ApiError = require('../../error/ApiError');
 
 const auth = (req, res, next) => {
   const token = req.header('auth-token');
-  if (!token) next(ApiError.accessDeniedError());
+  if (!token) throw ApiError.accessDeniedError();
   try {
     const verified = jwt.verify(token, process.env.TOKEN_SECRET);
     req.user = verified;
   } catch (error) {
-    next(ApiError.badRequestError('Invalid token'));
+    throw ApiError.badRequestError('Invalid token');
   }
+  next();
 };
 
 module.exports = auth;
