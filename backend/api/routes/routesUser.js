@@ -112,10 +112,11 @@ const login = (app) => {
       },
   );
 };
-
+// End Login
 
 module.exports = (app) => {
   // Route for registering a new user
   register(app);
+  // Route for logging in returning user
   login(app);
 };

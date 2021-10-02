@@ -1,6 +1,5 @@
 const ApiError = require('../../error/ApiError');
 const userDal = require('../repositories/dalUser');
-const bcrypt = require('bcrypt');
 const crypto = require('crypto');
 
 module.exports = {
