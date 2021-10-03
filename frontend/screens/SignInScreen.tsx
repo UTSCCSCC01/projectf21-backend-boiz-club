@@ -14,7 +14,7 @@ import {
 import { RootStackScreenProps } from '@/types';
 import { useDispatch } from 'react-redux';
 import { addToken } from '@/redux/userCredential';
-import { login } from '@/services/login';
+import login from '@/services/login';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const SignInScreen = ({ navigation }: RootStackScreenProps<'SignIn'>) => {
