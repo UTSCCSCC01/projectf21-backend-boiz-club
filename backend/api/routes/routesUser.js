@@ -113,9 +113,21 @@ const login = (app) => {
 };
 // End Login
 
+const forgotPassword = (app) => {
+  app.post(pathPrefix + '/forgot-password/:email', async (req, res, next) => {
+    try {
+      const result = await forgotPasswordService.sendOTPEmail(req.params.email);
+      res.json(result);
+    } catch (error) {
+      next(error);
+    }
+  });
+};
+
 module.exports = (app) => {
   // Route for registering a new user
   register(app);
   // Route for logging in returning user
   login(app);
+  forgotPassword(app);
 };
