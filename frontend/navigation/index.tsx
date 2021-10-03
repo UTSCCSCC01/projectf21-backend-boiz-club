@@ -11,8 +11,10 @@ import {
   DarkTheme,
 } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import * as React from 'react';
+import React, { useEffect, useState } from 'react';
 import { ColorSchemeName, Pressable } from 'react-native';
+
+import { HStack, Spinner } from 'native-base';
 
 import Colors from '@/constants/Colors';
 import useColorScheme from '@/hooks/useColorScheme';
@@ -22,25 +24,66 @@ import Home from '@/screens/Home';
 import Services from '@/screens/Services';
 import Store from '@/screens/Store';
 import {
-  RootStackParamList,
-  RootTabParamList,
-  RootTabScreenProps,
+  HomeStackParamList,
+  HomeTabParamList,
+  HomeTabScreenProps,
 } from '@/types';
 import LinkingConfiguration from './LinkingConfiguration';
 import Account from '@/screens/Account';
 import Cart from '@/screens/Cart';
+
+import RootStackNavigator from './RootStack';
+import { RootState } from '@/redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { addToken } from '@/redux/userCredential';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Navigation({
   colorScheme,
 }: {
   colorScheme: ColorSchemeName;
 }) {
+  const dispatch = useDispatch();
+
+  const [isLoading, setIsLoading] = useState(true);
+  // attempt to retrieve token from async storage to check if user
+  // is still logged in from previous session
+  useEffect(() => {
+    setTimeout(async () => {
+      try {
+        // await AsyncStorage.removeItem('userToken');
+        const userToken = await AsyncStorage.getItem('userToken');
+        if (userToken !== null) {
+          dispatch(
+            addToken({
+              userToken: userToken,
+            })
+          );
+        }
+      } catch (e) {
+        console.log('Failed to retrieve user token' + e);
+      }
+      setIsLoading(false);
+    }, 1000);
+    // setIsLoading(false);
+  }, [dispatch]);
+  const userToken = useSelector(
+    (state: RootState) => state.userCredential.userToken
+  );
+  console.log('root', userToken);
+  if (isLoading) {
+    return (
+      <HStack safeArea flex={1} alignItems="center" justifyContent="center">
+        <Spinner size="lg" />
+      </HStack>
+    );
+  }
   return (
     <NavigationContainer
       linking={LinkingConfiguration}
       theme={colorScheme === 'dark' ? DarkTheme : DefaultTheme}
     >
-      <RootNavigator />
+      {userToken == null ? <RootStackNavigator /> : <HomeStackNavigator />}
     </NavigationContainer>
   );
 }
@@ -49,25 +92,25 @@ export default function Navigation({
  * A root stack navigator is often used for displaying modals on top of all other content.
  * https://reactnavigation.org/docs/modal
  */
-const Stack = createNativeStackNavigator<RootStackParamList>();
+const HomeStack = createNativeStackNavigator<HomeStackParamList>();
 
-function RootNavigator() {
+function HomeStackNavigator() {
   return (
-    <Stack.Navigator>
-      <Stack.Screen
+    <HomeStack.Navigator>
+      <HomeStack.Screen
         name="Root"
         component={BottomTabNavigator}
         options={{ headerShown: false }}
       />
-      <Stack.Screen
+      <HomeStack.Screen
         name="NotFound"
         component={NotFoundScreen}
         options={{ title: 'Oops!' }}
       />
-      <Stack.Group screenOptions={{ presentation: 'modal' }}>
-        <Stack.Screen name="Modal" component={ModalScreen} />
-      </Stack.Group>
-    </Stack.Navigator>
+      <HomeStack.Group screenOptions={{ presentation: 'modal' }}>
+        <HomeStack.Screen name="Modal" component={ModalScreen} />
+      </HomeStack.Group>
+    </HomeStack.Navigator>
   );
 }
 
@@ -75,7 +118,7 @@ function RootNavigator() {
  * A bottom tab navigator displays tab buttons on the bottom of the display to switch screens.
  * https://reactnavigation.org/docs/bottom-tab-navigator
  */
-const BottomTab = createBottomTabNavigator<RootTabParamList>();
+const BottomTab = createBottomTabNavigator<HomeTabParamList>();
 
 function BottomTabNavigator() {
   const colorScheme = useColorScheme();
@@ -90,7 +133,7 @@ function BottomTabNavigator() {
       <BottomTab.Screen
         name="Home"
         component={Home}
-        options={({ navigation }: RootTabScreenProps<'Home'>) => ({
+        options={({ navigation }: HomeTabScreenProps<'Home'>) => ({
           title: 'Home',
           tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
           headerRight: () => (
