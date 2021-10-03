@@ -51,7 +51,6 @@ export default function Navigation({
   useEffect(() => {
     setTimeout(async () => {
       try {
-        // await AsyncStorage.removeItem('userToken');
         const userToken = await AsyncStorage.getItem('userToken');
         if (userToken !== null) {
           dispatch(
@@ -65,12 +64,11 @@ export default function Navigation({
       }
       setIsLoading(false);
     }, 1000);
-    // setIsLoading(false);
   }, [dispatch]);
   const userToken = useSelector(
     (state: RootState) => state.userCredential.userToken
   );
-  console.log('root', userToken);
+
   if (isLoading) {
     return (
       <HStack safeArea flex={1} alignItems="center" justifyContent="center">

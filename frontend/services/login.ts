@@ -16,4 +16,4 @@ async function login(email: string, password: string) {
   return res.headers['auth-tken'];
 }
 
-export { login };
+export default login;
