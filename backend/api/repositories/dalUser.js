@@ -4,6 +4,7 @@ const crypto = require('crypto');
 const User = require('../models/modelUser');
 const UserCredential = require('../models/modelUserCredential');
 const OTP = require('../models/modelOTP');
+const otpGenerator = require('otp-generator');
 
 
 module.exports = {
