@@ -11,7 +11,10 @@
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.19.0",
+<<<<<<< HEAD
     "crypto": "^1.0.1",
+=======
+>>>>>>> f75ecb4efdbcf872a70688c147441d606ed66b34
     "crypto-js": "^4.1.1",
     "express": "^4.17.1",
     "express-validator": "^6.12.2",
