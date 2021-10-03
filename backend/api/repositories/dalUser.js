@@ -3,6 +3,7 @@ const crypto = require('crypto');
 // Schema Models
 const User = require('../models/modelUser');
 const UserCredential = require('../models/modelUserCredential');
+const OTP = require('../models/modelOTP');
 
 
 module.exports = {
@@ -52,6 +53,34 @@ module.exports = {
 
   getUser: async (userId) => {
     return await User.findOne({_id: userId});
+  },
+
+  createAndPostOTP: async () => {
+    const otp = otpGenerator.generate(
+        6, {alphabets: false, upperCase: false, specialChars: false});
+    const expirationTime = new Date(new Date().getTime() + 30*60000);
+
+    const newOTP = new OTP({
+      otp: otp,
+      expiration_time: expirationTime,
+    });
+
+    try {
+      const savedOTP = await newOTP.save();
+      return savedOTP;
+    } catch (error) {
+      throw ApiError.badRequestError(`The OTP ${otp.id} cannot be saved`);
+    }
+  },
+
+  searchEmailUser: async (email) => {
+    try {
+      const user = await UserCredential.findOne({email: email});
+      return user;
+    } catch (err) {
+      throw ApiError.requestNotFoundError(
+          `There is no email ${email} in the database`, err);
+    }
   },
 
 };
