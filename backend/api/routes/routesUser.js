@@ -116,7 +116,7 @@ const login = (app) => {
 const forgotPassword = (app) => {
   app.post(pathPrefix + '/forgot-password/:email', async (req, res, next) => {
     try {
-      const result = await forgotPasswordService.sendOTPEmail(req.params.email);
+      const result = await userService.sendOTPEmail(req.params.email);
       res.json(result);
     } catch (error) {
       next(error);

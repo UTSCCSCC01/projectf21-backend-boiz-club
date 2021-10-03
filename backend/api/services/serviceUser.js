@@ -1,6 +1,8 @@
 const ApiError = require('../../error/ApiError');
 const userDal = require('../repositories/dalUser');
 const crypto = require('crypto');
+const {transporter, emailForgotPassword} =
+require('../../api/utils/emailConfig');
 
 module.exports = {
   /**
@@ -41,5 +43,36 @@ module.exports = {
     if (saltedHash != cred.password) {
       throw ApiError.badRequestError('Invalid credentials');
     } else return await userDal.getUser(cred.user_id);
+  },
+
+  sendOTPEmail: async (email) => {
+    const user = await userDal.searchEmailUser(email);
+    const otpInstance = await userDal.createAndPostOTP();
+    /* Only for testing
+    const user = {
+      'email': email,
+    };
+    */
+    const emailTemplate = emailForgotPassword(user, otpInstance.otp);
+
+
+    await transporter.verify();
+    // How to catch error from the callback function?
+    await transporter.sendMail(emailTemplate, (err, info) => {
+      if (err) {
+        console.log(err);
+      } else {
+        const details = {
+          'timestamp': otpInstance.created_at,
+          'email': email,
+          'message': 'OTP has been successfully sent to the user',
+          'otp_id': otpInstance.id,
+        };
+        const encryptedDetails = CryptoJS.AES.encrypt(
+            JSON.stringify(details), process.env.PASSPHRASE);
+
+        return encryptedDetails;
+      }
+    });
   },
 };
