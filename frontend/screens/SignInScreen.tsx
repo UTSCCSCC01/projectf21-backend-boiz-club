@@ -29,7 +29,7 @@ const SignInScreen = ({ navigation }: RootStackScreenProps<'SignIn'>) => {
 
   // Make sure user information inputs are not empty
   const validateInput = (email: string, password: string) => {
-    if (email.length === 0 || email == null) {
+    if (email == null || email.length === 0 || ) {
       setInputError({
         emailError: true,
         passwordError: false,
