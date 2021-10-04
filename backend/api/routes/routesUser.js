@@ -3,8 +3,9 @@ const ApiError = require('../../error/ApiError');
 const {validationResult, checkSchema} = require('express-validator');
 const jwt = require('jsonwebtoken');
 const normalizeEmail = require('normalize-email');
+const verifyToken = require('../utils/verifyToekn');
 
-const pathPrefix = '/api/v1';
+const pathPrefix = '/api/v1/users';
 
 // Start Registration
 const registrationSchema = {
@@ -53,7 +54,7 @@ const registrationSchema = {
 };
 
 const register = (app) => {
-  app.post(pathPrefix+'/users/register',
+  app.post(pathPrefix+'/register',
       checkSchema(registrationSchema),
       async (req, res, next) => {
         const {body} = req;
@@ -90,7 +91,7 @@ const loginSchema = {
 
 const login = (app) => {
   app.post(
-      pathPrefix+'/users/login',
+      pathPrefix+'/login',
       checkSchema(loginSchema),
       async (req, res, next) => {
         const {body} = req;
@@ -113,7 +114,7 @@ const login = (app) => {
   );
 };
 // End Login
-// Start Upload Govrnment ID
+// Start Upload Govrnment ID/Request Verification
 /*
 Multer to upload images, filter file types to accept only images,
 limit file upload size to 5 MB and accept file with key gov_id
@@ -137,17 +138,21 @@ const upload = multer(
         fileSize: 1024 * 1024 * 5, // 5 MB
       },
       fileFilter: fileFilter,
-    }).single('gov_id');
+    }).single('gov-id');
 
 
 const uploadGovernmentId = (app) => {
-  app.post(pathPrefix+'/users/self/request-verification',
-      upload,
-      (req, res, next) => {
+  app.post(pathPrefix+'/self/request-verification',
+      verifyToken, upload,
+      async (req, res, next) => {
         try {
-          if (!req.file) {
+          const userId = req.user.user_id;
+          const file = req.file;
+          if (!file) {
             throw ApiError.badRequestError('File required');
           }
+          await userService.handleVerificationRequest(file, userId);
+          res.send(file);
         } catch (error) {
           next(error);
         }
@@ -156,10 +161,9 @@ const uploadGovernmentId = (app) => {
         // verify user does not have a pending verification
         // upload file to s3
         // upload gov_id object to mongoose
-        res.send(req.file);
       });
 };
-// End Upload Govrnment ID
+// End Upload Govrnment ID/Request Verification
 
 const forgotPassword = (app) => {
   app.post(pathPrefix + '/forgot-password/:email', async (req, res, next) => {

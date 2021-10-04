@@ -1,4 +1,5 @@
-const s3 = require('aws-sdk/clients/s3');
+const S3 = require('aws-sdk/clients/s3');
+const uuid = require('uuid');
 
 const bucketName = process.env.AWS_BUCKET_NAME;
 const region = process.env.AWS_BUCKET_REGION;
@@ -13,11 +14,10 @@ const s3 = new S3({region, accessKeyId, secretAccessKey});
  * @return {promise<{ETag, Location, key, Key, Bucket}>}
  */
 function upload(file) {
-  const fileStream = fs.createReadStream(file.path);
   const uploadParams = {
     Bucket: bucketName,
-    Body: fileStream,
-    Key: file.filename,
+    Body: file.buffer,
+    Key: `${uuid.v4()}.${file.fileType}`,
   };
   return s3.upload(uploadParams).promise();
 }

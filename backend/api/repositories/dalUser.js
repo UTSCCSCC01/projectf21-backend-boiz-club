@@ -6,10 +6,11 @@ const UserCredential = require('../models/modelUserCredential');
 const OTP = require('../models/modelOTP');
 const otpGenerator = require('otp-generator');
 
+const VerficationRequest = require('../models/modelVerificationRequest');
 
 module.exports = {
   /**
-   *
+   *  Checks if email is unique
    * @param {String} email
    * @return {Boolean} whether the email is unique inside database
    */
@@ -18,7 +19,7 @@ module.exports = {
     return result.length == 0;
   },
   /**
-   *
+   *  Checks if username is unique
    * @param {String} username
    * @return {Boolean} whether the username is unique inside database
    */
@@ -48,10 +49,18 @@ module.exports = {
     return user.save();
   },
 
+  /**
+   * Gets user credentials by email
+   * @param {Object} email - user email
+   */
   getCredential: async (email) => {
     return await UserCredential.findOne({email: email});
   },
 
+  /**
+   * Gets user information by user id
+   * @param {Object} userId - user id
+   */
   getUser: async (userId) => {
     return await User.findOne({_id: userId});
   },
@@ -86,4 +95,24 @@ module.exports = {
 
 };
 
+  /**
+   * Creates a verification request for a user
+   * @param {Object} userId - user id
+   * @param {Object} imgKey - image key in s3 bucket to government id
+   */
+  createVerificationRequest: async (userId, imgKey) => {
+    const request = new VerficationRequest({
+      user_id: userId,
+      img_key: imgKey,
+    });
+    return await request.send();
+  },
 
+  /**
+   * Gets a verification request created by a user
+   * @param {Object} userId - user id
+   */
+  getVerificationRequest: async (userId) => {
+    return await VerficationRequest.findOne({user_id: userId});
+  },
+};
