@@ -42,4 +42,13 @@ module.exports = {
       throw ApiError.badRequestError('Invalid credentials');
     } else return await userDal.getUser(cred.user_id);
   },
+
+  /**
+     * Get user information
+     * @param {Object} userId - user id
+  */
+  getUser: async (userId) => {
+    return await userDal.getUser(userId);
+  },
+
 };

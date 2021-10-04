@@ -2,6 +2,7 @@ const userService = require('../services/serviceUser');
 const ApiError = require('../../error/ApiError');
 const {validationResult, checkSchema} = require('express-validator');
 const jwt = require('jsonwebtoken');
+const verify = require('../utils/verifyToekn');
 
 const pathPrefix = '/api/v1';
 
@@ -113,9 +114,29 @@ const login = (app) => {
 };
 // End Login
 
+// Start get user info
+const getUser = (app) => {
+  app.get(
+      pathPrefix+'/users/self',
+      verify,
+      async (req, res, next) => {
+        const {user} = req;
+        try {
+          const userInfo = await userService.getUser(user.user_id);
+          res.send(userInfo);
+        } catch (error) {
+          next(error);
+        }
+      },
+  );
+};
+// End get user info
+
 module.exports = (app) => {
   // Route for registering a new user
   register(app);
   // Route for logging in returning user
   login(app);
+  // Route for getting user information
+  getUser(app);
 };
