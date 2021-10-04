@@ -5,6 +5,8 @@ const express = require('express');
 const {urlencoded} = require('body-parser');
 const mongoose = require('mongoose');
 const errorHandler = require('./error/api-error-handler');
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocs = require('./swaggerConfig');
 
 const server = express();
 
@@ -28,6 +30,7 @@ mongoose
 server.use(urlencoded({extended: true}));
 server.use(morgan('dev'));
 server.use(express.json());
+server.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 // Routes
 routes(server);
