@@ -5,9 +5,6 @@ const jwt = require('jsonwebtoken');
 
 const pathPrefix = '/api/v1';
 
-// Swagger models
-
-
 // Routes
 
 // Start Registration
