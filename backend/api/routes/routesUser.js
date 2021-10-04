@@ -151,15 +151,12 @@ const uploadGovernmentId = (app) => {
             throw ApiError.badRequestError('File required');
           }
           await userService.handleVerificationRequest(file, userId);
-          res.send(file);
+          res.status(200).send(
+              {status: '200',
+                message: 'Successfully uploaded image'});
         } catch (error) {
           next(error);
         }
-        // verify jwt token is valid
-        // verify user is not already verified
-        // verify user does not have a pending verification
-        // upload file to s3
-        // upload gov_id object to mongoose
       });
 };
 // End Upload Govrnment ID/Request Verification
