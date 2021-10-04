@@ -106,10 +106,11 @@ describe('Create User Test', () => {
           done();
         });
   });
-    it('Should return a 200 status and create new user (Clean up database after running this command)', (done) => {
+    it('Should return a 200 status and create new user', (done) => {
+    let randName = (Math.random() + 1).toString(36).substring(7);
     const user = {
-      email: 'newemail@gmail.com',
-      username: 'tester',
+      email: randName+'@notamail.com',
+      username: randName,
       password: 'test',
     };
     chai.request(server)
