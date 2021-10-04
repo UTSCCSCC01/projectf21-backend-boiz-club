@@ -19,4 +19,4 @@ const verificationRequestSchema = new Schema({
 const VerificationRequest = mongoose.model(
     'Verification_Request', verificationRequestSchema);
 
-module.exports=VerificationRequest;
+module.exports = VerificationRequest;

@@ -81,14 +81,13 @@ module.exports = {
   handleVerificationRequest: async (file, userId) => {
     // Check if already verified
     const user = await userDal.getUser(userId);
-    console.log(user);
     if (user.authentication_lvl != 'unverified') {
       throw ApiError.badRequestError('User already verified');
     }
     // Check if user has pending verification
     const request = await userDal.getVerificationRequest(userId);
     if (request) {
-      throw ApiError.badRequestError('User has pending verification request');
+      throw ApiError.badRequestError('User has a pending verification request');
     }
     // Upload file to s3
     const uploadedFile = await s3.upload(file);
