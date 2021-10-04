@@ -4,6 +4,7 @@ const {validationResult, checkSchema} = require('express-validator');
 const jwt = require('jsonwebtoken');
 const normalizeEmail = require('normalize-email');
 const verifyToken = require('../utils/verifyToken');
+const verify = require('../utils/verifyToekn');
 
 const pathPrefix = '/api/v1/users';
 
@@ -178,6 +179,24 @@ const getUser = (app) => {
   app.get(
       pathPrefix+'/users/self',
       verifyToken,
+      async (req, res, next) => {
+        const {user} = req;
+        try {
+          const userInfo = await userService.getUser(user.user_id);
+          res.send(userInfo);
+        } catch (error) {
+          next(error);
+        }
+      },
+  );
+};
+// End get user info
+
+// Start get user info
+const getUser = (app) => {
+  app.get(
+      pathPrefix+'/users/self',
+      verify,
       async (req, res, next) => {
         const {user} = req;
         try {
