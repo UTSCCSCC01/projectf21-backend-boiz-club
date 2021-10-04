@@ -161,6 +161,24 @@ const uploadGovernmentId = (app) => {
 };
 // End Upload Govrnment ID/Request Verification
 
+// Start get user info
+const getUser = (app) => {
+  app.get(
+      pathPrefix+'/users/self',
+      verifyToken,
+      async (req, res, next) => {
+        const {user} = req;
+        try {
+          const userInfo = await userService.getUser(user.user_id);
+          res.send(userInfo);
+        } catch (error) {
+          next(error);
+        }
+      },
+  );
+};
+// End get user info
+
 module.exports = (app) => {
   // Route for registering a new user
   register(app);
@@ -168,4 +186,6 @@ module.exports = (app) => {
   login(app);
   // Route for uploading government id
   uploadGovernmentId(app);
+  // Route for getting user information
+  getUser(app);
 };
