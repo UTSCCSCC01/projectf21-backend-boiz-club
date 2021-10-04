@@ -17,9 +17,12 @@ function upload(file) {
   const uploadParams = {
     Bucket: bucketName,
     Body: file.buffer,
-    Key: `${uuid.v4()}.${file.fileType}`,
+    Key: `${uuid.v4()}.${
+      file.originalname.substring(
+          file.originalname.lastIndexOf('.') + 1)
+    }`,
   };
   return s3.upload(uploadParams).promise();
 }
 
-module.exports ={upload};
+module.exports={upload};
