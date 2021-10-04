@@ -72,7 +72,7 @@ module.exports = {
       user_id: userId,
       img_key: imgKey,
     });
-    return await request.send();
+    return await request.save();
   },
 
   /**
