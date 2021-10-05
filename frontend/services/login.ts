@@ -13,7 +13,7 @@ async function login(email: string, password: string) {
       throw err;
     });
 
-  return res.headers['auth-tken'];
+  return res.headers['auth-token'];
 }
 
 export default login;
