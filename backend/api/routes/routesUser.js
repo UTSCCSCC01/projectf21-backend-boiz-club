@@ -153,7 +153,7 @@ const uploadGovernmentId = (app) => {
           }
           await userService.handleVerificationRequest(file, userId);
           res.status(200).send(
-              {status: '200',
+              {status: 200,
                 message: 'Successfully uploaded image'});
         } catch (error) {
           next(error);
