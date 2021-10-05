@@ -23,7 +23,7 @@ describe('Create User Test', () => {
       'location': 'body',
     };
     chai.request(server)
-        .post(ApiPrefix+'/users')
+        .post(ApiPrefix+'/users/register')
         .send(badUser)
         .end((err, res) => {
           res.should.have.status(400);
@@ -47,7 +47,7 @@ describe('Create User Test', () => {
       'location': 'body',
     };
     chai.request(server)
-        .post(ApiPrefix+'/users')
+        .post(ApiPrefix+'/users/register')
         .send(badUser)
         .end((err, res) => {
           res.should.have.status(400);
@@ -71,7 +71,7 @@ describe('Create User Test', () => {
       'location': 'body',
     };
     chai.request(server)
-        .post(ApiPrefix+'/users')
+        .post(ApiPrefix+'/users/register')
         .send(badUser)
         .end((err, res) => {
           res.should.have.status(400);
@@ -95,7 +95,7 @@ describe('Create User Test', () => {
       'location': 'body',
     };
     chai.request(server)
-        .post(ApiPrefix+'/users')
+        .post(ApiPrefix+'/users/register')
         .send(badUser)
         .end((err, res) => {
           res.should.have.status(400);
@@ -114,7 +114,7 @@ describe('Create User Test', () => {
       password: 'test',
     };
     chai.request(server)
-        .post(ApiPrefix+'/users')
+        .post(ApiPrefix+'/users/register')
         .send(user)
         .end((err, res) => {
           res.should.have.status(200);
@@ -135,7 +135,7 @@ describe('Create User Test', () => {
       'location': 'body',
     };
     chai.request(server)
-        .post(ApiPrefix+'/users')
+        .post(ApiPrefix+'/users/register')
         .send(badUser)
         .end((err, res) => {
           res.should.have.status(400);
