@@ -2,6 +2,7 @@ const swaggerJsDoc = require('swagger-jsdoc');
 
 const swaggerOptions = {
   swaggerDefinition: {
+    openapi: '3.0.2',
     info: {
       title: 'PawsUp API',
       version: '1.0.0',

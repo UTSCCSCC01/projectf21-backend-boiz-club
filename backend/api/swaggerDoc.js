@@ -7,18 +7,20 @@
  *   summary: Create user
  *   tags: [User]
  *   description: Create a new user
- *   parameters:
- *    - in: body
- *      name: body
- *      required: true
- *      description: User credentials
+ *   consumes:
+ *    - application/json
+ *   requestBody:
+ *    content:
+ *     application/json:
  *      schema:
  *       $ref: '#/definitions/NewUserRequest'
  *   responses:
  *    200:
  *     description: Successfully created new user
- *     schema:
-*       $ref: '#/definitions/User'
+ *     content:
+ *      application/json:
+ *       schema:
+ *        $ref: '#/definitions/User'
  *    400:
  *     description: Bad request
  *    500:
