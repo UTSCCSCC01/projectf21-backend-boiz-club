@@ -1,4 +1,6 @@
 /**
+ * Routes
+ *
  * @swagger
  * /api/v1/users/register:
  *  post:
@@ -24,6 +26,8 @@
  */
 
 /**
+ * Models
+ *
  * @swagger
  * definitions:
  *  NewUserRequest:
@@ -83,6 +87,8 @@
  */
 
 /**
+ * Tags
+ *
  * @swagger
  * tags:
  *  name: User
