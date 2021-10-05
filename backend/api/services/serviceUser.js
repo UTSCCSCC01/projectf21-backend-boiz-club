@@ -65,4 +65,11 @@ module.exports = {
     await userDal.createVerificationRequest(userId, uploadedFile.key);
     return;
   },
+  /**
+     * Get user information
+     * @param {Object} userId - user id
+  */
+  getUser: async (userId) => {
+    return await userDal.getUser(userId);
+  },
 };
