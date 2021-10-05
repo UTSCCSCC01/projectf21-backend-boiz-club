@@ -2,7 +2,7 @@ const userService = require('../services/serviceUser');
 const ApiError = require('../../error/ApiError');
 const {validationResult, checkSchema} = require('express-validator');
 const jwt = require('jsonwebtoken');
-const verifyToken = require('../utils/verifyToekn');
+const verifyToken = require('../utils/verifyToken');
 
 const pathPrefix = '/api/v1/users';
 
@@ -105,7 +105,7 @@ const login = (app) => {
                 username: user.username,
               },
               process.env.TOKEN_SECRET);
-          res.header('auth-tken', token).send(user);
+          res.header('auth-token', token).send(user);
         } catch (error) {
           next(error);
         }
