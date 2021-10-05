@@ -179,6 +179,24 @@ const getUser = (app) => {
 };
 // End get user info
 
+// Start get user info
+const getUser = (app) => {
+  app.get(
+      pathPrefix+'/users/self',
+      verify,
+      async (req, res, next) => {
+        const {user} = req;
+        try {
+          const userInfo = await userService.getUser(user.user_id);
+          res.send(userInfo);
+        } catch (error) {
+          next(error);
+        }
+      },
+  );
+};
+// End get user info
+
 module.exports = (app) => {
   // Route for registering a new user
   register(app);
