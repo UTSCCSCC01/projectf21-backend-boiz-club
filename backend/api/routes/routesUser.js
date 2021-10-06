@@ -3,8 +3,8 @@ const ApiError = require('../../error/ApiError');
 const {validationResult, checkSchema} = require('express-validator');
 const constants= require('../../constants');
 const jwt = require('jsonwebtoken');
-
-const pathPrefix = constants.ApiPrefix;
+const verifyToken = require('../utils/verifyToken');
+const pathPrefix = constants.ApiPrefix+'/users';
 
 // Start Registration
 const registrationSchema = {
@@ -53,7 +53,7 @@ const registrationSchema = {
 };
 
 const register = (app) => {
-  app.post(pathPrefix+'/users/register',
+  app.post(pathPrefix+'/register',
       checkSchema(registrationSchema),
       async (req, res, next) => {
         const {body} = req;
@@ -90,7 +90,7 @@ const loginSchema = {
 
 const login = (app) => {
   app.post(
-      pathPrefix+'/users/login',
+      pathPrefix+'/login',
       checkSchema(loginSchema),
       async (req, res, next) => {
         const {body} = req;
@@ -105,7 +105,7 @@ const login = (app) => {
                 username: user.username,
               },
               process.env.TOKEN_SECRET);
-          res.header('auth-tken', token).send(user);
+          res.header('auth-token', token).send(user);
         } catch (error) {
           next(error);
         }
@@ -113,10 +113,79 @@ const login = (app) => {
   );
 };
 // End Login
+// Start Upload Govrnment ID/Request Verification
+/*
+Multer to upload images, filter file types to accept only images,
+limit file upload size to 5 MB and accept file with key gov_id
+*/
+const multer = require('multer');
+const storage = multer.memoryStorage({
+  destination: function(req, file, callback) {
+    callback(null, '');
+  },
+});
+const fileFilter = (req, file, callback) =>{
+  if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
+    callback(null, true);
+  } else {
+    callback(ApiError.badRequestError('Invalid file type'), false);
+  }
+};
+const upload = multer(
+    {storage: storage,
+      limits: {
+        fileSize: 1024 * 1024 * 5, // 5 MB
+      },
+      fileFilter: fileFilter,
+    }).single('gov-id');
+
+
+const uploadGovernmentId = (app) => {
+  app.post(pathPrefix+'/self/request-verification',
+      verifyToken, upload,
+      async (req, res, next) => {
+        try {
+          const userId = req.user.user_id;
+          const file = req.file;
+          if (!file) {
+            throw ApiError.badRequestError('File required');
+          }
+          await userService.handleVerificationRequest(file, userId);
+          res.status(200).send(
+              {status: 200,
+                message: 'Successfully uploaded image'});
+        } catch (error) {
+          next(error);
+        }
+      });
+};
+// End Upload Govrnment ID/Request Verification
+
+// Start get user info
+const getUser = (app) => {
+  app.get(
+      pathPrefix+'/self',
+      verifyToken,
+      async (req, res, next) => {
+        const {user} = req;
+        try {
+          const userInfo = await userService.getUser(user.user_id);
+          res.send(userInfo);
+        } catch (error) {
+          next(error);
+        }
+      },
+  );
+};
+// End get user info
 
 module.exports = (app) => {
   // Route for registering a new user
   register(app);
   // Route for logging in returning user
   login(app);
+  // Route for uploading government id
+  uploadGovernmentId(app);
+  // Route for getting user information
+  getUser(app);
 };

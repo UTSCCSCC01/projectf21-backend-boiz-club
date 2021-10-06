@@ -29,7 +29,7 @@ const SignInScreen = ({ navigation }: RootStackScreenProps<'SignIn'>) => {
 
   // Make sure user information inputs are not empty
   const validateInput = (email: string, password: string) => {
-    if (email == null || email.length === 0 || ) {
+    if (email == null || email.length === 0) {
       setInputError({
         emailError: true,
         passwordError: false,
@@ -88,7 +88,7 @@ const SignInScreen = ({ navigation }: RootStackScreenProps<'SignIn'>) => {
       }
       return null;
     });
-    if (userToken !== null) {
+    if (userToken != null) {
       try {
         await AsyncStorage.setItem('userToken', userToken);
         dispatch(addToken({ userToken: userToken }));
