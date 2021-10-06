@@ -2,6 +2,7 @@ const userService = require('../services/serviceUser');
 const ApiError = require('../../error/ApiError');
 const {validationResult, checkSchema} = require('express-validator');
 const jwt = require('jsonwebtoken');
+const normalizeEmail = require('normalize-email');
 
 const pathPrefix = '/api/v1';
 
@@ -116,7 +117,8 @@ const login = (app) => {
 const forgotPassword = (app) => {
   app.post(pathPrefix + '/forgot-password/:email', async (req, res, next) => {
     try {
-      const result = await userService.sendOTPEmail(req.params.email);
+      const result = await
+      userService.sendOTPEmail(normalizeEmail(req.params.email));
       res.json(result);
     } catch (error) {
       next(error);
