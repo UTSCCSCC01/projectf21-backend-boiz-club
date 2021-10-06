@@ -66,8 +66,7 @@ module.exports = {
   },
 
   /**
-   * Gets user information by user id
-   * @param {Object} userId - user id
+   * Generate OTP and save it into the database
    */
   createAndPostOTP: async () => {
     const otp = otpGenerator.generate(
@@ -84,20 +83,6 @@ module.exports = {
       return savedOTP;
     } catch (error) {
       throw ApiError.badRequestError(`The OTP ${otp.id} cannot be saved`);
-    }
-  },
-
-  /**
-   * Gets user information by user id
-   * @param {Object} email
-   */
-  searchEmailUser: async (email) => {
-    try {
-      const user = await UserCredential.findOne({email: email});
-      return user;
-    } catch (err) {
-      throw ApiError.requestNotFoundError(
-          `There is no email ${email} in the database`, err);
     }
   },
 
