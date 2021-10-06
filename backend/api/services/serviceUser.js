@@ -45,6 +45,11 @@ module.exports = {
     } else return await userDal.getUser(cred.user_id);
   },
 
+  /**
+     * Resets an existing user's password
+     * @param {String} email - email of the user requesting the password reset
+     * @param {Object} body - encryptedEmail, encryptedOTPId, otp, password
+  */
   resetPassword: async (email, body) => {
     const currentDate = new Date();
     const {encryptedEmail, encryptedOTPId, otp, password} = body;
