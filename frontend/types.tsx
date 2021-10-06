@@ -42,7 +42,7 @@ export type HomeTabScreenProps<Screen extends keyof HomeTabParamList> =
 export type RootStackParamList = {
   SignIn: undefined;
   SignUp: undefined;
-  ResetPassword: undefined;
+  ForgotPassword: undefined;
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> =
