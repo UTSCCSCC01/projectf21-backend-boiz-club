@@ -20,7 +20,11 @@ function RootStackNavigator() {
         component={SignUpScreen}
         options={{ headerShown: false }}
       />
-      <RootStack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
+      <RootStack.Screen 
+        name="ForgotPassword" 
+        component={ForgotPasswordScreen} 
+        options={{ headerShown: false}}
+      />
     </RootStack.Navigator>
   );
 }

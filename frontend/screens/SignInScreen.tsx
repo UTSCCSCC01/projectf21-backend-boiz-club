@@ -165,7 +165,7 @@ const SignInScreen = ({ navigation }: RootStackScreenProps<'SignIn'>) => {
         </FormControl>
         <Button
           height="12"
-          marginTop="16"
+          marginTop="0"
           color="#72BCC1"
           _text={{ color: 'white', fontSize: 18 }}
           onPress={() => signInHandle(userData.email, userData.password)}
