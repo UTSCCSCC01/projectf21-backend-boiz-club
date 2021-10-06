@@ -4,6 +4,8 @@ const crypto = require('crypto');
 const User = require('../models/modelUser');
 const UserCredential = require('../models/modelUserCredential');
 const VerficationRequest = require('../models/modelVerificationRequest');
+const OTP = require('../models/modelOTP');
+
 
 module.exports = {
   /**
@@ -74,6 +76,15 @@ module.exports = {
     });
     return await request.save();
   },
+  getOTP: async (otpId) => {
+    return await OTP.findOne({_id: otpId});
+  },
+
+  deleteOTP: async (otpId) => {
+    return await OTP.findOneAndDelete({_id: otpId});
+  },
+};
+
 
   /**
    * Gets a verification request created by a user
