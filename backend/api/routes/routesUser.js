@@ -200,6 +200,7 @@ module.exports = (app) => {
   register(app);
   // Route for logging in returning user
   login(app);
+  // Route for forgot password request
   forgotPassword(app);
   // Route for uploading government id
   uploadGovernmentId(app);

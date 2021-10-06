@@ -65,6 +65,10 @@ module.exports = {
     return await User.findOne({_id: userId});
   },
 
+  /**
+   * Gets user information by user id
+   * @param {Object} userId - user id
+   */
   createAndPostOTP: async () => {
     const otp = otpGenerator.generate(
         6, {alphabets: false, upperCase: false, specialChars: false});
@@ -83,6 +87,10 @@ module.exports = {
     }
   },
 
+  /**
+   * Gets user information by user id
+   * @param {Object} email
+   */
   searchEmailUser: async (email) => {
     try {
       const user = await UserCredential.findOne({email: email});
