@@ -169,7 +169,7 @@ const forgotPassword = (app) => {
   app.post(pathPrefix + '/forgot-password/:email', async (req, res, next) => {
     try {
       const result = await
-      userService.sendOTPEmail(normalizeEmail(req.params.email));
+      userService.sendOTPEmail(req.params.email);
       res.json(result);
     } catch (error) {
       next(error);
