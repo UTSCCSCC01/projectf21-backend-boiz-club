@@ -162,6 +162,9 @@ const uploadGovernmentId = (app) => {
 };
 // End Upload Govrnment ID/Request Verification
 
+/*
+Forgot password request
+*/
 const forgotPassword = (app) => {
   app.post(pathPrefix + '/forgot-password/:email', async (req, res, next) => {
     try {
@@ -173,6 +176,7 @@ const forgotPassword = (app) => {
     }
   });
 };
+
 // Start get user info
 const getUser = (app) => {
   app.get(

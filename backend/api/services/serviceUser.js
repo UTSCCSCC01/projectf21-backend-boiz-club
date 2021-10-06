@@ -73,6 +73,8 @@ module.exports = {
         return {encryptedEmail, encryptedOTPId};
       }
     });
+  },
+
   /**
      * Saves verification request and government id
      * @param {Object} file - user government id
@@ -102,5 +104,4 @@ module.exports = {
   getUser: async (userId) => {
     return await userDal.getUser(userId);
   },
-
 };

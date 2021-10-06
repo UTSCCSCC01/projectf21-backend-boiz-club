@@ -93,8 +93,6 @@ module.exports = {
     }
   },
 
-};
-
   /**
    * Creates a verification request for a user
    * @param {Object} userId - user id
@@ -115,4 +113,6 @@ module.exports = {
   getVerificationRequest: async (userId) => {
     return await VerficationRequest.findOne({user_id: userId});
   },
+
 };
+
