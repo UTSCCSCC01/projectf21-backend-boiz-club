@@ -99,13 +99,13 @@ module.exports = {
     let decipher = crypto.createDecipheriv(
         algorithm, process.env.SECURITY_KEY, process.env.INITVECTOR);
     let decryptedEmail = decipher.update(
-        String(encryptedEmail), 'hex', 'utf-8');
+        encryptedEmail, 'hex', 'utf-8');
     decryptedEmail += decipher.final('utf8');
 
     decipher = crypto.createDecipheriv(
         algorithm, process.env.SECURITY_KEY, process.env.INITVECTOR);
     let decryptedOTPId = decipher.update(
-        String(encryptedOTPId), 'hex', 'utf-8');
+        encryptedOTPId, 'hex', 'utf-8');
     decryptedOTPId += decipher.final('utf8');
 
     if (decryptedEmail != email) {
@@ -122,7 +122,7 @@ module.exports = {
           'Failed to find the OTP in the database', error);
     }
 
-    if (currentDate > otpInstance.expiration_time) {
+    if (currentDate >= otpInstance.expiration_time) {
       throw ApiError.badRequestError('The OTP is already expired');
     }
     if (otp != otpInstance.otp) {
@@ -130,11 +130,9 @@ module.exports = {
     }
 
     try {
-      await userDal.deleteOTP(mongoose.Types.ObjectId(otp.id));
+      await userDal.deleteOTP(mongoose.Types.ObjectId(decryptedOTPId));
     } catch (error) {
       throw ApiError.badRequestError('Failed to delete the OTP', error);
     }
-    console.log('SUCCESS!');
-    return 'Success!';
   },
 };
