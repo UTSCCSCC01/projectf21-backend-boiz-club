@@ -63,14 +63,13 @@ module.exports = {
         let cipher = crypto.createCipheriv(
             algorithm, process.env.SECURITY_KEY, process.env.INITVECTOR);
 
-        let encryptedEmail = cipher.update(String(email), 'utf-8', 'hex');
+        let encryptedEmail = cipher.update(email, 'utf-8', 'hex');
         encryptedEmail += cipher.final('hex');
 
         cipher = crypto.createCipheriv(
             algorithm, process.env.SECURITY_KEY, process.env.INITVECTOR);
 
-        let encryptedOTPId = cipher.update(
-            String(otpInstance.id), 'utf-8', 'hex');
+        let encryptedOTPId = cipher.update(otpInstance.id, 'utf-8', 'hex');
         encryptedOTPId += cipher.final('hex');
 
         return {encryptedEmail, encryptedOTPId};
