@@ -93,7 +93,7 @@ module.exports = {
           'Failed to find the OTP in the database', error);
     }
 
-    if (currentDate >= otpInstance.expiration_time) {
+    if (currentDate > otpInstance.expiration_time) {
       throw ApiError.badRequestError('The OTP is already expired');
     }
     if (otp != otpInstance.otp) {
