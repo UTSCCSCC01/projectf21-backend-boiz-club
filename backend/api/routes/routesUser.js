@@ -1,12 +1,11 @@
 const userService = require('../services/serviceUser');
 const ApiError = require('../../error/ApiError');
 const {validationResult, checkSchema} = require('express-validator');
+const constants= require('../../constants');
 const jwt = require('jsonwebtoken');
 const normalizeEmail = require('normalize-email');
 const verifyToken = require('../utils/verifyToken');
-const verify = require('../utils/verifyToekn');
-
-const pathPrefix = '/api/v1/users';
+const pathPrefix = constants.ApiPrefix+'/users';
 
 // Start Registration
 const registrationSchema = {
