@@ -179,6 +179,19 @@ const getUser = (app) => {
 };
 // End get user info
 
+const resetPassword = (app) => {
+  app.post(pathPrefix + '/forgot-password/:email', async (req, res, next) => {
+    try {
+      const result = await userService.resetPassword(
+          req.params.email, req.body);
+      res.json(result);
+    } catch (error) {
+      next(error);
+    }
+  });
+};
+
+
 module.exports = (app) => {
   // Route for registering a new user
   register(app);
@@ -188,4 +201,5 @@ module.exports = (app) => {
   uploadGovernmentId(app);
   // Route for getting user information
   getUser(app);
+  resetPassword(app);
 };
