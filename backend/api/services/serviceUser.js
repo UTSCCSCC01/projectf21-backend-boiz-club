@@ -49,9 +49,12 @@ module.exports = {
   /**
      * Send the verification code for forgot password request
      * @param {Object} email - email of the user requesting for password reset
+     * @return {String} encrypted email
+     * @return {String} encrypted OTP ID
+     *
   */
   sendOTPEmail: async (email) => {
-    const user = await userDal.searchEmailUser(email);
+    const user = await userDal.getCredential(email);
     const otpInstance = await userDal.createAndPostOTP();
 
     const emailTemplate = emailForgotPassword(user, otpInstance.otp);
