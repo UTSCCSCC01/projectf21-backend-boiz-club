@@ -58,7 +58,7 @@ const ForgotPasswordScreen = ({ navigation }: RootStackScreenProps<'ForgotPasswo
   return (
     <Box safeArea flex={1} p="2">
       <VStack alignItems="center" space="md">
-        <Box w="350" h="150">
+        <Box w="210" h="90">
           <Image
             flex={1}
             source={require('@/assets/images/pawsup-logo.png')}
