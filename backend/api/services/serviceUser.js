@@ -1,7 +1,6 @@
 const ApiError = require('../../error/ApiError');
 const userDal = require('../repositories/dalUser');
 const crypto = require('crypto');
-const cryptoJSON = require('crypto-json');
 const {transporter, emailForgotPassword} =
 require('../../api/utils/emailConfig');
 
@@ -59,19 +58,16 @@ module.exports = {
       if (err) {
         console.log(err);
       } else {
-        const details = {
-          'email': email,
-          'otp_id': otpInstance.id,
-        };
+        const algorithm = 'aes-256-cbc';
+        const initVector = crypto.randomBytes(16);
+        const securityKey = process.env.PASSPHRASE;
 
-        const keys = ['email', 'otp_id'];
-        const algorithm = 'aes256';
-        const encoding = 'hex';
+        const cipher = crypto.createCipheriv(
+            algorithm, securityKey, initVector);
+        const encryptedEmail = cipher.update(email, 'utf-8', 'hex');
+        const encryptedOTPId = cipher.update(otpInstance.id, 'utf-8', 'hex');
 
-        const encryptedDetails = cryptoJSON.encrypt(
-            details, process.env.PASSPHRASE, {encoding, keys, algorithm});
-
-        return encryptedDetails;
+        return {encryptedEmail, encryptedOTPId};
       }
     });
   },
