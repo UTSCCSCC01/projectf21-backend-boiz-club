@@ -1,6 +1,7 @@
 const ApiError = require('../../error/ApiError');
 const userDal = require('../repositories/dalUser');
 const crypto = require('crypto');
+const cryptoJSON = require('crypto-json');
 const {transporter, emailForgotPassword} =
 require('../../api/utils/emailConfig');
 
@@ -48,11 +49,7 @@ module.exports = {
   sendOTPEmail: async (email) => {
     const user = await userDal.searchEmailUser(email);
     const otpInstance = await userDal.createAndPostOTP();
-    /* Only for testing
-    const user = {
-      'email': email,
-    };
-    */
+
     const emailTemplate = emailForgotPassword(user, otpInstance.otp);
 
 
@@ -63,13 +60,16 @@ module.exports = {
         console.log(err);
       } else {
         const details = {
-          'timestamp': otpInstance.created_at,
           'email': email,
-          'message': 'OTP has been successfully sent to the user',
           'otp_id': otpInstance.id,
         };
-        const encryptedDetails = CryptoJS.AES.encrypt(
-            JSON.stringify(details), process.env.PASSPHRASE);
+
+        const keys = ['timestamp', 'email', 'otp_id'];
+        const algorithm = 'aes256';
+        const encoding = 'hex';
+
+        const encryptedDetails = cryptoJSON.encrypt(
+            details, process.env.PASSPHRASE, {encoding, keys, algorithm});
 
         return encryptedDetails;
       }
