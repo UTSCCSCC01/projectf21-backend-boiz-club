@@ -113,9 +113,23 @@ const login = (app) => {
 };
 // End Login
 
+const resetPassword = (app) => {
+  app.post(pathPrefix + '/forgot-password/:email', async (req, res, next) => {
+    try {
+      const result = await userService.resetPassword(
+          req.params.email, req.body);
+      res.json(result);
+    } catch (error) {
+      next(error);
+    }
+  });
+};
+
+
 module.exports = (app) => {
   // Route for registering a new user
   register(app);
   // Route for logging in returning user
   login(app);
+  resetPassword(app);
 };
