@@ -51,13 +51,10 @@ module.exports = {
 
     const emailTemplate = emailForgotPassword(user, otpInstance.otp);
 
-
     await transporter.verify();
-    // How to catch error from the callback function?
-
-    await transporter.sendMail(emailTemplate, (err, info) => {
-      if (err) {
-        console.log(err);
+    await transporter.sendMail(emailTemplate, (error) => {
+      if (error) {
+        throw ApiError.badRequestError('Failed to send the email', error);
       } else {
         const algorithm = 'aes-256-cbc';
         let cipher = crypto.createCipheriv(
