@@ -47,14 +47,16 @@ module.exports = {
 
   resetPassword: async (email, body) => {
     const currentDate = new Date();
-    const {key, otp, password} = body;
+    const {encryptedEmail, encryptedOTPId, otp, password} = body;
 
     if (!email) {
       throw ApiError.badRequestError('Email is not provided');
     }
-
-    if (!key) {
-      throw ApiError.badRequestError('Key is not provided');
+    if (!encryptedEmail) {
+      throw ApiError.badRequestError('Encrypted email is not provided');
+    }
+    if (!encryptedOTPId) {
+      throw ApiError.badRequestError('Encrypted OTP ID is not provided');
     }
     if (!otp) {
       throw ApiError.badRequestError('OTP is not provided');
@@ -63,23 +65,29 @@ module.exports = {
       throw ApiError.badRequestError('New password is not provided');
     }
 
-    let decodedKey;
+    const algorithm = 'aes-256-cbc';
 
-    try {
-      decodedKey = CryptoJS.AES.decrypt(encrypted, env.process.PASSPHRASE);
-    } catch (error) {
-      throw ApiError.badRequestError('Failed to decrypt the key', error);
-    }
+    let decipher = crypto.createDecipheriv(
+        algorithm, process.env.SECURITY_KEY, process.env.INITVECTOR);
+    let decryptedEmail = decipher.update(
+        String(encryptedEmail), 'hex', 'utf-8');
+    decryptedEmail += decipher.final('utf8');
 
-    const parsedKey = JSON.parse(decodedKey);
-    if (parsedKey.email != email) {
+    decipher = crypto.createDecipheriv(
+        algorithm, process.env.SECURITY_KEY, process.env.INITVECTOR);
+    let decryptedOTPId = decipher.update(
+        String(encryptedOTPId), 'hex', 'utf-8');
+    decryptedOTPId += decipher.final('utf8');
+
+    if (decryptedEmail != email) {
       throw ApiError.badRequestError(
           `The OTP was not sent to the email ${email}`);
     }
 
     let otpInstance;
     try {
-      otpInstance = await userDal.getOTP(mongoose.Types.ObjectId(otp.id));
+      otpInstance = await userDal.getOTP(
+          mongoose.Types.ObjectId(decryptedOTPId));
     } catch (error) {
       throw ApiError.requestNotFoundError(
           'Failed to find the OTP in the database', error);
@@ -97,6 +105,7 @@ module.exports = {
     } catch (error) {
       throw ApiError.badRequestError('Failed to delete the OTP', error);
     }
+    console.log('SUCCESS!');
     return 'Success!';
   },
 };
