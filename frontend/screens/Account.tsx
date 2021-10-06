@@ -7,13 +7,14 @@ import {
   Avatar,
   Modal,
   useToast,
-  Box,
-  Icon,
-  View,
+  Progress,
 } from 'native-base';
 import { FontAwesome5 } from '@expo/vector-icons';
 import * as DocumentPicker from 'expo-document-picker';
 import { useEffect, useState } from 'react';
+import requestVerification from '@/services/upload';
+import { useAppSelector } from '@/hooks/react-redux';
+import * as FileSystem from 'expo-file-system';
 
 type AccountProps = {
   showVerifyModal: boolean;
@@ -169,28 +170,55 @@ const VerifyAccountModal = ({
   showVerifyModal,
   setShowVerifyModal,
 }: AccountProps) => {
-  const [file, setFile] = useState('');
+  const [filename, setFilename] = useState('');
+  const [fileURI, setFileURI] = useState('');
+  const token = useAppSelector((state) => state.userCredential.userToken);
+
   const toast = useToast();
 
   const pickDocument = async () => {
-    await DocumentPicker.getDocumentAsync().then((resp) =>
-      setFile(resp.type == 'success' ? resp.name : '')
-    );
+    await DocumentPicker.getDocumentAsync({
+      type: 'image/*',
+    }).then((resp) => {
+      setFilename(resp.type === 'success' ? resp.name : '');
+      setFileURI(resp.type === 'success' ? resp.uri : '');
+    });
   };
 
   useEffect(() => {
-    setFile('');
+    setFilename('');
+    setFileURI('');
   }, []);
 
-  const onPressSaveId = () => {
+  const onPressSaveId = async () => {
     setShowVerifyModal(false);
-
-    if (file !== '')
-      toast.show({
-        status: 'success',
-        title: 'Verification request has been sent.',
-        placement: 'top',
-      });
+    if (filename !== '') {
+      await requestVerification(fileURI, token)
+        .catch((err) => {
+          console.log('ERROR');
+          toast.show({
+            status: 'error',
+            title: err.body,
+            placement: 'top',
+          });
+        })
+        .then((resp) => {
+          console.log(resp);
+          if (resp.status === 200) {
+            toast.show({
+              status: 'success',
+              title: 'Verification request has been sent.',
+              placement: 'top',
+            });
+          } else {
+            toast.show({
+              status: 'error',
+              title: JSON.parse(resp?.body).message,
+              placement: 'top',
+            });
+          }
+        });
+    }
   };
 
   const onPressCancel = () => {
@@ -204,7 +232,7 @@ const VerifyAccountModal = ({
       size="md"
     >
       <Modal.Content>
-        <Modal.CloseButton onPress={() => setFile('')} />
+        <Modal.CloseButton onPress={() => setFilename('')} />
         <Modal.Header>Verify Account</Modal.Header>
         <Modal.Body>
           <Column space={3}>
@@ -217,7 +245,7 @@ const VerifyAccountModal = ({
               and in accordance with security standards.
             </Text>
             <Button onPress={pickDocument}>
-              {file == '' ? 'Upload File' : file}
+              {filename === '' ? 'Upload File' : filename}
             </Button>
           </Column>
         </Modal.Body>
