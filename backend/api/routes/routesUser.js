@@ -114,7 +114,7 @@ const login = (app) => {
 // End Login
 
 const resetPassword = (app) => {
-  app.post(pathPrefix + '/forgot-password/:email', async (req, res, next) => {
+  app.post(pathPrefix + '/reset-password/:email', async (req, res, next) => {
     try {
       const result = await userService.resetPassword(
           req.params.email, req.body);
