@@ -7,7 +7,6 @@ import {
   Avatar,
   Modal,
   useToast,
-  Progress,
 } from 'native-base';
 import { FontAwesome5 } from '@expo/vector-icons';
 import * as DocumentPicker from 'expo-document-picker';
@@ -172,8 +171,9 @@ const VerifyAccountModal = ({
 }: AccountProps) => {
   const [filename, setFilename] = useState('');
   const [fileURI, setFileURI] = useState('');
-  const token = useAppSelector((state) => state.userCredential.userToken);
+  const [isLoading, setIsLoading] = useState(false);
 
+  const token = useAppSelector((state) => state.userCredential.userToken);
   const toast = useToast();
 
   const pickDocument = async () => {
@@ -191,11 +191,10 @@ const VerifyAccountModal = ({
   }, []);
 
   const onPressSaveId = async () => {
-    setShowVerifyModal(false);
     if (filename !== '') {
+      setIsLoading(true);
       await requestVerification(fileURI, token)
         .catch((err) => {
-          console.log('ERROR');
           toast.show({
             status: 'error',
             title: err.body,
@@ -203,7 +202,6 @@ const VerifyAccountModal = ({
           });
         })
         .then((resp) => {
-          console.log(resp);
           if (resp.status === 200) {
             toast.show({
               status: 'success',
@@ -219,6 +217,8 @@ const VerifyAccountModal = ({
           }
         });
     }
+    setIsLoading(false);
+    setShowVerifyModal(false);
   };
 
   const onPressCancel = () => {
@@ -232,7 +232,10 @@ const VerifyAccountModal = ({
       size="md"
     >
       <Modal.Content>
-        <Modal.CloseButton onPress={() => setFilename('')} />
+        <Modal.CloseButton
+          disabled={isLoading}
+          onPress={() => setFilename('')}
+        />
         <Modal.Header>Verify Account</Modal.Header>
         <Modal.Body>
           <Column space={3}>
@@ -244,7 +247,7 @@ const VerifyAccountModal = ({
               Note: All data is encrypted and your images will be stored safely
               and in accordance with security standards.
             </Text>
-            <Button onPress={pickDocument}>
+            <Button isLoading={isLoading} onPress={pickDocument}>
               {filename === '' ? 'Upload File' : filename}
             </Button>
           </Column>
@@ -254,11 +257,14 @@ const VerifyAccountModal = ({
             <Button
               variant="ghost"
               colorScheme="blueGray"
+              disabled={isLoading}
               onPress={onPressCancel}
             >
               Cancel
             </Button>
-            <Button onPress={onPressSaveId}>Save</Button>
+            <Button disabled={isLoading} onPress={onPressSaveId}>
+              Save
+            </Button>
           </Button.Group>
         </Modal.Footer>
       </Modal.Content>
