@@ -3,6 +3,7 @@ const crypto = require('crypto');
 // Schema Models
 const User = require('../models/modelUser');
 const UserCredential = require('../models/modelUserCredential');
+const OTP = require('../models/modelOTP');
 
 
 module.exports = {
@@ -54,6 +55,13 @@ module.exports = {
     return await User.findOne({_id: userId});
   },
 
+  getOTP: async (otpId) => {
+    return await OTP.findOne({_id: otpId});
+  },
+
+  deleteOTP: async (otpId) => {
+    return await OTP.findOneAndDelete({_id: otpId});
+  },
 };
 
 
