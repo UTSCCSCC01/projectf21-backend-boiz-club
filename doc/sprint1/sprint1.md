@@ -2,6 +2,15 @@
 
 The goal for this sprint is to work on two main epics **Auth** (BAC-7) and **Admin** (BAC-25). The goal is to have user authentication completed in regards to both the frontend and backend components. Simple admin functionality such as user verification through government identification is also a main goal of this sprint in both the frontend and backend systems.
 
+The following indivuals are participating in the current sprint and task division is stated on JIRA:
+  - Payam Yektamaram
+  - Steven Hans Limantoro
+  - Krutik Tejalkumar Shah
+  - Tanzim Ahmed
+  - Tony Chen
+  - Mark (LiangShu) Chen
+  - Pasa Aslan
+
 # Sprint Stories & Subtasks
 
 - **(BAC-1, Auth, 8 Pts)** As a first time user, I want to create an account so that I can access the services that are provided by Pawsup.
@@ -46,4 +55,11 @@ The goal for this sprint is to work on two main epics **Auth** (BAC-7) and **Adm
   - **BAC-44** Frontend - Create Admin View to Appro... 
   - **BAC-61** Frontend - Storybook 
 
+# Team Capacity
 
+As we can deduce from above we are commited to 34 story points for the first sprint and we have as a team decided to never commit to more then 40 story points in a single sprint.
+
+# Spikes
+- Figure out authentication provider and how ato uthenicate/authorize both frontend and backend systems
+- How to retrieve documents from an user's phone on the frontend system
+- How to create/use a S3 bucket in an encrypted manner
