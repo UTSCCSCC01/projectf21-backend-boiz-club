@@ -130,19 +130,6 @@ const SignUpScreen = ({ navigation }: RootStackScreenProps<'SignUp'>) => {
     return false;
   };
 
-  interface backendError{
-    value: string;
-    msg: string;
-    param: string;
-    location: string;
-  }
-
-  interface backendResponse{
-    status: string;
-    message: string;
-    errors: backendError[];
-  }
-
   const signUpHandle = async (email: string, username: string, password: string, confirmPassword: string) => {
     if (!validateInput(email, username, password, confirmPassword)) {
       return;
