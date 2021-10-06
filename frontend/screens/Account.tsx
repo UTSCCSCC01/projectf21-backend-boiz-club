@@ -13,7 +13,6 @@ import * as DocumentPicker from 'expo-document-picker';
 import { useEffect, useState } from 'react';
 import requestVerification from '@/services/upload';
 import { useAppSelector } from '@/hooks/react-redux';
-import * as FileSystem from 'expo-file-system';
 
 type AccountProps = {
   showVerifyModal: boolean;
