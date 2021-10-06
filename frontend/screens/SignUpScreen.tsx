@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import {
+  Alert,
   Box,
   Button,
   Heading,
@@ -10,6 +11,8 @@ import {
   Text,
   HStack,
   VStack,
+  IconButton,
+  CloseIcon,
 } from 'native-base';
 
 import { RootStackScreenProps } from '@/types';
@@ -64,6 +67,7 @@ const SignUpScreen = ({ navigation }: RootStackScreenProps<'SignUp'>) => {
     usernameError: false,
     passwordError: false,
     confirmPasswordError: false,
+    alreadyHaveAccountError: false,
   });
 
   // Function to validate user sign-up information
@@ -76,6 +80,7 @@ const SignUpScreen = ({ navigation }: RootStackScreenProps<'SignUp'>) => {
         usernameError: false,
         passwordError: false,
         confirmPasswordError: false,
+        alreadyHaveAccountError: false,
       });
     } 
 
@@ -86,6 +91,7 @@ const SignUpScreen = ({ navigation }: RootStackScreenProps<'SignUp'>) => {
         usernameError: true,
         passwordError: false,
         confirmPasswordError: false,
+        alreadyHaveAccountError: false,
       });
     } 
     
@@ -96,6 +102,7 @@ const SignUpScreen = ({ navigation }: RootStackScreenProps<'SignUp'>) => {
         usernameError: false,
         passwordError: true,
         confirmPasswordError: false,
+        alreadyHaveAccountError: false,
       });
     } 
     
@@ -106,6 +113,7 @@ const SignUpScreen = ({ navigation }: RootStackScreenProps<'SignUp'>) => {
         usernameError: false,
         passwordError: false,
         confirmPasswordError: true,
+        alreadyHaveAccountError: false,
       });
     } 
     
@@ -115,6 +123,7 @@ const SignUpScreen = ({ navigation }: RootStackScreenProps<'SignUp'>) => {
         usernameError: false,
         passwordError: false,
         confirmPasswordError: false,
+        alreadyHaveAccountError: false,
       });
       return true;
     }
@@ -127,7 +136,14 @@ const SignUpScreen = ({ navigation }: RootStackScreenProps<'SignUp'>) => {
     }
 
     const userSignUp = await signup(email, username, password).catch((err) => {
-      console.log('Sign Up failed');
+      console.log('Sign Up failed.');
+      setInputError({
+        emailError: false,
+        usernameError: false,
+        passwordError: false,
+        confirmPasswordError: false,
+        alreadyHaveAccountError: true,
+      });
       return null;
     });
 
@@ -165,7 +181,7 @@ const SignUpScreen = ({ navigation }: RootStackScreenProps<'SignUp'>) => {
 
       <VStack paddingRight="8" paddingLeft="8" paddingTop="4" space={4}>
 
-        <FormControl isInvalid={inputError.emailError}>
+        <FormControl isInvalid={inputError.emailError || inputError.alreadyHaveAccountError}>
           <FormControl.Label>Email</FormControl.Label>
           <Input
             size="lg"
@@ -177,7 +193,7 @@ const SignUpScreen = ({ navigation }: RootStackScreenProps<'SignUp'>) => {
           <FormControl.ErrorMessage
             _text={{ fontSize: 'sm', color: 'error.500', fontWeight: 400 }}
           >
-            Invalid Email
+            {(inputError.emailError) ? "Invalid Email" : (inputError.alreadyHaveAccountError) ? "There is an account with this email" : ""}
           </FormControl.ErrorMessage>
         </FormControl> 
 

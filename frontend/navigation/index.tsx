@@ -51,6 +51,8 @@ export default function Navigation({
   useEffect(() => {
     setTimeout(async () => {
       try {
+        // Uncomment following line to logout every time app refreshes.
+        // await AsyncStorage.removeItem('userToken');
         const userToken = await AsyncStorage.getItem('userToken');
         if (userToken !== null) {
           dispatch(
