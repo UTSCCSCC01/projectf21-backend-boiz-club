@@ -64,7 +64,7 @@ module.exports = {
           'otp_id': otpInstance.id,
         };
 
-        const keys = ['timestamp', 'email', 'otp_id'];
+        const keys = ['email', 'otp_id'];
         const algorithm = 'aes256';
         const encoding = 'hex';
 
