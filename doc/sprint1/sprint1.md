@@ -54,12 +54,12 @@ The following indivuals are participating in the current sprint and task divisio
   - **BAC-64** Backend - Unit Testing 
   - **BAC-44** Frontend - Create Admin View to Appro... 
   - **BAC-61** Frontend - Storybook 
-
+# Spikes
+- Figure out authentication provider and how to authenicate/authorize both frontend and backend systems
+- How to retrieve documents from an user's phone on the frontend system
+- How to create/use a S3 bucket using full encryption
+- How to reset passwords and send emails to users
+- How to manage validate user data on the backend
 # Team Capacity
 
 As we can deduce from above we are commited to 34 story points for the first sprint and we have as a team decided to never commit to more then 40 story points in a single sprint.
-
-# Spikes
-- Figure out authentication provider and how ato uthenicate/authorize both frontend and backend systems
-- How to retrieve documents from an user's phone on the frontend system
-- How to create/use a S3 bucket in an encrypted manner
