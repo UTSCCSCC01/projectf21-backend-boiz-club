@@ -12,6 +12,8 @@ import {
   VStack,
 } from 'native-base';
 import { RootStackScreenProps } from '@/types';
+import forgotPassword from '@/services/forgotPassword';
+import { navigate } from '@storybook/addon-links/dist/preview';
 
 const ForgotPasswordScreen = ({ navigation }: RootStackScreenProps<'ForgotPassword'>) => {
 
@@ -26,7 +28,32 @@ const ForgotPasswordScreen = ({ navigation }: RootStackScreenProps<'ForgotPasswo
         setEmail(input);
     };
 
-    const handleRequest = () => {};
+    const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
+    
+    const validateEmail = (email: string) => {
+      if (email == null || email.length === 0 || !emailRegex.test(email)) {
+        setEmailError({
+          wrongFormatError: true,
+          noMatchingEmailError: false,
+        });
+        return false;
+      }
+      return true;
+    };
+
+    const handleRequest = async (email: string) => {
+
+      if (!validateEmail(email)){
+        return;
+      }
+
+      const request = forgotPassword(email).catch((err) => {
+        return;
+      })
+
+      console.log(request);
+      navigation.navigate("ResetPassword");
+    };
 
   return (
     <Box safeArea flex={1} p="2">
@@ -77,7 +104,7 @@ const ForgotPasswordScreen = ({ navigation }: RootStackScreenProps<'ForgotPasswo
           marginTop="0"
           color="#72BCC1"
           _text={{ color: 'white', fontSize: 18 }}
-          onPress={() => handleRequest()}
+          onPress={() => handleRequest(email)}
         >
           Request Password Change
         </Button>
