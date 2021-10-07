@@ -175,7 +175,7 @@ const getUser = (app) => {
 
 // Start verify user info
 const verifyUser = (app) => {
-  app.post(pathPrefix + "/self/verify", verifyToken, async (req, res, next) => {
+  app.post(pathPrefix + "/verify", verifyToken, async (req, res, next) => {
     const { user } = req;
     try {
       await userService.verifyUser(user.user_id);
