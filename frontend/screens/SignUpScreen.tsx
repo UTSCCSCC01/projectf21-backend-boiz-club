@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import {
-  Alert,
   Box,
   Button,
   Heading,
@@ -11,17 +10,13 @@ import {
   Text,
   HStack,
   VStack,
-  IconButton,
-  CloseIcon,
 } from 'native-base';
 
 import { RootStackScreenProps } from '@/types';
 import signup from '@/services/signup';
-import { convertAbsoluteToRem } from 'native-base/lib/typescript/theme/tools';
 
 const SignUpScreen = ({ navigation }: RootStackScreenProps<'SignUp'>) => {
-
-  const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
+  const emailRegex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w\w+)+$/;
 
   interface user {
     email: string;
@@ -73,20 +68,23 @@ const SignUpScreen = ({ navigation }: RootStackScreenProps<'SignUp'>) => {
   const [backendError, setBackendError] = useState({
     existingEmailError: false,
     existingUsernameError: false,
-  })
+  });
 
   // Function to validate user sign-up information
-  const validateInput = (email: string, username: string, password: string, confirmPassword: string) => {
-
+  const validateInput = (email: string, username: string, password: string) => {
     // Check whether email is entered and satisfies the regex.
-    if (email == null || email.length === 0 || emailRegex.test(email) == false) {
+    if (email == null || email.length === 0 || !emailRegex.test(email)) {
       setInputError({
         emailError: true,
         usernameError: false,
         passwordError: false,
         confirmPasswordError: false,
       });
-    } 
+      setBackendError({
+        existingEmailError: false,
+        existingUsernameError: false,
+      });
+    }
 
     // Check whether email is entered and satisfies the regex.
     else if (username == null || username.length === 0) {
@@ -96,8 +94,12 @@ const SignUpScreen = ({ navigation }: RootStackScreenProps<'SignUp'>) => {
         passwordError: false,
         confirmPasswordError: false,
       });
-    } 
-    
+      setBackendError({
+        existingEmailError: false,
+        existingUsernameError: false,
+      });
+    }
+
     // Check whether password is entered.
     else if (password == null || password.length === 0) {
       setInputError({
@@ -106,60 +108,76 @@ const SignUpScreen = ({ navigation }: RootStackScreenProps<'SignUp'>) => {
         passwordError: true,
         confirmPasswordError: false,
       });
-    } 
-    
+      setBackendError({
+        existingEmailError: false,
+        existingUsernameError: false,
+      });
+    }
+
     // Check whether confirm password is entered and matches password.
-    else if (confirmPassword == null || confirmPassword.length === 0 || confirmPassword !== password) {
+    else if (
+      confirmPassword == null ||
+      confirmPassword.length === 0 ||
+      confirmPassword !== password
+    ) {
       setInputError({
         emailError: false,
         usernameError: false,
         passwordError: false,
         confirmPasswordError: true,
       });
-    } 
-    
-    else {
+      setBackendError({
+        existingEmailError: false,
+        existingUsernameError: false,
+      });
+    } else {
       setInputError({
         emailError: false,
         usernameError: false,
         passwordError: false,
         confirmPasswordError: false,
       });
+      setBackendError({
+        existingEmailError: false,
+        existingUsernameError: false,
+      });
       return true;
     }
     return false;
   };
 
-  const signUpHandle = async (email: string, username: string, password: string, confirmPassword: string) => {
-    if (!validateInput(email, username, password, confirmPassword)) {
+  const signUpHandle = async (
+    email: string,
+    username: string,
+    password: string
+  ) => {
+    if (!validateInput(email, username, password)) {
       return;
     }
 
     const userSignUp = await signup(email, username, password).catch((err) => {
       console.log('Sign Up failed.');
 
-      let feedback = err.response.data.errors[0].param
+      let feedback = err.response.data.errors[0].param;
 
-      if (feedback == 'email'){
+      if (feedback === 'email') {
         setBackendError({
           existingEmailError: true,
           existingUsernameError: false,
-        })
-      }
-
-      else if (feedback == 'username'){
+        });
+      } else if (feedback === 'username') {
         setBackendError({
           existingEmailError: false,
           existingUsernameError: true,
-        })
+        });
       }
-      
+
       return null;
     });
 
-    if (userSignUp !== null){
-      console.log('Sign Up Succeed')
-      navigation.navigate("SignIn")
+    if (userSignUp !== null) {
+      console.log('Sign Up Succeed');
+      navigation.navigate('SignIn');
     }
 
     return;
@@ -190,8 +208,9 @@ const SignUpScreen = ({ navigation }: RootStackScreenProps<'SignUp'>) => {
       </VStack>
 
       <VStack paddingRight="8" paddingLeft="8" paddingTop="4" space={4}>
-
-        <FormControl isInvalid={inputError.emailError || backendError.existingEmailError}>
+        <FormControl
+          isInvalid={inputError.emailError || backendError.existingEmailError}
+        >
           <FormControl.Label>Email</FormControl.Label>
           <Input
             size="lg"
@@ -203,11 +222,19 @@ const SignUpScreen = ({ navigation }: RootStackScreenProps<'SignUp'>) => {
           <FormControl.ErrorMessage
             _text={{ fontSize: 'sm', color: 'error.500', fontWeight: 400 }}
           >
-            {(inputError.emailError) ? "Invalid Email" : (backendError.existingEmailError) ? "There is an account with this email" : ""}
+            {inputError.emailError
+              ? 'Invalid Email'
+              : backendError.existingEmailError
+              ? 'There is an account with this email'
+              : ''}
           </FormControl.ErrorMessage>
-        </FormControl> 
+        </FormControl>
 
-        <FormControl isInvalid={inputError.usernameError || backendError.existingUsernameError}>
+        <FormControl
+          isInvalid={
+            inputError.usernameError || backendError.existingUsernameError
+          }
+        >
           <FormControl.Label>Username</FormControl.Label>
           <Input
             size="lg"
@@ -219,9 +246,13 @@ const SignUpScreen = ({ navigation }: RootStackScreenProps<'SignUp'>) => {
           <FormControl.ErrorMessage
             _text={{ fontSize: 'sm', color: 'error.500', fontWeight: 400 }}
           >
-            {(inputError.usernameError) ? "Invalid Username" : (backendError.existingUsernameError) ? "Username is taken" : ""}
+            {inputError.usernameError
+              ? 'Invalid Username'
+              : backendError.existingUsernameError
+              ? 'Username is taken'
+              : ''}
           </FormControl.ErrorMessage>
-        </FormControl> 
+        </FormControl>
 
         <FormControl isInvalid={inputError.passwordError}>
           <FormControl.Label>Password</FormControl.Label>
@@ -258,7 +289,9 @@ const SignUpScreen = ({ navigation }: RootStackScreenProps<'SignUp'>) => {
           marginTop="0"
           color="#72BCC1"
           _text={{ color: 'white', fontSize: 18 }}
-          onPress={() => signUpHandle(userData.email, userData.username, userData.password, confirmPassword)}
+          onPress={() =>
+            signUpHandle(userData.email, userData.username, userData.password)
+          }
         >
           Sign Up
         </Button>
@@ -279,10 +312,8 @@ const SignUpScreen = ({ navigation }: RootStackScreenProps<'SignUp'>) => {
           Sign In
         </Link>
       </HStack>
-
     </Box>
   );
 };
 
 export default SignUpScreen;
-
