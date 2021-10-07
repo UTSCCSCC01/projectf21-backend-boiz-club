@@ -8631,7 +8631,7 @@ expo-cli@^4.12.1:
     wrap-ansi "^7.0.0"
     xdl "59.2.1"
 
-expo-constants@~11.0.1:
+expo-constants@^11.0.1, expo-constants@~11.0.1:
   version "11.0.1"
   resolved "https://registry.yarnpkg.com/expo-constants/-/expo-constants-11.0.1.tgz#8a33d9702d03289ab68d6de2bbeb2bbc9654734c"
   integrity sha512-yolJSfsNAVmuNDc+NNxBzUKbZRXPM35edoMpv8xdmRBMpOWkRmTdpBIFAYAKCtrGruw2tkIQhnLmCD2aDycvTg==
@@ -8742,7 +8742,7 @@ expo-web-browser@~9.2.0:
   dependencies:
     compare-urls "^2.0.0"
 
-expo@~42.0.1:
+expo@^42.0.4:
   version "42.0.4"
   resolved "https://registry.yarnpkg.com/expo/-/expo-42.0.4.tgz#07b0e044e43f7cb366e2082850b41b8bb5117a21"
   integrity sha512-i1QvMb3cIXdsx7OQh0/N0KJHkPwFlBGEGsXRr/IF2DJFHMWd/J4DR8IaAnTAhx0ifborWHmENgXj5hgWJgirog==
@@ -13161,10 +13161,10 @@ nanomatch@^1.2.9:
     snapdragon "^0.8.1"
     to-regex "^3.0.1"
 
-native-base@^3.2.0:
-  version "3.2.0"
-  resolved "https://registry.yarnpkg.com/native-base/-/native-base-3.2.0.tgz#03cc51bf3624141833103330eae8f9b9fd7bbf35"
-  integrity sha512-s7lM0/xupz3AMVMMl59z8yl15T2cbnR662gwgXXGOpiFk10dR61jP3q8kGap+GRF8lRssKAZkN/a0OqV/JFAHA==
+native-base@3.2.1-rc.1:
+  version "3.2.1-rc.1"
+  resolved "https://registry.yarnpkg.com/native-base/-/native-base-3.2.1-rc.1.tgz#5730a84296681a0fa3195500b787a5980398526c"
+  integrity sha512-cIGMUahlJqBDhZIzO+cVHeI3nQgJQsKIuFTFFqtjEQUaXVa27tqUhPuM/dLh01Ly4fcgdq3BkGQY3NSCDZCf2w==
   dependencies:
     "@react-aria/focus" "^3.2.3"
     "@react-aria/utils" "^3.6.0"
