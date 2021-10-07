@@ -14,7 +14,7 @@ const getGovernmentId = (app) => {
           if (!file) {
             throw ApiError.badRequestError('Key required');
           }
-          image = await storageService.getGovID(key, userId);
+          image = await storageService.getGovID(key);
           res.json(
               {image: image});
         } catch (error) {
