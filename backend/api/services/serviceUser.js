@@ -65,7 +65,11 @@ module.exports = {
     await userDal.createVerificationRequest(userId, uploadedFile.key);
     return;
   },
-  verifyUser: async (userId) => {
+  /**
+   * Approves user's verification request.
+   * @param userId - the user id
+   */
+  verifyApproveUser: async (userId) => {
     const user = await userDal.getUser(userId);
 
     // check user auth level
@@ -80,6 +84,26 @@ module.exports = {
 
     // verify user
     await userDal.verifyUser(userId);
+    // remove verification request
+    await userDal.removeVerificationRequest(userId);
+  },
+  /**
+   * Decline user's verification request.
+   * @param userId - the user id
+   */
+  verifyDeclineUser: async (userId) => {
+    const user = await userDal.getUser(userId);
+
+    // check user auth level
+    if (user.authentication_lvl !== "admin") throw ApiError.accessDeniedError();
+    else if (user.authentication_lvl === "verified")
+      throw ApiError.badRequestError("User already verified.");
+
+    // check if user has pending verification
+    const request = await userDal.getVerificationRequest(userId);
+    if (!request)
+      throw ApiError.badRequestError("User has not requested to be verified.");
+
     // remove verification request
     await userDal.removeVerificationRequest(userId);
   },

@@ -173,21 +173,48 @@ const getUser = (app) => {
 };
 // End get user info
 
-// Start verify user info
-const verifyUser = (app) => {
-  app.post(pathPrefix + "/verify", verifyToken, async (req, res, next) => {
-    const { user } = req;
-    try {
-      await userService.verifyUser(user.user_id);
-      res
-        .status(200)
-        .send({ status: 200, message: "Successfully verified user" });
-    } catch (error) {
-      next(error);
+// Start verify approve user info
+const verifyApproveUser = (app) => {
+  app.post(
+    pathPrefix + "/verify/approve",
+    verifyToken,
+    async (req, res, next) => {
+      const { user } = req;
+      try {
+        await userService.verifyApproveUser(user.user_id);
+        res
+          .status(200)
+          .send({ status: 200, message: "Successfully verified user" });
+      } catch (error) {
+        next(error);
+      }
     }
-  });
+  );
 };
-// End verify user info
+// End verify approve user info
+
+// Start verify decline user info
+const verifyDeclineUser = (app) => {
+  app.post(
+    pathPrefix + "/verify/decline",
+    verifyToken,
+    async (req, res, next) => {
+      const { user } = req;
+      try {
+        await userService.verifyDeclineUser(user.user_id);
+        res
+          .status(200)
+          .send({
+            status: 200,
+            message: "Successfully declined user verification request",
+          });
+      } catch (error) {
+        next(error);
+      }
+    }
+  );
+};
+// End verify decline user info
 
 module.exports = (app) => {
   // Route for registering a new user
@@ -199,5 +226,6 @@ module.exports = (app) => {
   // Route for getting user information
   getUser(app);
   // Route for verifying users
-  verifyUser(app);
+  verifyApproveUser(app);
+  verifyDeclineUser(app);
 };
