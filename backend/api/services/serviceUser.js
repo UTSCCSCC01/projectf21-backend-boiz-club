@@ -79,7 +79,10 @@ module.exports = {
     let encryptedOTPId = cipher.update(otpInstance.id, 'utf-8', 'hex');
     encryptedOTPId += cipher.final('hex');
 
-    return {encryptedEmail, encryptedOTPId};
+    return {
+      encryptedEmail: encryptedEmail,
+      encryptedOTPId: encryptedOTPId,
+    };
   },
 
   /**
