@@ -8,8 +8,8 @@ module.exports = {
   */
   getGovID: async (key) => {
     data = await s3.getFile(key);
-    if (!data){
-      throw ApiError.badRequestError("Image could not be loaded")
+    if (!data) {
+      throw ApiError.badRequestError('Image could not be loaded');
     }
     return data.body;
   },

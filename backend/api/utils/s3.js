@@ -30,10 +30,10 @@ function upload(file) {
  * @return {promise<data>} data ===null if retrieval failed
  */
 function getFile(file) {
-  const getParams={ 
+  const getParams={
     Bucket: bucketName,
     Key: file};
   return s3.getObject(getParams).promise();
 };
 
-module.exports={upload};
+module.exports={upload, getFile};

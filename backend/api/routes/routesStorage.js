@@ -5,14 +5,11 @@ const verifyToken = require('../utils/verifyToken');
 const pathPrefix = constants.ApiPrefix+'/storage';
 
 
-
-//start Get S3 Image from Key
+// start Get S3 Image from Key
 const getGovernmentId = (app) => {
   app.get(pathPrefix+'/gov-id/:key',
-      verifyToken,
       async (req, res, next) => {
         try {
-          const userId = req.user.user_id;
           const key = req.params.key;
           if (!file) {
             throw ApiError.badRequestError('Key required');
@@ -29,5 +26,5 @@ const getGovernmentId = (app) => {
 
 module.exports = (app) => {
   // Route for image from key
-  getGovernmentId(app)
+  getGovernmentId(app);
 };
