@@ -73,6 +73,7 @@ module.exports = {
   */
   getUser: async (userId) => {
     return await userDal.getUser(userId);
+  },
 
   /**
      * Resets an existing user's password

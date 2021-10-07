@@ -76,6 +76,7 @@ module.exports = {
     });
     return await request.save();
   },
+  
   getOTP: async (otpId) => {
     return await OTP.findOne({_id: otpId});
   },
@@ -83,14 +84,12 @@ module.exports = {
   deleteOTP: async (otpId) => {
     return await OTP.findOneAndDelete({_id: otpId});
   },
-};
-
 
   /**
    * Gets a verification request created by a user
    * @param {Object} userId - user id
    */
-  getVerificationRequest: async (userId) => {
+   getVerificationRequest: async (userId) => {
     return await VerficationRequest.findOne({user_id: userId});
   },
 };
