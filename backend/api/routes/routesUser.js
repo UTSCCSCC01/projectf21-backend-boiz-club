@@ -183,8 +183,9 @@ const verifyUser = (app) => {
       const { user_id, approved } = req.body;
 
       try {
-        if (!user_id || approved == null)
+        if (!user_id || approved == null) {
           throw ApiError.badRequestError("user_id and approved not in payload");
+        }
 
         await userService.verifyUser(user.user_id, user_id, approved);
         res.status(200).send({

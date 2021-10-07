@@ -75,17 +75,20 @@ module.exports = {
     const adminUser = await userDal.getUser(adminUserId);
     const user = await userDal.getUser(userId);
 
-    if (!user) throw ApiError.notFoundError("User not found");
-    else if (user.authentication_lvl === "verified")
+    if (!user) {
+      throw ApiError.notFoundError("User not found");
+    } else if (user.authentication_lvl === "verified") {
       throw ApiError.badRequestError("User already verified.");
-    else if (user.authentication_lvl === "admin")
+    } else if (user.authentication_lvl === "admin") {
       throw ApiError.badRequestError("Cannot verify an admin.");
-    else if (adminUser.authentication_lvl !== "admin")
+    } else if (adminUser.authentication_lvl !== "admin") {
       throw ApiError.accessDeniedError();
+    }
 
     // check if user has pending verification
-    if (!(await userDal.getVerificationRequest(userId)))
+    if (!(await userDal.getVerificationRequest(userId))) {
       throw ApiError.badRequestError("User has not requested to be verified.");
+    }
 
     if (approved) await userDal.verifyUser(userId);
     else await userDal.removeVerificationRequest(userId);
