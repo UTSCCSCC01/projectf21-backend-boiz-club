@@ -82,19 +82,11 @@ module.exports = {
       throw ApiError.accessDeniedError();
 
     // check if user has pending verification
-    const request = await userDal.getVerificationRequest(userId);
-    if (!request)
+    if (!(await userDal.getVerificationRequest(userId)))
       throw ApiError.badRequestError("User has not requested to be verified.");
 
-    // verify user
-    if (approved && (await userDal.verifyUser(userId)) == null)
-      throw ApiError.badRequestError("Failed to verify user.");
-
-    // remove verification request
-    if ((await userDal.removeVerificationRequest(userId)) == null)
-      throw ApiError.badRequestError(
-        "Failed to remove user verification request."
-      );
+    if (approved) await userDal.verifyUser(userId);
+    else await userDal.removeVerificationRequest(userId);
   },
   /**
    * Get user information

@@ -1,4 +1,5 @@
 const crypto = require("crypto");
+const mongoose = require("mongoose");
 
 // Schema Models
 const User = require("../models/modelUser");
@@ -94,9 +95,25 @@ module.exports = {
    * @param userId - user id
    */
   verifyUser: async (userId) => {
-    return User.findOneAndUpdate(
-      { _id: userId },
-      { authentication_lvl: "verified" }
-    );
+    const session = await mongoose.startSession();
+    session.startTransaction();
+    try {
+      // verify user
+      await User.findOneAndUpdate(
+        { _id: userId },
+        { authentication_lvl: "verified" }
+      );
+
+      // remove verification request
+      await VerificationRequest.findOneAndRemove({ user_id: userId });
+
+      // send changes
+      await session.commitTransaction();
+    } catch (error) {
+      await session.abortTransaction();
+      throw error;
+    } finally {
+      await session.endSession();
+    }
   },
 };
