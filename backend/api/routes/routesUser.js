@@ -1,10 +1,10 @@
 const userService = require('../services/serviceUser');
 const ApiError = require('../../error/ApiError');
 const {validationResult, checkSchema} = require('express-validator');
-const constants= require('../../constants');
+const constants = require('../../constants');
 const jwt = require('jsonwebtoken');
 const verifyToken = require('../utils/verifyToken');
-const pathPrefix = constants.ApiPrefix+'/users';
+const pathPrefix = constants.ApiPrefix + '/users';
 
 // Start Registration
 const registrationSchema = {
@@ -17,9 +17,7 @@ const registrationSchema = {
       options: (value) => {
         return userService.isUsernameUnique(value).then((unique) => {
           if (!unique) {
-            return Promise.reject(
-                new Error('Username already in use'),
-            );
+            return Promise.reject(new Error('Username already in use'));
           }
         });
       },
@@ -36,9 +34,7 @@ const registrationSchema = {
       options: (value) => {
         return userService.isEmailUnique(value).then((unique) => {
           if (!unique) {
-            return Promise.reject(
-                new Error('Email already in use'),
-            );
+            return Promise.reject(new Error('Email already in use'));
           }
         });
       },
@@ -53,7 +49,8 @@ const registrationSchema = {
 };
 
 const register = (app) => {
-  app.post(pathPrefix+'/register',
+  app.post(
+      pathPrefix + '/register',
       checkSchema(registrationSchema),
       async (req, res, next) => {
         const {body} = req;
@@ -90,7 +87,7 @@ const loginSchema = {
 
 const login = (app) => {
   app.post(
-      pathPrefix+'/login',
+      pathPrefix + '/login',
       checkSchema(loginSchema),
       async (req, res, next) => {
         const {body} = req;
@@ -101,10 +98,9 @@ const login = (app) => {
           }
           const user = await userService.getUserByCredentials(body);
           const token = jwt.sign(
-              {user_id: user._id,
-                username: user.username,
-              },
-              process.env.TOKEN_SECRET);
+              {user_id: user._id, username: user.username},
+              process.env.TOKEN_SECRET,
+          );
           res.header('auth-token', token).send(user);
         } catch (error) {
           next(error);
@@ -124,25 +120,26 @@ const storage = multer.memoryStorage({
     callback(null, '');
   },
 });
-const fileFilter = (req, file, callback) =>{
+const fileFilter = (req, file, callback) => {
   if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
     callback(null, true);
   } else {
     callback(ApiError.badRequestError('Invalid file type'), false);
   }
 };
-const upload = multer(
-    {storage: storage,
-      limits: {
-        fileSize: 1024 * 1024 * 5, // 5 MB
-      },
-      fileFilter: fileFilter,
-    }).single('gov-id');
-
+const upload = multer({
+  storage: storage,
+  limits: {
+    fileSize: 1024 * 1024 * 5, // 5 MB
+  },
+  fileFilter: fileFilter,
+}).single('gov-id');
 
 const uploadGovernmentId = (app) => {
-  app.post(pathPrefix+'/self/request-verification',
-      verifyToken, upload,
+  app.post(
+      pathPrefix + '/self/request-verification',
+      verifyToken,
+      upload,
       async (req, res, next) => {
         try {
           const userId = req.user.user_id;
@@ -151,33 +148,59 @@ const uploadGovernmentId = (app) => {
             throw ApiError.badRequestError('File required');
           }
           await userService.handleVerificationRequest(file, userId);
-          res.status(200).send(
-              {status: 200,
-                message: 'Successfully uploaded image'});
-        } catch (error) {
-          next(error);
-        }
-      });
-};
-// End Upload Govrnment ID/Request Verification
-
-// Start get user info
-const getUser = (app) => {
-  app.get(
-      pathPrefix+'/self',
-      verifyToken,
-      async (req, res, next) => {
-        const {user} = req;
-        try {
-          const userInfo = await userService.getUser(user.user_id);
-          res.send(userInfo);
+          res
+              .status(200)
+              .send({status: 200, message: 'Successfully uploaded image'});
         } catch (error) {
           next(error);
         }
       },
   );
 };
+// End Upload Government ID/Request Verification
+
+// Start get user info
+const getUser = (app) => {
+  app.get(pathPrefix + '/self', verifyToken, async (req, res, next) => {
+    const {user} = req;
+    try {
+      const userInfo = await userService.getUser(user.user_id);
+      res.send(userInfo);
+    } catch (error) {
+      next(error);
+    }
+  });
+};
 // End get user info
+
+// Start verify user
+const verifyUser = (app) => {
+  app.put(
+      pathPrefix + '/verification-request',
+      verifyToken,
+      async (req, res, next) => {
+        const {user} = req;
+        const {user_id: userId, approved} = req.body;
+
+        try {
+          if (!userId || approved == null) {
+            throw ApiError
+                .badRequestError('user_id and approved not in payload');
+          }
+          await userService.verifyUser(user.user_id, userId, approved);
+          res.status(200).send({
+            status: 200,
+            message: approved ?
+            'Successfully verified user' :
+            'Successfully declined verification request',
+          });
+        } catch (error) {
+          next(error);
+        }
+      },
+  );
+};
+// End verify user
 
 module.exports = (app) => {
   // Route for registering a new user
@@ -188,4 +211,6 @@ module.exports = (app) => {
   uploadGovernmentId(app);
   // Route for getting user information
   getUser(app);
+  // Route for verifying users
+  verifyUser(app);
 };
