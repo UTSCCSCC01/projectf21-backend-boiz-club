@@ -63,23 +63,23 @@ module.exports = {
     await transporter.sendMail(emailTemplate, (error) => {
       if (error) {
         throw ApiError.badRequestError('Failed to send the email', error);
-      } else {
-        const algorithm = 'aes-256-cbc';
-        let cipher = crypto.createCipheriv(
-            algorithm, process.env.SECURITY_KEY, process.env.INITVECTOR);
-
-        let encryptedEmail = cipher.update(email, 'utf-8', 'hex');
-        encryptedEmail += cipher.final('hex');
-
-        cipher = crypto.createCipheriv(
-            algorithm, process.env.SECURITY_KEY, process.env.INITVECTOR);
-
-        let encryptedOTPId = cipher.update(otpInstance.id, 'utf-8', 'hex');
-        encryptedOTPId += cipher.final('hex');
-
-        return {encryptedEmail, encryptedOTPId};
       }
     });
+
+    const algorithm = 'aes-256-cbc';
+    let cipher = crypto.createCipheriv(
+        algorithm, process.env.SECURITY_KEY, process.env.INITVECTOR);
+
+    let encryptedEmail = cipher.update(email, 'utf-8', 'hex');
+    encryptedEmail += cipher.final('hex');
+
+    cipher = crypto.createCipheriv(
+        algorithm, process.env.SECURITY_KEY, process.env.INITVECTOR);
+
+    let encryptedOTPId = cipher.update(otpInstance.id, 'utf-8', 'hex');
+    encryptedOTPId += cipher.final('hex');
+
+    return {encryptedEmail, encryptedOTPId};
   },
 
   /**
