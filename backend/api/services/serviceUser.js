@@ -145,7 +145,8 @@ module.exports = {
       user = await userDal.getCredential(email);
       await userDal.updatePassword(user, password);
     } catch (error) {
-      throw ApiError.badRequestError("Failed to reset the user's password", error);
+      throw ApiError.badRequestError(
+          'Failed to reset the user\'s password', error);
     }
   },
 };
