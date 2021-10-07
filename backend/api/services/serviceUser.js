@@ -78,6 +78,8 @@ module.exports = {
     if (!user) throw ApiError.notFoundError("User not found");
     else if (user.authentication_lvl === "verified")
       throw ApiError.badRequestError("User already verified.");
+    else if (user.authentication_lvl === "admin")
+      throw ApiError.badRequestError("Cannot verify an admin.");
     else if (adminUser.authentication_lvl !== "admin")
       throw ApiError.accessDeniedError();
 
