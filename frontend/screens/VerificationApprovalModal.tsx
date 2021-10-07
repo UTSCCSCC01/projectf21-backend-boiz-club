@@ -1,5 +1,8 @@
+import { useAppSelector } from '@/hooks/react-redux';
+import { verifyUserByID } from '@/services/verification';
 import { AccountStackScreenProps, User } from '@/types';
 import {
+  Avatar,
   Button,
   Center,
   Heading,
@@ -7,10 +10,10 @@ import {
   Row,
   ScrollView,
   Text,
+  useToast,
   View,
-  Avatar,
 } from 'native-base';
-import React from 'react';
+import React, { useState } from 'react';
 
 const normalizedKeys = {
   username: 'Username',
@@ -24,10 +27,27 @@ export default function VerificationApprovalModal({
   route,
 }: AccountStackScreenProps<'VerificationApprovalModal'>) {
   const { user, request } = route.params;
-  const onApprove = () => {
-    navigation.goBack();
-  };
-  const onReject = () => {
+  const token = useAppSelector((state) => state.userCredential.userToken);
+
+  const toast = useToast();
+  const [isLoading, setIsLoading] = useState(false);
+  const handleRequest = async (approval: boolean) => {
+    setIsLoading(true);
+    await verifyUserByID(request.user_id, approval, token)
+      .catch((err) => {
+        toast.show({
+          status: 'error',
+          title: err,
+          placement: 'top',
+        });
+      })
+      .then((resp) => {
+        toast.show({
+          status: resp.status === 200 ? 'success' : 'error',
+          title: resp.data.message,
+          placement: 'top',
+        });
+      });
     navigation.goBack();
   };
   return (
@@ -75,14 +95,25 @@ export default function VerificationApprovalModal({
           />
         </Center>
 
-        <Row justifyContent="space-between" marginTop="10%" marginBottom="30%">
-          <Button colorScheme="teal" onPress={onApprove}>
-            Approve
-          </Button>
-          <Button colorScheme="danger" onPress={onReject}>
-            Reject
-          </Button>
-        </Row>
+        {!isLoading && (
+          <Row
+            justifyContent="space-between"
+            marginTop="10%"
+            marginBottom="30%"
+          >
+            <Button colorScheme="teal" onPress={() => handleRequest(true)}>
+              Approve
+            </Button>
+            <Button colorScheme="danger" onPress={() => handleRequest(false)}>
+              Reject
+            </Button>
+          </Row>
+        )}
+        {isLoading && (
+          <Center flex={1} marginBottom="30%">
+            <Text>Processing...</Text>
+          </Center>
+        )}
       </ScrollView>
     </View>
   );

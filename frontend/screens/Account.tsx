@@ -1,31 +1,44 @@
+import { useAppSelector } from '@/hooks/react-redux';
 import NotificationScreen from '@/screens/NotificationScreen';
 import VerificationApprovalModal from '@/screens/VerificationApprovalModal';
 import VerificationUploadModal from '@/screens/VerificationUploadModal';
-import { AccountStackParamList, AccountStackScreenProps } from '@/types';
+import { whoAmI } from '@/services/account';
+import { AccountStackParamList, AccountStackScreenProps, User } from '@/types';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import {
   Avatar,
   Button,
+  Center,
   Column,
   Row,
-  Text,
   ScrollView,
-  Center,
+  Text,
   View,
 } from 'native-base';
 import * as React from 'react';
-
+import { RefreshControl } from 'react-native';
 function AccountIndexScreen({
   navigation,
 }: AccountStackScreenProps<'AccountIndexScreen'>) {
+  const token = useAppSelector((state) => state.userCredential.userToken);
+  const [isLoading, setIsLoading] = React.useState(true);
+  const [userInfo, setUserInfo] = React.useState<User | null>(null);
+  const updateUserInfo = async () => {
+    setIsLoading(true);
+    whoAmI(token).then((res) => {
+      setUserInfo(res.data);
+      setIsLoading(false);
+    });
+  };
+  React.useEffect(() => {
+    updateUserInfo();
+  }, []);
   const UserDetails = () => (
     <Center padding={5}>
       <Row>
         <Column>
-          <Avatar bg="lightBlue.400" size="xl">
-            PY
-          </Avatar>
+          <Avatar bg="lightBlue.400" size="xl" />
         </Column>
       </Row>
       <Row>
@@ -36,8 +49,18 @@ function AccountIndexScreen({
             alignContent="center"
             justifyContent="center"
           >
-            Payam Yektamaram &nbsp;
-            <FontAwesome5 name="check-circle" size={24} color="blue" />
+            {userInfo?.username} &nbsp;
+            <FontAwesome5
+              name={
+                userInfo?.authentication_lvl === 'unverified'
+                  ? 'times-circle'
+                  : 'check-circle'
+              }
+              size={24}
+              color={
+                userInfo?.authentication_lvl === 'unverified' ? 'grey' : 'green'
+              }
+            />
           </Text>
           <Text fontSize="md">
             <FontAwesome5
@@ -151,7 +174,16 @@ function AccountIndexScreen({
     </View>
   );
   return (
-    <ScrollView>
+    <ScrollView
+      refreshControl={
+        <RefreshControl
+          refreshing={isLoading}
+          onRefresh={() => {
+            updateUserInfo();
+          }}
+        />
+      }
+    >
       <UserDetails />
       <UserButtons />
     </ScrollView>

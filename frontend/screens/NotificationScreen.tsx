@@ -15,9 +15,8 @@ import {
   View,
   VStack,
 } from 'native-base';
-import { RefreshControl } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { RefreshControl } from 'react-native';
 export const NotificationScreen = ({
   navigation,
 }: AccountStackScreenProps<'NotificationScreen'>) => {

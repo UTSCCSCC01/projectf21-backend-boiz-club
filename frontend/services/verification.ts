@@ -30,3 +30,29 @@ export async function getUserInfoByID(userID: string) {
     updatedAt: '2021-10-01T18:15:17.249+00:00',
   };
 }
+export async function verifyUserByID(
+  userId: string,
+  approval: boolean,
+  token: string
+) {
+  return axios
+    .put(
+      'https://pawsup-dev-oznda.ondigitalocean.app/api/v1/users/verification-request',
+      {
+        user_id: userId,
+        approved: approval,
+      },
+      {
+        headers: {
+          'auth-token': token,
+        },
+        validateStatus: function (status) {
+          return status < 500; // Resolve only if the status code is less than 500
+        },
+      }
+    )
+    .catch((err) => {
+      console.log('Put operation for verification request failed. ' + err);
+      throw err;
+    });
+}
