@@ -65,7 +65,7 @@ export const NotificationScreen = ({
         renderItem={({ item }: { item: Notification }) => (
           <Pressable
             onPress={() => {
-              navigation.navigate('VerificationModal', item.payload);
+              navigation.navigate('VerificationApprovalModal', item.payload);
             }}
           >
             {({ isPressed }) => {

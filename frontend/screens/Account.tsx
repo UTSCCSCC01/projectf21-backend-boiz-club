@@ -1,24 +1,160 @@
-import * as React from 'react';
-import { View, Text, Button } from 'native-base';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { AccountStackParamList } from '@/types';
 import NotificationScreen from '@/screens/NotificationScreen';
-import EditScreenInfo from '@/components/EditScreenInfo';
-import VerificationModal from '@/screens/VerificationModal';
-import { AccountStackScreenProps } from '@/types';
+import VerificationApprovalModal from '@/screens/VerificationApprovalModal';
+import VerificationUploadModal from '@/screens/VerificationUploadModal';
+import { AccountStackParamList, AccountStackScreenProps } from '@/types';
+import { FontAwesome5 } from '@expo/vector-icons';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import {
+  Avatar,
+  Button,
+  Column,
+  Row,
+  Text,
+  ScrollView,
+  Center,
+  View,
+} from 'native-base';
+import * as React from 'react';
 
 function AccountIndexScreen({
   navigation,
 }: AccountStackScreenProps<'AccountIndexScreen'>) {
-  return (
-    <View flex={1} alignItems="center" justifyContent="center">
-      <Text fontSize="2xl">Account</Text>
-      <Button onPress={() => navigation.navigate('NotificationScreen')}>
+  const UserDetails = () => (
+    <Center padding={5}>
+      <Row>
+        <Column>
+          <Avatar bg="lightBlue.400" size="xl">
+            PY
+          </Avatar>
+        </Column>
+      </Row>
+      <Row>
+        <Column alignItems="center">
+          <Text
+            bold
+            fontSize="xl"
+            alignContent="center"
+            justifyContent="center"
+          >
+            Payam Yektamaram &nbsp;
+            <FontAwesome5 name="check-circle" size={24} color="blue" />
+          </Text>
+          <Text fontSize="md">
+            <FontAwesome5
+              name="map-pin"
+              color="red"
+              size={20}
+              style={{ padding: 10 }}
+            />
+            &nbsp; Toronto, Canada
+          </Text>
+          <Text fontSize="md">
+            3 <FontAwesome5 name="dog" size={24} color="blue" />
+            3 <FontAwesome5 name="cat" size={24} color="purple" />
+          </Text>
+        </Column>
+      </Row>
+    </Center>
+  );
+  const UserButtons = () => (
+    <View justifyContent="center" alignItems="center" marginBottom={5}>
+      <Button
+        size="lg"
+        key="personalInformationBtn"
+        width="70%"
+        style={{ justifyContent: 'flex-start' }}
+        marginBottom={7}
+        startIcon={
+          <FontAwesome5 style={{ color: 'white' }} name="home" size={18} />
+        }
+      >
+        Personal Information
+      </Button>
+
+      <Button
+        size="lg"
+        key="paymentInformationBtn"
+        width="70%"
+        style={{ justifyContent: 'flex-start' }}
+        marginBottom={7}
+        startIcon={
+          <FontAwesome5
+            style={{ color: 'white' }}
+            name="credit-card"
+            size={18}
+          />
+        }
+      >
+        Payment Information
+      </Button>
+
+      <Button
+        size="lg"
+        key="verifyAccountBtn"
+        width="70%"
+        onPress={() => navigation.navigate('VerificationUploadModal')}
+        marginBottom={7}
+        style={{ justifyContent: 'flex-start' }}
+        startIcon={
+          <FontAwesome5
+            style={{ color: 'white' }}
+            name="user-check"
+            size={18}
+          />
+        }
+      >
+        Verify Account
+      </Button>
+
+      <Button
+        size="lg"
+        key="notificationsBtn"
+        width="70%"
+        style={{ justifyContent: 'flex-start' }}
+        marginBottom={7}
+        startIcon={
+          <FontAwesome5 style={{ color: 'white' }} name="bell" size={18} />
+        }
+        onPress={() => navigation.navigate('NotificationScreen')}
+      >
         Notifications
       </Button>
-      <View marginY={30} height={1} width="80%" />
-      <EditScreenInfo path="/screens/Account.tsx" />
+
+      <Button
+        size="lg"
+        key="messagesBtn"
+        width="70%"
+        style={{ justifyContent: 'flex-start' }}
+        marginBottom={7}
+        startIcon={
+          <FontAwesome5 style={{ color: 'white' }} name="envelope" size={18} />
+        }
+      >
+        Messages
+      </Button>
+
+      <Button
+        size="lg"
+        key="logOutBtn"
+        width="70%"
+        style={{ justifyContent: 'flex-start' }}
+        startIcon={
+          <FontAwesome5
+            style={{ color: 'white' }}
+            name="sign-out-alt"
+            size={18}
+          />
+        }
+      >
+        Log out
+      </Button>
     </View>
+  );
+  return (
+    <ScrollView>
+      <UserDetails />
+      <UserButtons />
+    </ScrollView>
   );
 }
 
@@ -39,8 +175,13 @@ export default function Account() {
       />
       <AccountStack.Group screenOptions={{ presentation: 'modal' }}>
         <AccountStack.Screen
-          name="VerificationModal"
-          component={VerificationModal}
+          name="VerificationApprovalModal"
+          component={VerificationApprovalModal}
+          options={{ headerShown: false }}
+        />
+        <AccountStack.Screen
+          name="VerificationUploadModal"
+          component={VerificationUploadModal}
           options={{ headerShown: false }}
         />
       </AccountStack.Group>

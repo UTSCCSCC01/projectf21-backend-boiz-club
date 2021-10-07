@@ -19,10 +19,10 @@ const normalizedKeys = {
   address: 'Address',
   phone_number: 'Phone Number',
 };
-export default function VerificationModal({
+export default function VerificationApprovalModal({
   navigation,
   route,
-}: AccountStackScreenProps<'VerificationModal'>) {
+}: AccountStackScreenProps<'VerificationApprovalModal'>) {
   const { user, request } = route.params;
   const onApprove = () => {
     navigation.goBack();
