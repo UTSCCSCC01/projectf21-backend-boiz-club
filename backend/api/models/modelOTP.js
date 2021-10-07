@@ -9,19 +9,6 @@ const otpSchema = new mongoose.Schema({
     type: Date,
     required: true,
   },
-  verified: {
-    type: Boolean,
-    default: false,
-    required: true,
-  },
-  created_at: {
-    type: Date,
-    default: Date.now(),
-  },
-  updated_at: {
-    type: Date,
-    default: Date.now(),
-  },
 });
 
 otpSchema.set('toJSON', {
