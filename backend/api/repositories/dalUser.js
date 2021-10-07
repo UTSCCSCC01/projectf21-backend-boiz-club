@@ -77,14 +77,27 @@ module.exports = {
     return await request.save();
   },
 
+  /**
+   * Find the OTP's ID and retrieve the OTP
+   * @param {Object} otpId - the OTP's ID
+   */
   getOTP: async (otpId) => {
     return await OTP.findOne({_id: otpId});
   },
 
+  /**
+   * Find the OTP's ID and delete the OTP
+   * @param {Object} otpId - the OTP's ID
+   */
   deleteOTP: async (otpId) => {
     return await OTP.findOneAndDelete({_id: otpId});
   },
 
+  /**
+   * Update an existing user's password
+   * @param {Object} user - user object
+   * @param {string} newPassword - desired new password
+   */
   updatePassword: async (user, newPassword) => {
     const salt = crypto.randomBytes(16).toString('base64');
     const hash = crypto.createHmac('sha512', salt);
