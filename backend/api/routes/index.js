@@ -1,3 +1,4 @@
 const testRoutes = require('./routesTest');
 const userRoutes = require('./routesUser');
-module.exports = {testRoutes, userRoutes};
+const userRoutes = require('./routesStorage');
+module.exports = {testRoutes, userRoutes, storageRoutes};
