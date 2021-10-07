@@ -1,7 +1,7 @@
-const ApiError = require('../../error/ApiError');
-const userDal = require('../repositories/dalUser');
-const crypto = require('crypto');
-const s3 = require('../utils/s3');
+const ApiError = require("../../error/ApiError");
+const userDal = require("../repositories/dalUser");
+const crypto = require("crypto");
+const s3 = require("../utils/s3");
 
 module.exports = {
   /**
@@ -13,51 +13,51 @@ module.exports = {
     return userDal.isEmailUnique(email);
   },
   /**
-  * Checks if username is unique
-  * @param {String} username
-  * @return {Boolean} whether the username is unique inside database
-  */
+   * Checks if username is unique
+   * @param {String} username
+   * @return {Boolean} whether the username is unique inside database
+   */
   isUsernameUnique: async (username) => {
     return userDal.isUsernameUnique(username);
   },
   /**
-     * Registers a new user
-     * @param {Object} body - user credentials
-  */
+   * Registers a new user
+   * @param {Object} body - user credentials
+   */
   registerUser: async (body) => {
     return userDal.createUser(body);
   },
   /**
-     * Gets user by email and password
-     * @param {Object} body - user login credentials
-  */
+   * Gets user by email and password
+   * @param {Object} body - user login credentials
+   */
   getUserByCredentials: async (body) => {
     const cred = await userDal.getCredential(body.email);
     if (!cred) {
-      throw ApiError.badRequestError('Invalid credentials');
+      throw ApiError.badRequestError("Invalid credentials");
     }
-    const hash = crypto.createHmac('sha512', cred.salt);
+    const hash = crypto.createHmac("sha512", cred.salt);
     hash.update(body.password);
-    const saltedHash = hash.digest('base64');
+    const saltedHash = hash.digest("base64");
     if (saltedHash != cred.password) {
-      throw ApiError.badRequestError('Invalid credentials');
+      throw ApiError.badRequestError("Invalid credentials");
     } else return await userDal.getUser(cred.user_id);
   },
   /**
-     * Saves verification request and government id
-     * @param {Object} file - user government id
-     * @param {Object} userId - logged in user's id
-  */
+   * Saves verification request and government id
+   * @param {Object} file - user government id
+   * @param {Object} userId - logged in user's id
+   */
   handleVerificationRequest: async (file, userId) => {
     // Check if already verified
     const user = await userDal.getUser(userId);
-    if (user.authentication_lvl != 'unverified') {
-      throw ApiError.badRequestError('User already verified');
+    if (user.authentication_lvl != "unverified") {
+      throw ApiError.badRequestError("User already verified");
     }
     // Check if user has pending verification
     const request = await userDal.getVerificationRequest(userId);
     if (request) {
-      throw ApiError.badRequestError('User has a pending verification request');
+      throw ApiError.badRequestError("User has a pending verification request");
     }
     // Upload file to s3
     const uploadedFile = await s3.upload(file);
@@ -65,10 +65,28 @@ module.exports = {
     await userDal.createVerificationRequest(userId, uploadedFile.key);
     return;
   },
+  verifyUser: async (userId) => {
+    const user = await userDal.getUser(userId);
+
+    // check user auth level
+    if (user.authentication_lvl !== "admin") throw ApiError.accessDeniedError();
+    else if (user.authentication_lvl === "verified")
+      throw ApiError.badRequestError("User already verified.");
+
+    // check if user has pending verification
+    const request = await userDal.getVerificationRequest(userId);
+    if (!request)
+      throw ApiError.badRequestError("User has not requested to be verified.");
+
+    // verify user
+    await userDal.verifyUser(userId);
+    // remove verification request
+    await userDal.removeVerificationRequest(userId);
+  },
   /**
-     * Get user information
-     * @param {Object} userId - user id
-  */
+   * Get user information
+   * @param {Object} userId - user id
+   */
   getUser: async (userId) => {
     return await userDal.getUser(userId);
   },

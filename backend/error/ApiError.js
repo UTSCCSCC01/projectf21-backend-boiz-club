@@ -7,7 +7,7 @@ module.exports = class ApiError {
    */
   constructor(code, message, errors) {
     (this.code = code), (this.message = message);
-    this.errors = errors? errors:[];
+    this.errors = errors ? errors : [];
   }
 
   /**
@@ -24,6 +24,6 @@ module.exports = class ApiError {
    * @return {ApiError}
    */
   static accessDeniedError() {
-    return new ApiError(401, 'Access Denied');
+    return new ApiError(401, "Access Denied");
   }
 };

@@ -1,9 +1,9 @@
-const crypto = require('crypto');
+const crypto = require("crypto");
 
 // Schema Models
-const User = require('../models/modelUser');
-const UserCredential = require('../models/modelUserCredential');
-const VerficationRequest = require('../models/modelVerificationRequest');
+const User = require("../models/modelUser");
+const UserCredential = require("../models/modelUserCredential");
+const VerificationRequest = require("../models/modelVerificationRequest");
 
 module.exports = {
   /**
@@ -12,7 +12,7 @@ module.exports = {
    * @return {Boolean} whether the email is unique inside database
    */
   isEmailUnique: async (email) => {
-    const result = await UserCredential.find({email});
+    const result = await UserCredential.find({ email });
     return result.length == 0;
   },
   /**
@@ -21,7 +21,7 @@ module.exports = {
    * @return {Boolean} whether the username is unique inside database
    */
   isUsernameUnique: async (username) => {
-    const result = await User.find({username});
+    const result = await User.find({ username });
     return result.length == 0;
   },
   /**
@@ -29,13 +29,13 @@ module.exports = {
    * @param {Object} body - user credentials
    */
   createUser: async (body) => {
-    const {username, email, password} = body;
-    const user = new User({username});
+    const { username, email, password } = body;
+    const user = new User({ username });
     const userID = user.id;
-    const salt = crypto.randomBytes(16).toString('base64');
-    const hash = crypto.createHmac('sha512', salt);
+    const salt = crypto.randomBytes(16).toString("base64");
+    const hash = crypto.createHmac("sha512", salt);
     hash.update(password);
-    const saltedHash = hash.digest('base64');
+    const saltedHash = hash.digest("base64");
     const userCred = new UserCredential({
       email,
       password: saltedHash,
@@ -51,7 +51,7 @@ module.exports = {
    * @param {Object} email - user email
    */
   getCredential: async (email) => {
-    return await UserCredential.findOne({email: email});
+    return await UserCredential.findOne({ email: email });
   },
 
   /**
@@ -59,7 +59,7 @@ module.exports = {
    * @param {Object} userId - user id
    */
   getUser: async (userId) => {
-    return await User.findOne({_id: userId});
+    return await User.findOne({ _id: userId });
   },
 
   /**
@@ -68,7 +68,7 @@ module.exports = {
    * @param {Object} imgKey - image key in s3 bucket to government id
    */
   createVerificationRequest: async (userId, imgKey) => {
-    const request = new VerficationRequest({
+    const request = new VerificationRequest({
       user_id: userId,
       img_key: imgKey,
     });
@@ -80,6 +80,23 @@ module.exports = {
    * @param {Object} userId - user id
    */
   getVerificationRequest: async (userId) => {
-    return await VerficationRequest.findOne({user_id: userId});
+    return await VerificationRequest.findOne({ user_id: userId });
+  },
+  /**
+   * Removes a verification request created by a user
+   * @param {Object} userId - user id
+   */
+  removeVerificationRequest: async (userId) => {
+    return VerificationRequest.findOneAndRemove({ user_id: userId });
+  },
+  /**
+   * Verifies an user
+   * @param userId - user id
+   */
+  verifyUser: async (userId) => {
+    return User.findOneAndUpdate(
+      { _id: userId },
+      { authentication_lvl: "verified" }
+    );
   },
 };
