@@ -85,6 +85,15 @@ module.exports = {
     return await OTP.findOneAndDelete({_id: otpId});
   },
 
+  updatePassword: async (user, newPassword) => {
+    const salt = crypto.randomBytes(16).toString('base64');
+    const hash = crypto.createHmac('sha512', salt);
+    hash.update(password);
+    const saltedHash = hash.digest('base64');
+    user.password = saltedHash;
+    await user.save();
+  },
+
   /**
    * Gets a verification request created by a user
    * @param {Object} userId - user id
