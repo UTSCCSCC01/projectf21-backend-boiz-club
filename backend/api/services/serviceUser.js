@@ -140,5 +140,12 @@ module.exports = {
     } catch (error) {
       throw ApiError.badRequestError('Failed to delete the OTP', error);
     }
+
+    try {
+      user = await userDal.getCredential(email);
+      await userDal.updatePassword(user, password);
+    } catch (error) {
+      throw ApiError.badRequestError("Failed to reset the user's password", error);
+    }
   },
 };
