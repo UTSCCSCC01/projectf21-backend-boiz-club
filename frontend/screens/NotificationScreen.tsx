@@ -15,7 +15,9 @@ import {
   View,
   VStack,
 } from 'native-base';
+import { RefreshControl } from 'react-native';
 import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 export const NotificationScreen = ({
   navigation,
 }: AccountStackScreenProps<'NotificationScreen'>) => {
@@ -26,9 +28,10 @@ export const NotificationScreen = ({
     payload: any;
   };
   const [notifications, setNotifications] = useState<Notification[]>([]);
-
-  useEffect(() => {
+  const [isLoading, setIsLoading] = useState(false);
+  const updateNotifications = async () => {
     setNotifications([]);
+    setIsLoading(true);
     //Parse verification requests
     const parseVerificationRequests = async () => {
       const verificationRequests = await getVerificationRequests();
@@ -52,7 +55,11 @@ export const NotificationScreen = ({
         );
       });
     };
-    parseVerificationRequests();
+    await parseVerificationRequests();
+    setIsLoading(false);
+  };
+  useEffect(() => {
+    updateNotifications();
   }, []);
   return (
     <View flex={1} alignItems="center">
@@ -60,6 +67,14 @@ export const NotificationScreen = ({
         Inbox
       </Heading>
       <FlatList
+        refreshControl={
+          <RefreshControl
+            refreshing={isLoading}
+            onRefresh={() => {
+              updateNotifications();
+            }}
+          />
+        }
         maxWidth="100%"
         data={notifications}
         renderItem={({ item }: { item: Notification }) => (
