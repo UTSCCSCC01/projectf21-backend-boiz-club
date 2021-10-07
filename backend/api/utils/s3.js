@@ -29,10 +29,10 @@ function upload(file) {
  * @param {file} file File to retrieve from aws s3.
  * @return {promise<data>} data ===null if retrieval failed
  */
-function getFile(file) {
+function getFile(key) {
   const getParams={
     Bucket: bucketName,
-    Key: file};
+    Key: key};
   return s3.getObject(getParams).promise();
 };
 
