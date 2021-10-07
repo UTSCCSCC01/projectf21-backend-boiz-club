@@ -1,12 +1,11 @@
 const storageService = require('../services/serviceStorage');
 const ApiError = require('../../error/ApiError');
 const constants= require('../../constants');
-const verifyToken = require('../utils/verifyToken');
 const pathPrefix = constants.ApiPrefix+'/storage';
 
 
 // start Get S3 Image from Key
-const getGovernmentId = (app) => {
+const getMedia = (app) => {
   app.get(pathPrefix+'/media/:key',
       async (req, res, next) => {
         try {
@@ -26,5 +25,5 @@ const getGovernmentId = (app) => {
 
 module.exports = (app) => {
   // Route for image from key
-  getGovernmentId(app);
+  getMedia(app);
 };
