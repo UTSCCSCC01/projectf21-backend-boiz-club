@@ -1,10 +1,10 @@
-const crypto = require("crypto");
-const mongoose = require("mongoose");
+const crypto = require('crypto');
+const mongoose = require('mongoose');
 
 // Schema Models
-const User = require("../models/modelUser");
-const UserCredential = require("../models/modelUserCredential");
-const VerificationRequest = require("../models/modelVerificationRequest");
+const User = require('../models/modelUser');
+const UserCredential = require('../models/modelUserCredential');
+const VerificationRequest = require('../models/modelVerificationRequest');
 
 module.exports = {
   /**
@@ -13,7 +13,7 @@ module.exports = {
    * @return {Boolean} whether the email is unique inside database
    */
   isEmailUnique: async (email) => {
-    const result = await UserCredential.find({ email });
+    const result = await UserCredential.find({email});
     return result.length == 0;
   },
   /**
@@ -22,7 +22,7 @@ module.exports = {
    * @return {Boolean} whether the username is unique inside database
    */
   isUsernameUnique: async (username) => {
-    const result = await User.find({ username });
+    const result = await User.find({username});
     return result.length == 0;
   },
   /**
@@ -30,13 +30,13 @@ module.exports = {
    * @param {Object} body - user credentials
    */
   createUser: async (body) => {
-    const { username, email, password } = body;
-    const user = new User({ username });
+    const {username, email, password} = body;
+    const user = new User({username});
     const userID = user.id;
-    const salt = crypto.randomBytes(16).toString("base64");
-    const hash = crypto.createHmac("sha512", salt);
+    const salt = crypto.randomBytes(16).toString('base64');
+    const hash = crypto.createHmac('sha512', salt);
     hash.update(password);
-    const saltedHash = hash.digest("base64");
+    const saltedHash = hash.digest('base64');
     const userCred = new UserCredential({
       email,
       password: saltedHash,
@@ -52,7 +52,7 @@ module.exports = {
    * @param {Object} email - user email
    */
   getCredential: async (email) => {
-    return await UserCredential.findOne({ email: email });
+    return await UserCredential.findOne({email: email});
   },
 
   /**
@@ -60,7 +60,7 @@ module.exports = {
    * @param {Object} userId - user id
    */
   getUser: async (userId) => {
-    return await User.findOne({ _id: userId });
+    return await User.findOne({_id: userId});
   },
 
   /**
@@ -81,18 +81,18 @@ module.exports = {
    * @param {Object} userId - user id
    */
   getVerificationRequest: async (userId) => {
-    return await VerificationRequest.findOne({ user_id: userId });
+    return await VerificationRequest.findOne({user_id: userId});
   },
   /**
    * Removes a verification request created by a user
    * @param {Object} userId - user id
    */
   removeVerificationRequest: async (userId) => {
-    return VerificationRequest.findOneAndRemove({ user_id: userId });
+    return VerificationRequest.findOneAndRemove({user_id: userId});
   },
   /**
    * Verifies an user
-   * @param userId - user id
+   * @param {Object} userId - user id
    */
   verifyUser: async (userId) => {
     const session = await mongoose.startSession();
@@ -100,12 +100,12 @@ module.exports = {
     try {
       // verify user
       await User.findOneAndUpdate(
-        { _id: userId },
-        { authentication_lvl: "verified" }
+          {_id: userId},
+          {authentication_lvl: 'verified'},
       );
 
       // remove verification request
-      await VerificationRequest.findOneAndRemove({ user_id: userId });
+      await VerificationRequest.findOneAndRemove({user_id: userId});
 
       // send changes
       await session.commitTransaction();

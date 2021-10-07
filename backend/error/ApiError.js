@@ -21,6 +21,8 @@ module.exports = class ApiError {
   }
 
   /**
+   * @param {String} message error message
+   * @param {Array} errors express-validator errors arr
    * @return {ApiError}
    */
   static notFoundError(message, errors) {
@@ -31,6 +33,6 @@ module.exports = class ApiError {
    * @return {ApiError}
    */
   static accessDeniedError() {
-    return new ApiError(401, "Access Denied");
+    return new ApiError(401, 'Access Denied');
   }
 };
