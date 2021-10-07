@@ -170,7 +170,7 @@ const forgotPassword = (app) => {
     try {
       const result = await
       userService.sendOTPEmail(req.params.email);
-      res.json(result);
+      res.status(200).json(result);
     } catch (error) {
       next(error);
     }
