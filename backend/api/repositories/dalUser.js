@@ -76,7 +76,7 @@ module.exports = {
     });
     return await request.save();
   },
-  
+
   getOTP: async (otpId) => {
     return await OTP.findOne({_id: otpId});
   },
@@ -88,9 +88,10 @@ module.exports = {
   updatePassword: async (user, newPassword) => {
     const salt = crypto.randomBytes(16).toString('base64');
     const hash = crypto.createHmac('sha512', salt);
-    hash.update(password);
+    hash.update(newPassword);
     const saltedHash = hash.digest('base64');
     user.password = saltedHash;
+    user.updatedAt = new Date();
     await user.save();
   },
 
@@ -98,7 +99,7 @@ module.exports = {
    * Gets a verification request created by a user
    * @param {Object} userId - user id
    */
-   getVerificationRequest: async (userId) => {
+  getVerificationRequest: async (userId) => {
     return await VerficationRequest.findOne({user_id: userId});
   },
 };
