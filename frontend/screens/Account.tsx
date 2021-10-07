@@ -13,20 +13,32 @@ import * as DocumentPicker from 'expo-document-picker';
 import { useEffect, useState } from 'react';
 import requestVerification from '@/services/upload';
 import { useAppSelector } from '@/hooks/react-redux';
+import { useDispatch } from 'react-redux';
+import { clearToken } from '@/redux/userCredential';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type AccountProps = {
   showVerifyModal: boolean;
   setShowVerifyModal: (x: boolean) => void;
+  logout: () => void;
 };
 
 export default function Account() {
+  const dispatch = useDispatch();
   // Modal shown when user wants to upload government identification
   const [showVerifyModal, setShowVerifyModal] = useState(false);
-
+  const logout = async () => {
+    try {
+      await AsyncStorage.removeItem('userToken');
+      dispatch(clearToken());
+    } catch (err) {
+      console.log('Logout Failed');
+    }
+  };
   return (
     <Column size={2} space={10} alignItems="center" padding="10">
       <UserDetails />
-      <UserButtons {...{ showVerifyModal, setShowVerifyModal }} />
+      <UserButtons {...{ showVerifyModal, setShowVerifyModal, logout }} />
     </Column>
   );
 }
@@ -62,7 +74,11 @@ const UserDetails = () => (
   </>
 );
 
-const UserButtons = ({ showVerifyModal, setShowVerifyModal }: AccountProps) => (
+const UserButtons = ({
+  showVerifyModal,
+  setShowVerifyModal,
+  logout,
+}: AccountProps) => (
   <>
     <Row>
       <Button
@@ -114,7 +130,9 @@ const UserButtons = ({ showVerifyModal, setShowVerifyModal }: AccountProps) => (
       >
         Verify Account
       </Button>
-      <VerifyAccountModal {...{ showVerifyModal, setShowVerifyModal }} />
+      <VerifyAccountModal
+        {...{ showVerifyModal, setShowVerifyModal, logout }}
+      />
     </Row>
     <Row>
       <Button
@@ -149,6 +167,7 @@ const UserButtons = ({ showVerifyModal, setShowVerifyModal }: AccountProps) => (
         size="lg"
         key="logOutBtn"
         width="70%"
+        onPress={logout}
         style={{ justifyContent: 'flex-start' }}
         startIcon={
           <FontAwesome5
