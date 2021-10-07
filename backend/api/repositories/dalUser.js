@@ -80,6 +80,14 @@ module.exports = {
   getOTP: async (otpId) => {
     return await OTP.findOne({_id: otpId});
   },
+  getOTP: async (otpId) => {
+    return await OTP.findOne({_id: otpId});
+  },
+
+  deleteOTP: async (otpId) => {
+    return await OTP.findOneAndDelete({_id: otpId});
+  },
+};
 
   deleteOTP: async (otpId) => {
     return await OTP.findOneAndDelete({_id: otpId});

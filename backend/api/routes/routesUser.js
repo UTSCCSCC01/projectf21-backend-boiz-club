@@ -192,6 +192,19 @@ const resetPassword = (app) => {
 };
 
 
+const resetPassword = (app) => {
+  app.post(pathPrefix + '/reset-password/:email', async (req, res, next) => {
+    try {
+      const result = await userService.resetPassword(
+          req.params.email, req.body);
+      res.json(result);
+    } catch (error) {
+      next(error);
+    }
+  });
+};
+
+
 module.exports = (app) => {
   // Route for registering a new user
   register(app);
