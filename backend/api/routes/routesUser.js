@@ -173,48 +173,33 @@ const getUser = (app) => {
 };
 // End get user info
 
-// Start verify approve user info
-const verifyApproveUser = (app) => {
-  app.post(
-    pathPrefix + "/verify/approve",
+// Start verify user
+const verifyUser = (app) => {
+  app.put(
+    pathPrefix + "/verification-request",
     verifyToken,
     async (req, res, next) => {
       const { user } = req;
-      try {
-        await userService.verifyApproveUser(user.user_id);
-        res
-          .status(200)
-          .send({ status: 200, message: "Successfully verified user" });
-      } catch (error) {
-        next(error);
-      }
-    }
-  );
-};
-// End verify approve user info
+      const { user_id, approved } = req.body;
 
-// Start verify decline user info
-const verifyDeclineUser = (app) => {
-  app.post(
-    pathPrefix + "/verify/decline",
-    verifyToken,
-    async (req, res, next) => {
-      const { user } = req;
       try {
-        await userService.verifyDeclineUser(user.user_id);
-        res
-          .status(200)
-          .send({
-            status: 200,
-            message: "Successfully declined user verification request",
-          });
+        if (!user_id || approved == null)
+          throw ApiError.badRequestError("user_id and approved not in payload");
+
+        await userService.verifyUser(user.user_id, user_id, approved);
+        res.status(200).send({
+          status: 200,
+          message: approved
+            ? "Successfully verified user"
+            : "Successfully declined verification request",
+        });
       } catch (error) {
         next(error);
       }
     }
   );
 };
-// End verify decline user info
+// End verify user
 
 module.exports = (app) => {
   // Route for registering a new user
@@ -226,6 +211,5 @@ module.exports = (app) => {
   // Route for getting user information
   getUser(app);
   // Route for verifying users
-  verifyApproveUser(app);
-  verifyDeclineUser(app);
+  verifyUser(app);
 };

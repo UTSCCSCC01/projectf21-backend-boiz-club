@@ -23,6 +23,13 @@ module.exports = class ApiError {
   /**
    * @return {ApiError}
    */
+  static notFoundError(message, errors) {
+    return new ApiError(404, message, errors);
+  }
+
+  /**
+   * @return {ApiError}
+   */
   static accessDeniedError() {
     return new ApiError(401, "Access Denied");
   }

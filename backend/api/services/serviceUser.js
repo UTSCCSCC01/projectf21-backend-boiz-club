@@ -66,16 +66,20 @@ module.exports = {
     return;
   },
   /**
-   * Approves user's verification request.
+   * Approve or decline user's verification request.
+   * @param adminUserId - the admin's id
    * @param userId - the user id
+   * @param approved - whether the user is approved/declined
    */
-  verifyApproveUser: async (userId) => {
+  verifyUser: async (adminUserId, userId, approved) => {
+    const adminUser = await userDal.getUser(adminUserId);
     const user = await userDal.getUser(userId);
 
-    // check user auth level
-    if (user.authentication_lvl !== "admin") throw ApiError.accessDeniedError();
+    if (!user) throw ApiError.notFoundError("User not found");
     else if (user.authentication_lvl === "verified")
       throw ApiError.badRequestError("User already verified.");
+    else if (adminUser.authentication_lvl !== "unverified")
+      throw ApiError.accessDeniedError();
 
     // check if user has pending verification
     const request = await userDal.getVerificationRequest(userId);
@@ -83,29 +87,14 @@ module.exports = {
       throw ApiError.badRequestError("User has not requested to be verified.");
 
     // verify user
-    await userDal.verifyUser(userId);
-    // remove verification request
-    await userDal.removeVerificationRequest(userId);
-  },
-  /**
-   * Decline user's verification request.
-   * @param userId - the user id
-   */
-  verifyDeclineUser: async (userId) => {
-    const user = await userDal.getUser(userId);
-
-    // check user auth level
-    if (user.authentication_lvl !== "admin") throw ApiError.accessDeniedError();
-    else if (user.authentication_lvl === "verified")
-      throw ApiError.badRequestError("User already verified.");
-
-    // check if user has pending verification
-    const request = await userDal.getVerificationRequest(userId);
-    if (!request)
-      throw ApiError.badRequestError("User has not requested to be verified.");
+    if (approved && (await userDal.verifyUser(userId)) == null)
+      throw ApiError.badRequestError("Failed to verify user.");
 
     // remove verification request
-    await userDal.removeVerificationRequest(userId);
+    if ((await userDal.removeVerificationRequest(userId)) == null)
+      throw ApiError.badRequestError(
+        "Failed to remove user verification request."
+      );
   },
   /**
    * Get user information
