@@ -106,8 +106,8 @@ describe('Create User Test', () => {
           done();
         });
   });
-    it('Should return a 200 status and create new user', (done) => {
-    let randName = (Math.random() + 1).toString(36).substring(7);
+  it('Should return a 200 status and create new user', (done) => {
+    const randName = (Math.random() + 1).toString(36).substring(7);
     const user = {
       email: randName+'@notamail.com',
       username: randName,
