@@ -226,16 +226,46 @@ const retrieveVerification = (app) => {
 // End get verification requests
 
 // Start reset password
+const resetPasswordSchema = {
+  encryptedEmail: {
+    notEmpty: true,
+    errorMessage: 'Encrypted email cannot be empty',
+    bail: true,
+  },
+  encryptedOTPId: {
+    notEmpty: true,
+    errorMessage: 'Encrypted OTP ID cannot be empty',
+    bail: true,
+  },
+  otp: {
+    isLength: {
+      options: {min: 6, max: 6},
+      errorMessage: 'Encrypted email cannot be empty',
+    },
+    isInt: {
+      errorMessage: 'OTP must consist of only integers',
+    },
+    bail: true,
+  },
+  password: {
+    notEmpty: true,
+    errorMessage: 'Password cannot be empty',
+    bail: true,
+  },
+};
+
 const resetPassword = (app) => {
-  app.post(pathPrefix + '/reset-password/:email', async (req, res, next) => {
-    try {
-      const result = await userService.resetPassword(
-          req.params.email, req.body);
-      res.json(result);
-    } catch (error) {
-      next(error);
-    }
-  });
+  app.post(pathPrefix + '/reset-password/:email',
+      checkSchema(resetPasswordSchema),
+      async (req, res, next) => {
+        try {
+          const result = await userService.resetPassword(
+              req.params.email, req.body);
+          res.json(result);
+        } catch (error) {
+          next(error);
+        }
+      });
 };
 // End reset password
 
