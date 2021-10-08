@@ -240,7 +240,7 @@ const resetPasswordSchema = {
   otp: {
     isLength: {
       options: {min: 6, max: 6},
-      errorMessage: 'Encrypted email cannot be empty',
+      errorMessage: 'OTP must be exactly 6 characters long',
     },
     isInt: {
       errorMessage: 'OTP must consist of only integers',
