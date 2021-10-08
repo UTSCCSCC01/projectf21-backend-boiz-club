@@ -2,7 +2,7 @@ import {
   getUserInfoByID,
   getVerificationRequests,
 } from '@/services/verification';
-import { AccountStackScreenProps } from '@/types';
+import { AccountStackScreenProps, VerificationRequest } from '@/types';
 import {
   Avatar,
   Box,
@@ -17,6 +17,8 @@ import {
 } from 'native-base';
 import React, { useEffect, useState } from 'react';
 import { RefreshControl } from 'react-native';
+import { useAppSelector } from '@/hooks/react-redux';
+
 export const NotificationScreen = ({
   navigation,
 }: AccountStackScreenProps<'NotificationScreen'>) => {
@@ -28,16 +30,18 @@ export const NotificationScreen = ({
   };
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const token = useAppSelector((state) => state.userCredential.userToken);
+
   const updateNotifications = async () => {
     setNotifications([]);
     setIsLoading(true);
     //Parse verification requests
     const parseVerificationRequests = async () => {
-      const verificationRequests = await getVerificationRequests();
+      const verificationRequests = await getVerificationRequests(token);
       const newNotifications: Notification[] = [];
       await Promise.all(
-        verificationRequests.map((request) =>
-          getUserInfoByID(request.user_id).then((user) => {
+        verificationRequests.map((request: VerificationRequest) =>
+          getUserInfoByID(request.user_id).then(({ data: user }) => {
             newNotifications.push({
               username: user.username,
               date: new Date(request.createdAt),
@@ -60,6 +64,7 @@ export const NotificationScreen = ({
   useEffect(() => {
     updateNotifications();
   }, []);
+
   return (
     <View flex={1} alignItems="center">
       <Heading fontSize="xl" p="4" pb="3">
