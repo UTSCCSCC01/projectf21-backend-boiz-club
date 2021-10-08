@@ -12,7 +12,6 @@ module.exports = {
   isEmailUnique: async (email) => {
     return userDal.isEmailUnique(email);
   },
-
   /**
    * Checks if username is unique
    * @param {String} username
@@ -21,7 +20,6 @@ module.exports = {
   isUsernameUnique: async (username) => {
     return userDal.isUsernameUnique(username);
   },
-
   /**
    * Registers a new user
    * @param {Object} body - user credentials
@@ -29,7 +27,6 @@ module.exports = {
   registerUser: async (body) => {
     return userDal.createUser(body);
   },
-
   /**
    * Gets user by email and password
    * @param {Object} body - user login credentials
@@ -46,7 +43,6 @@ module.exports = {
       throw ApiError.badRequestError('Invalid credentials');
     } else return await userDal.getUser(cred.user_id);
   },
-
   /**
    * Saves verification request and government id
    * @param {Object} file - user government id
@@ -68,13 +64,14 @@ module.exports = {
     // Add pending verification to db
     await userDal.createVerificationRequest(userId, uploadedFile.key);
   },
-
   /**
    * Approve or decline user's verification request.
+   * @param {Object} adminUserId - the admin's id
    * @param {Object} userId - the user id
    * @param {Object} approved - whether the user is approved/declined
    */
-  verifyUser: async (userId, approved) => {
+  verifyUser: async (adminUserId, userId, approved) => {
+    const adminUser = await userDal.getUser(adminUserId);
     const user = await userDal.getUser(userId);
 
     if (!user) {
@@ -83,6 +80,8 @@ module.exports = {
       throw ApiError.badRequestError('User already verified.');
     } else if (user.authentication_lvl === 'admin') {
       throw ApiError.badRequestError('Cannot verify an admin.');
+    } else if (adminUser.authentication_lvl !== 'admin') {
+      throw ApiError.accessDeniedError();
     }
 
     // check if user has pending verification
@@ -99,26 +98,5 @@ module.exports = {
    */
   getUser: async (userId) => {
     return await userDal.getUser(userId);
-  },
-
-  /**
-   * Verifies a user is an admin
-   * @param {Object} userId - current user's id
-   */
-  verifyAdmin: async (userId) => {
-    const user = await userDal.getUser(userId);
-    if (user.authentication_lvl != 'admin') {
-      throw ApiError.accessDeniedError();
-    }
-    return;
-  },
-
-  /**
-   * Gets a list of user verification requests that are pageable
-   * @param {int} limit - number of items per page
-   * @param {int} skip - number of pages to skip
-   */
-  getPagableVerificationRequests: async (limit, skip) => {
-    return await userDal.getPageableVerificationRequests(limit, skip);
   },
 };

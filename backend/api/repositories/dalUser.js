@@ -116,14 +116,4 @@ module.exports = {
       await session.endSession();
     }
   },
-
-  /**
-   * Gets a list of user verification requests that are pageable
-   * @param {int} limit - number of items per page
-   * @param {int} skip - number of pages to skip
-   */
-  getPageableVerificationRequests: async (limit, skip) =>{
-    return await VerificationRequest
-        .find().skip(limit * skip).limit(limit).sort('_id');
-  },
 };

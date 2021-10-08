@@ -24,16 +24,5 @@ function upload(file) {
   };
   return s3.upload(uploadParams).promise();
 }
-/**
- * retrieve a file to from s3.
- * @param {file} file File to retrieve from aws s3.
- * @return {promise<data>} data ===null if retrieval failed
- */
-function getFile(key) {
-  const getParams={
-    Bucket: bucketName,
-    Key: key};
-  return s3.getObject(getParams).promise();
-};
 
-module.exports={upload, getFile};
+module.exports={upload};
