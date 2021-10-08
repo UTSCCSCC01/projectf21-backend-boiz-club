@@ -274,10 +274,10 @@ module.exports = (app) => {
   uploadGovernmentId(app);
   // Route for getting user information
   getUser(app);
-  // Route for getting user information by user id
-  getUserById(app);
   // Route for verifying users
   verifyUser(app);
   // Route for retrieving a pagable verification request
   retrieveVerification(app);
+  // Route for getting user information by user id
+  getUserById(app);
 };
