@@ -23,9 +23,9 @@ const emailForgotPassword = (user, otp) => {
   const html = `
     <p>Dear ${user.first_name || user.email},</p>
     <p>We have received your password reset request.</p>
-    <p>Please submit the following verification altogether with your new password:</p>
+    <p>Please submit the following verification code altogether with your new password:</p>
     <p>Verification code: ${otp}</p>
-    <p>If you don’t use code within 30 minutes, it will expire.</p>
+    <p>If you don’t use the code within 30 minutes, it will expire.</p>
 
 
     <p>Best Regards,</p>
