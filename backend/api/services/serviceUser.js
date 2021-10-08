@@ -152,7 +152,7 @@ module.exports = {
       otpInstance = await userDal.getOTP(
           mongoose.Types.ObjectId(decryptedOTPId));
     } catch (error) {
-      throw ApiError.requestNotFoundError(
+      throw ApiError.notFoundError(
           'Failed to find the OTP in the database', error);
     }
 
