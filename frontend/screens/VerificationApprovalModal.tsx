@@ -1,5 +1,5 @@
 import { useAppSelector } from '@/hooks/react-redux';
-import { verifyUserByID } from '@/services/verification';
+import { verifyUserByID, getIDPhotoData } from '@/services/verification';
 import { AccountStackScreenProps, User } from '@/types';
 import {
   Avatar,
@@ -12,8 +12,9 @@ import {
   Text,
   useToast,
   View,
+  Spinner,
 } from 'native-base';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 const normalizedKeys = {
   username: 'Username',
@@ -30,9 +31,17 @@ export default function VerificationApprovalModal({
   const token = useAppSelector((state) => state.userCredential.userToken);
 
   const toast = useToast();
-  const [isLoading, setIsLoading] = useState(false);
+  const [isPageLoading, setIsPageLoading] = useState(true);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [IDbase64, setIDbase64] = useState('');
+  useEffect(() => {
+    getIDPhotoData(request.img_key).then((resp) => {
+      setIDbase64(`data:image/png;base64,${resp.data.image}`);
+      setIsPageLoading(false);
+    });
+  }, []);
   const handleRequest = async (approval: boolean) => {
-    setIsLoading(true);
+    setIsProcessing(true);
     await verifyUserByID(request.user_id, approval, token)
       .catch((err) => {
         toast.show({
@@ -55,66 +64,78 @@ export default function VerificationApprovalModal({
       <Heading fontSize="sm" p="4" pb="3">
         Account Verification Request
       </Heading>
-      <ScrollView
-        _contentContainerStyle={{
-          px: '20px',
-          mb: '4',
-        }}
-      >
-        <Center flex={1}>
-          <Avatar
-            size="150px"
-            // source={{
-            //   uri: '',
-            // }}
-          />
-          {Object.keys(normalizedKeys).map((key) => (
-            <Center key={key}>
-              <Row maxWidth="100%" alignItems="center" justifyContent="center">
-                <Text bold underline>
-                  {normalizedKeys[key as keyof typeof normalizedKeys]}
-                </Text>
-              </Row>
-              <Row maxWidth="100%" alignItems="center" justifyContent="center">
-                <Text>{user[key as keyof User]}</Text>
-              </Row>
-            </Center>
-          ))}
-          <Row maxWidth="100%" alignItems="center" justifyContent="center">
-            <Text bold underline>
-              {'ID'}
-            </Text>
-          </Row>
-          <Image
-            size={'2xl'}
-            resizeMode="cover"
-            source={{
-              uri: 'https://wallpaperaccess.com/full/317501.jpg',
-            }}
-            alt={'Alternate Text ' + '2xl'}
-          />
-        </Center>
-
-        {!isLoading && (
-          <Row
-            justifyContent="space-between"
-            marginTop="10%"
-            marginBottom="30%"
-          >
-            <Button colorScheme="teal" onPress={() => handleRequest(true)}>
-              Approve
-            </Button>
-            <Button colorScheme="danger" onPress={() => handleRequest(false)}>
-              Reject
-            </Button>
-          </Row>
-        )}
-        {isLoading && (
-          <Center flex={1} marginBottom="30%">
-            <Text>Processing...</Text>
+      {isPageLoading ? (
+        <Spinner />
+      ) : (
+        <ScrollView
+          _contentContainerStyle={{
+            px: '20px',
+            mb: '4',
+          }}
+        >
+          <Center flex={1}>
+            <Avatar
+              size="150px"
+              // source={{
+              //   uri: '',
+              // }}
+            />
+            {Object.keys(normalizedKeys).map((key) => (
+              <Center key={key}>
+                <Row
+                  maxWidth="100%"
+                  alignItems="center"
+                  justifyContent="center"
+                >
+                  <Text bold underline>
+                    {normalizedKeys[key as keyof typeof normalizedKeys]}
+                  </Text>
+                </Row>
+                <Row
+                  maxWidth="100%"
+                  alignItems="center"
+                  justifyContent="center"
+                >
+                  <Text>{user[key as keyof User]}</Text>
+                </Row>
+              </Center>
+            ))}
+            <Row maxWidth="100%" alignItems="center" justifyContent="center">
+              <Text bold underline>
+                {'ID'}
+              </Text>
+            </Row>
+            <Image
+              size={'2xl'}
+              resizeMode="contain"
+              source={{
+                uri: IDbase64,
+              }}
+              alt={'Alternate Text ' + '2xl'}
+            />
           </Center>
-        )}
-      </ScrollView>
+
+          {!isProcessing && (
+            <Row
+              justifyContent="space-between"
+              marginTop="10%"
+              marginBottom="30%"
+            >
+              <Button colorScheme="teal" onPress={() => handleRequest(true)}>
+                Approve
+              </Button>
+              <Button colorScheme="danger" onPress={() => handleRequest(false)}>
+                Reject
+              </Button>
+            </Row>
+          )}
+          {isProcessing && (
+            <Center flex={1} marginBottom="30%">
+              <Text>Processing...</Text>
+            </Center>
+          )}
+        </ScrollView>
+      )}
     </View>
   );
 }
