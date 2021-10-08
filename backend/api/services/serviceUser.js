@@ -58,7 +58,16 @@ module.exports = {
   */
   sendOTPEmail: async (email) => {
     const user = await userDal.getCredential(email);
-    const otpInstance = await userDal.createAndPostOTP();
+    if (user == null) {
+      throw ApiError.notFoundError(`The email ${email} cannot be found`);
+    }
+
+    let otpInstance;
+    try {
+      otpInstance = await userDal.createAndPostOTP();
+    } catch (error) {
+      throw ApiError.badRequestError('The OTP cannot be generated', error);
+    }
 
     const emailTemplate = emailForgotPassword(user, otpInstance.otp);
 
