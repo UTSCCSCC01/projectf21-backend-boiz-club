@@ -59,7 +59,7 @@ module.exports = {
   sendOTPEmail: async (email) => {
     const user = await userDal.getCredential(email);
     if (user == null) {
-      throw ApiError.notFoundError(`The email ${email} cannot be found`);
+      throw ApiError.notFoundError(`The email ${email} is not registered`);
     }
 
     let otpInstance;
