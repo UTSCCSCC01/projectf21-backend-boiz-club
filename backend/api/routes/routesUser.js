@@ -286,10 +286,11 @@ const getUserById = (app) => {
       if (error.reason instanceof TypeError) {
         next(ApiError.badRequestError('Invalid Id'));
       }
+      next(error);
     }
   });
 };
-// End reset password
+// End get user info by user id
 
 // Start get user info by user id
 module.exports = (app) => {
