@@ -16,7 +16,7 @@ export const userCredentialSlice = createSlice({
       state.userToken = action.payload.userToken;
     },
     clearToken: (state) => {
-      state.userToken = '';
+      state.userToken = null;
     },
   },
 });

@@ -18,7 +18,8 @@ List of tools/dependencies used:
 To start the development server (After following the Expo installation instructions):
 ```bash
 cd frontend # change directory to frontend
-expo start # OR: npm start
+yarn install
+yarn start # OR: expo start
 ```
 ### Backend
 List of tools/dependencies used:

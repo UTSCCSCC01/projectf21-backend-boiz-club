@@ -18,9 +18,13 @@ import {
 } from 'native-base';
 import * as React from 'react';
 import { RefreshControl } from 'react-native';
+import { useDispatch } from 'react-redux';
+import { clearToken } from '@/redux/userCredential';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 function AccountIndexScreen({
   navigation,
 }: AccountStackScreenProps<'AccountIndexScreen'>) {
+  const dispatch = useDispatch();
   const token = useAppSelector((state) => state.userCredential.userToken);
   const [isLoading, setIsLoading] = React.useState(true);
   const [userInfo, setUserInfo] = React.useState<User | null>(null);
@@ -34,6 +38,14 @@ function AccountIndexScreen({
   React.useEffect(() => {
     updateUserInfo();
   }, []);
+  const logout = async () => {
+    try {
+      await AsyncStorage.removeItem('userToken');
+      dispatch(clearToken());
+    } catch (err) {
+      console.log('Logout Failed');
+    }
+  };
   const UserDetails = () => (
     <Center padding={5}>
       <Row>
@@ -128,7 +140,6 @@ function AccountIndexScreen({
       >
         Verify Account
       </Button>
-
       <Button
         size="lg"
         key="notificationsBtn"
@@ -160,6 +171,7 @@ function AccountIndexScreen({
         size="lg"
         key="logOutBtn"
         width="70%"
+        onPress={logout}
         style={{ justifyContent: 'flex-start' }}
         startIcon={
           <FontAwesome5
