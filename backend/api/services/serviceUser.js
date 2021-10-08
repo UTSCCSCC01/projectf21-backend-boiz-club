@@ -94,6 +94,7 @@ module.exports = {
     return {
       encryptedEmail: encryptedEmail,
       encryptedOTPId: encryptedOTPId,
+      message: 'Forgot password request has been sent successfully',
     };
   },
 
