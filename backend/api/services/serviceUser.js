@@ -115,18 +115,6 @@ module.exports = {
     if (!email) {
       throw ApiError.badRequestError('Email is not provided');
     }
-    if (!encryptedEmail) {
-      throw ApiError.badRequestError('Encrypted email is not provided');
-    }
-    if (!encryptedOTPId) {
-      throw ApiError.badRequestError('Encrypted OTP ID is not provided');
-    }
-    if (!otp) {
-      throw ApiError.badRequestError('OTP is not provided');
-    }
-    if (!password) {
-      throw ApiError.badRequestError('New password is not provided');
-    }
 
     const algorithm = 'aes-256-cbc';
 
