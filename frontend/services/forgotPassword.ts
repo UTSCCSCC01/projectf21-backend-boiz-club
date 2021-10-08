@@ -3,19 +3,17 @@ import axios from 'axios';
 // type forgotPassword = (email: string) => any;
 
 async function forgotPassword(email: string) {
-    const send = await axios
-    .post('https://pawsup-dev-oznda.ondigitalocean.app/api/v1/forgot-password/{email}', {
-        email: email,
+  const url = 'http://...:8080/api/v1/users/forgot-password/' + email;
+  const res = await axios
+    .post(url, {
+      email: email,
     })
     .catch((err) => {
-        console.log('Post operation for forgot password failed. ' + err);
-        throw err;
-    })
-    .then((response) => {
-        console.log(response.data);
-        console.log("-----------");
-        return response;
+      console.log('Post operation for forgot-password failed. ' + err);
+      throw err;
     });
+
+  return res.data;
 }
 
 export default forgotPassword;

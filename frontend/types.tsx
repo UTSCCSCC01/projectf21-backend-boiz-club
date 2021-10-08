@@ -43,7 +43,11 @@ export type RootStackParamList = {
   SignIn: undefined;
   SignUp: undefined;
   ForgotPassword: undefined;
-  ResetPassword: undefined;
+  ResetPassword: {
+    email: string;
+    encryptedEmail: string;
+    encrpytedOTPId: string;
+  };
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> =
