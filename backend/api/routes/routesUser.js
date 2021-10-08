@@ -248,8 +248,10 @@ const resetPasswordSchema = {
     bail: true,
   },
   password: {
-    notEmpty: true,
-    errorMessage: 'Password cannot be empty',
+    isLength: {
+      options: {min: 8, max: 12},
+      errorMessage: 'Password must be between 8 to 12 characters long',
+    },
     bail: true,
   },
 };
@@ -259,6 +261,10 @@ const resetPassword = (app) => {
       checkSchema(resetPasswordSchema),
       async (req, res, next) => {
         try {
+          const errors = validationResult(req);
+          if (!errors.isEmpty()) {
+            throw ApiError.badRequestError('Bad request', errors.array());
+          }
           const result = await userService.resetPassword(
               req.params.email, req.body);
           res.json(result);
