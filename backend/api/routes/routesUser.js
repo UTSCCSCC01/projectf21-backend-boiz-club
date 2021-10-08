@@ -4,7 +4,6 @@ const {validationResult, checkSchema} = require('express-validator');
 const constants = require('../../constants');
 const jwt = require('jsonwebtoken');
 const verifyToken = require('../utils/verifyToken');
-const verifyAdmin = require('../utils/verifyAdmin');
 const pathPrefix = constants.ApiPrefix+'/users';
 
 // Start Registration
@@ -182,13 +181,13 @@ const verifyUser = (app) => {
       async (req, res, next) => {
         const {user} = req;
         const {user_id: userId, approved} = req.body;
-
         try {
           if (!userId || approved == null) {
             throw ApiError
                 .badRequestError('user_id and approved not in payload');
           }
-          await userService.verifyUser(user.user_id, userId, approved);
+          await userService.verifyAdmin(user.user_id);
+          await userService.verifyUser(userId, approved);
           res.status(200).send({
             status: 200,
             message: approved ?
@@ -209,11 +208,10 @@ const retrieveVerification = (app) => {
       verifyToken,
       async (req, res, next) => {
         try {
+          const {user} = req;
           const limit = parseInt(req.query.limit);
           const skip = parseInt(req.query.skip);
-
-          await verifyAdmin(req);
-
+          await userService.verifyAdmin(user.user_id);
           const verificationRequestList =
           await userService.getPagableVerificationRequests(
               limit, skip,

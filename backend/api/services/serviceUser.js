@@ -71,12 +71,10 @@ module.exports = {
 
   /**
    * Approve or decline user's verification request.
-   * @param {Object} adminUserId - the admin's id
    * @param {Object} userId - the user id
    * @param {Object} approved - whether the user is approved/declined
    */
-  verifyUser: async (adminUserId, userId, approved) => {
-    const adminUser = await userDal.getUser(adminUserId);
+  verifyUser: async (userId, approved) => {
     const user = await userDal.getUser(userId);
 
     if (!user) {
@@ -85,8 +83,6 @@ module.exports = {
       throw ApiError.badRequestError('User already verified.');
     } else if (user.authentication_lvl === 'admin') {
       throw ApiError.badRequestError('Cannot verify an admin.');
-    } else if (adminUser.authentication_lvl !== 'admin') {
-      throw ApiError.accessDeniedError();
     }
 
     // check if user has pending verification
@@ -103,6 +99,18 @@ module.exports = {
    */
   getUser: async (userId) => {
     return await userDal.getUser(userId);
+  },
+
+  /**
+   * Verifies a user is an admin
+   * @param {Object} userId - current user's id
+   */
+  verifyAdmin: async (userId) => {
+    const user = await userDal.getUser(userId);
+    if (user.authentication_lvl != 'admin') {
+      throw ApiError.accessDeniedError();
+    }
+    return;
   },
 
   /**
