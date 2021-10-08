@@ -135,13 +135,10 @@ module.exports = {
           `The OTP was not sent to the email ${email}`);
     }
 
-    let otpInstance;
-    try {
-      otpInstance = await userDal.getOTP(
-          mongoose.Types.ObjectId(decryptedOTPId));
-    } catch (error) {
-      throw ApiError.notFoundError(
-          'Failed to find the OTP in the database', error);
+    const otpInstance = await userDal.getOTP(
+        mongoose.Types.ObjectId(decryptedOTPId));
+    if (!otpInstance) {
+      throw ApiError.notFoundError('The OTP does not exist in the database');
     }
 
     if (currentDate > otpInstance.expiration_time) {
