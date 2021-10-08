@@ -14,6 +14,8 @@ import {
   Text,
   View,
   VStack,
+  Center,
+  ScrollView,
 } from 'native-base';
 import React, { useEffect, useState } from 'react';
 import { RefreshControl } from 'react-native';
@@ -74,6 +76,22 @@ export const NotificationScreen = ({
       <Heading fontSize="md" p="5">
         Notifications
       </Heading>
+      {notifications.length === 0 && !isLoading && (
+        <ScrollView
+          refreshControl={
+            <RefreshControl
+              refreshing={isLoading}
+              onRefresh={() => {
+                updateNotifications();
+              }}
+            />
+          }
+        >
+          <Center p={5}>
+            <Text>No notifications found. Pull down to refresh.</Text>
+          </Center>
+        </ScrollView>
+      )}
       <FlatList
         refreshControl={
           <RefreshControl
