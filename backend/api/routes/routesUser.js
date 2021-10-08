@@ -173,6 +173,29 @@ const getUser = (app) => {
 };
 // End get user info
 
+// Start get user info by user id
+const getUserById = (app) => {
+  app.get(pathPrefix + '/:userId', async (req, res, next) => {
+    try {
+      const userId = req.params.userId;
+      if (!userId) {
+        throw ApiError.badRequestError('User Id required');
+      }
+      const userInfo = await userService.getUser(userId);
+      if (!userInfo) {
+        throw ApiError.badRequestError('User Id does not exist');
+      }
+      res.send(userInfo);
+    } catch (error) {
+      if (error.reason instanceof TypeError) {
+        next(ApiError.badRequestError('Invalid Id'));
+      }
+      next(error);
+    }
+  });
+};
+// Start get user info by user id
+
 // Start verify user
 const verifyUser = (app) => {
   app.put(
@@ -234,6 +257,8 @@ module.exports = (app) => {
   uploadGovernmentId(app);
   // Route for getting user information
   getUser(app);
+  // Route for getting user information by user id
+  getUserById(app);
   // Route for verifying users
   verifyUser(app);
   // Route for retrieving a pagable verification request
