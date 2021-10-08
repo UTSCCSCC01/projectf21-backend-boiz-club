@@ -12,6 +12,7 @@ module.exports = {
   isEmailUnique: async (email) => {
     return userDal.isEmailUnique(email);
   },
+
   /**
    * Checks if username is unique
    * @param {String} username
@@ -20,6 +21,7 @@ module.exports = {
   isUsernameUnique: async (username) => {
     return userDal.isUsernameUnique(username);
   },
+
   /**
    * Registers a new user
    * @param {Object} body - user credentials
@@ -27,6 +29,7 @@ module.exports = {
   registerUser: async (body) => {
     return userDal.createUser(body);
   },
+
   /**
    * Gets user by email and password
    * @param {Object} body - user login credentials
@@ -43,6 +46,7 @@ module.exports = {
       throw ApiError.badRequestError('Invalid credentials');
     } else return await userDal.getUser(cred.user_id);
   },
+
   /**
    * Saves verification request and government id
    * @param {Object} file - user government id
@@ -64,6 +68,7 @@ module.exports = {
     // Add pending verification to db
     await userDal.createVerificationRequest(userId, uploadedFile.key);
   },
+
   /**
    * Approve or decline user's verification request.
    * @param {Object} adminUserId - the admin's id
@@ -98,5 +103,14 @@ module.exports = {
    */
   getUser: async (userId) => {
     return await userDal.getUser(userId);
+  },
+
+  /**
+   * Gets a list of user verification requests that are pageable
+   * @param {int} limit - number of items per page
+   * @param {int} skip - number of pages to skip
+   */
+  getPagableVerificationRequests: async (limit, skip) => {
+    return await userDal.getPageableVerificationRequests(limit, skip);
   },
 };

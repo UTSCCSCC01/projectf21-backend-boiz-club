@@ -4,7 +4,8 @@ const {validationResult, checkSchema} = require('express-validator');
 const constants = require('../../constants');
 const jwt = require('jsonwebtoken');
 const verifyToken = require('../utils/verifyToken');
-const pathPrefix = constants.ApiPrefix + '/users';
+const verifyAdmin = require('../utils/verifyAdmin');
+const pathPrefix = constants.ApiPrefix+'/users';
 
 // Start Registration
 const registrationSchema = {
@@ -202,6 +203,30 @@ const verifyUser = (app) => {
 };
 // End verify user
 
+// Start get verification requests
+const retrieveVerification = (app) => {
+  app.get(pathPrefix+ '/verification-request',
+      verifyToken,
+      async (req, res, next) => {
+        try {
+          const limit = parseInt(req.query.limit);
+          const skip = parseInt(req.query.skip);
+
+          await verifyAdmin(req);
+
+          const verificationRequestList =
+          await userService.getPagableVerificationRequests(
+              limit, skip,
+          );
+          res.status(200).send({status: 200, data: verificationRequestList});
+        } catch (error) {
+          next(error);
+        }
+      },
+  );
+};
+// End get verification requests
+
 module.exports = (app) => {
   // Route for registering a new user
   register(app);
@@ -213,4 +238,6 @@ module.exports = (app) => {
   getUser(app);
   // Route for verifying users
   verifyUser(app);
+  // Route for retrieving a pagable verification request
+  retrieveVerification(app);
 };
