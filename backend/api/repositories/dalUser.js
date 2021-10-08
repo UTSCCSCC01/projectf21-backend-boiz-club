@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 // Schema Models
 const User = require('../models/modelUser');
 const UserCredential = require('../models/modelUserCredential');
+const VerificationRequest = require('../models/modelVerificationRequest');
 const OTP = require('../models/modelOTP');
 const otpGenerator = require('otp-generator');
 
