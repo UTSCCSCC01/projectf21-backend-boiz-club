@@ -76,11 +76,12 @@ const VerificationUploadModal = ({
       alignItems="center"
       // justifyContent="center"
       backgroundColor="white"
+      padding={5}
     >
       <Heading fontSize="sm" p="4" pb="3">
         Account Verification Request
       </Heading>
-      <Column space={3}>
+      <Column space={3} marginTop={5}>
         <Text>
           Upload any legal canadian government issued identification like a
           passport, driving license, or health card.

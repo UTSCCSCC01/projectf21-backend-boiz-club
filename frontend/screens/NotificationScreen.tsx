@@ -71,8 +71,8 @@ export const NotificationScreen = ({
 
   return (
     <View flex={1} alignItems="center">
-      <Heading fontSize="xl" p="4" pb="3">
-        Inbox
+      <Heading fontSize="md" p="5">
+        Notifications
       </Heading>
       <FlatList
         refreshControl={

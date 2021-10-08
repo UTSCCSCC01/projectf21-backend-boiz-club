@@ -11,7 +11,7 @@ export default function Home() {
   const count = useAppSelector((state) => state.counter.value);
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
       <Text fontSize="lg" bold>
         Pawsup
       </Text>
@@ -22,9 +22,6 @@ export default function Home() {
       <HStack space={2}>
         <Button onPress={async () => Alert.alert(await getHealth())}>
           Check Health of Backend
-        </Button>
-        <Button onPress={() => AsyncStorage.clear()}>
-          Clear Async Storage
         </Button>
       </HStack>
     </View>
