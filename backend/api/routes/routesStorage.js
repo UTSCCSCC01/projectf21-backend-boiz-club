@@ -6,11 +6,11 @@ const pathPrefix = constants.ApiPrefix+'/storage';
 
 // start Get S3 Image from Key
 
-function encode(data){
-    let buf = Buffer.from(data);
-    let base64 = buf.toString('base64');
-    return base64
-    }
+function encode(data) {
+  const buf = Buffer.from(data);
+  const base64 = buf.toString('base64');
+  return base64;
+}
 
 const getMedia = (app) => {
   app.get(pathPrefix+'/media/:key',
