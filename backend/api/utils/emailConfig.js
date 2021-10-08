@@ -21,7 +21,7 @@ const emailForgotPassword = (user, otp) => {
   const to = user.email;
   const subject = 'Pawsup Password Reset';
   const html = `
-    <p>Dear ${user.first_name || user.email},</p>
+    <p>Dear ${user.username || user.email},</p>
     <p>We have received your password reset request.</p>
     <p>Please submit the following verification code altogether with your new password:</p>
     <p>Verification code: ${otp}</p>
