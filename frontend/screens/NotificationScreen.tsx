@@ -37,26 +37,30 @@ export const NotificationScreen = ({
     setIsLoading(true);
     //Parse verification requests
     const parseVerificationRequests = async () => {
-      const verificationRequests = await getVerificationRequests(token);
-      const newNotifications: Notification[] = [];
-      await Promise.all(
-        verificationRequests.map((request: VerificationRequest) =>
-          getUserInfoByID(request.user_id).then(({ data: user }) => {
-            newNotifications.push({
-              username: user.username,
-              date: new Date(request.createdAt),
-              description: 'Requested account verification.',
-              payload: { user, request },
-            });
-          })
-        )
-      );
-      setNotifications((prevNotifications) => {
-        return [...prevNotifications, ...newNotifications].sort(
-          (a: Notification, b: Notification) =>
-            b.date.getTime() - a.date.getTime()
+      try {
+        const verificationRequests = await getVerificationRequests(token);
+        const newNotifications: Notification[] = [];
+        await Promise.all(
+          verificationRequests.map((request: VerificationRequest) =>
+            getUserInfoByID(request.user_id).then(({ data: user }) => {
+              newNotifications.push({
+                username: user.username,
+                date: new Date(request.createdAt),
+                description: 'Requested account verification.',
+                payload: { user, request },
+              });
+            })
+          )
         );
-      });
+        setNotifications((prevNotifications) => {
+          return [...prevNotifications, ...newNotifications].sort(
+            (a: Notification, b: Notification) =>
+              b.date.getTime() - a.date.getTime()
+          );
+        });
+      } catch (err) {
+        console.log(err);
+      }
     };
     await parseVerificationRequests();
     setIsLoading(false);
