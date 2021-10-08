@@ -265,9 +265,8 @@ const resetPassword = (app) => {
           if (!errors.isEmpty()) {
             throw ApiError.badRequestError('Bad request', errors.array());
           }
-          const result = await userService.resetPassword(
-              req.params.email, req.body);
-          res.json(result);
+          await userService.resetPassword(req.params.email, req.body);
+          res.status(200).send('Password has been succesfully updated');
         } catch (error) {
           next(error);
         }
