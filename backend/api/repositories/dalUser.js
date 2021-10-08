@@ -1,9 +1,9 @@
 const crypto = require('crypto');
+const mongoose = require('mongoose');
 
 // Schema Models
 const User = require('../models/modelUser');
 const UserCredential = require('../models/modelUserCredential');
-const VerficationRequest = require('../models/modelVerificationRequest');
 const OTP = require('../models/modelOTP');
 
 
@@ -70,7 +70,7 @@ module.exports = {
    * @param {Object} imgKey - image key in s3 bucket to government id
    */
   createVerificationRequest: async (userId, imgKey) => {
-    const request = new VerficationRequest({
+    const request = new VerificationRequest({
       user_id: userId,
       img_key: imgKey,
     });
@@ -113,6 +113,49 @@ module.exports = {
    * @param {Object} userId - user id
    */
   getVerificationRequest: async (userId) => {
-    return await VerficationRequest.findOne({user_id: userId});
+    return await VerificationRequest.findOne({user_id: userId});
+  },
+  /**
+   * Removes a verification request created by a user
+   * @param {Object} userId - user id
+   */
+  removeVerificationRequest: async (userId) => {
+    return VerificationRequest.findOneAndRemove({user_id: userId});
+  },
+  /**
+   * Verifies an user
+   * @param {Object} userId - user id
+   */
+  verifyUser: async (userId) => {
+    const session = await mongoose.startSession();
+    session.startTransaction();
+    try {
+      // verify user
+      await User.findOneAndUpdate(
+          {_id: userId},
+          {authentication_lvl: 'verified'},
+      );
+
+      // remove verification request
+      await VerificationRequest.findOneAndRemove({user_id: userId});
+
+      // send changes
+      await session.commitTransaction();
+    } catch (error) {
+      await session.abortTransaction();
+      throw error;
+    } finally {
+      await session.endSession();
+    }
+  },
+
+  /**
+   * Gets a list of user verification requests that are pageable
+   * @param {int} limit - number of items per page
+   * @param {int} skip - number of pages to skip
+   */
+  getPageableVerificationRequests: async (limit, skip) =>{
+    return await VerificationRequest
+        .find().skip(limit * skip).limit(limit).sort('_id');
   },
 };
