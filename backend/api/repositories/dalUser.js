@@ -96,17 +96,16 @@ module.exports = {
 
   /**
    * Update an existing user's password
-   * @param {Object} user - user object
+   * @param {Object} email - email of the user resetting the password
    * @param {string} newPassword - desired new password
    */
-  updatePassword: async (user, newPassword) => {
+  updatePassword: async (email, newPassword) => {
     const salt = crypto.randomBytes(16).toString('base64');
     const hash = crypto.createHmac('sha512', salt);
     hash.update(newPassword);
     const saltedHash = hash.digest('base64');
-    user.password = saltedHash;
-    user.updatedAt = new Date();
-    await user.save();
+    await UserCredential.findOneAndUpdate({email: email},
+        {password: saltedHash, salt: salt, updatedAt: new Date()});
   },
 
   /**
