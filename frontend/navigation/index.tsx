@@ -3,28 +3,87 @@
  * https://reactnavigation.org/docs/getting-started
  *
  */
-import { FontAwesome } from '@expo/vector-icons';
+import { FontAwesome, FontAwesome5 } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
+import {
+  NavigationContainer,
+  DefaultTheme,
+  DarkTheme,
+} from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import * as React from 'react';
+import React, { useEffect, useState } from 'react';
 import { ColorSchemeName, Pressable } from 'react-native';
 
-import Colors from '../constants/Colors';
-import useColorScheme from '../hooks/useColorScheme';
-import ModalScreen from '../screens/ModalScreen';
-import NotFoundScreen from '../screens/NotFoundScreen';
-import TabOneScreen from '../screens/TabOneScreen';
-import TabTwoScreen from '../screens/TabTwoScreen';
-import { RootStackParamList, RootTabParamList, RootTabScreenProps } from '../types';
-import LinkingConfiguration from './LinkingConfiguration';
+import { HStack, Spinner } from 'native-base';
 
-export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
+import Colors from '@/constants/Colors';
+import useColorScheme from '@/hooks/useColorScheme';
+import ModalScreen from '@/screens/ModalScreen';
+import NotFoundScreen from '@/screens/NotFoundScreen';
+import Home from '@/screens/Home';
+import Services from '@/screens/Services';
+import Store from '@/screens/Store';
+import {
+  HomeStackParamList,
+  HomeTabParamList,
+  HomeTabScreenProps,
+} from '@/types';
+import LinkingConfiguration from './LinkingConfiguration';
+import Account from '@/screens/Account';
+import Cart from '@/screens/Cart';
+
+import RootStackNavigator from './RootStack';
+import { RootState } from '@/redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { addToken } from '@/redux/userCredential';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+export default function Navigation({
+  colorScheme,
+}: {
+  colorScheme: ColorSchemeName;
+}) {
+  const dispatch = useDispatch();
+
+  const [isLoading, setIsLoading] = useState(true);
+  // attempt to retrieve token from async storage to check if user
+  // is still logged in from previous session
+  useEffect(() => {
+    setTimeout(async () => {
+      try {
+        // Uncomment following line to logout every time app refreshes.
+        // await AsyncStorage.removeItem('userToken');
+        const userToken = await AsyncStorage.getItem('userToken');
+        if (userToken !== null) {
+          dispatch(
+            addToken({
+              userToken: userToken,
+            })
+          );
+        }
+      } catch (e) {
+        console.log('Failed to retrieve user token' + e);
+      }
+      setIsLoading(false);
+    }, 1000);
+  }, [dispatch]);
+  const userToken = useSelector(
+    (state: RootState) => state.userCredential.userToken
+  );
+
+  if (isLoading) {
+    return (
+      <HStack safeArea flex={1} alignItems="center" justifyContent="center">
+        <Spinner size="lg" />
+      </HStack>
+    );
+  }
   return (
     <NavigationContainer
       linking={LinkingConfiguration}
-      theme={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <RootNavigator />
+      theme={colorScheme === 'dark' ? DarkTheme : DefaultTheme}
+    >
+      {userToken == null ? <RootStackNavigator /> : <HomeStackNavigator />}
     </NavigationContainer>
   );
 }
@@ -33,17 +92,25 @@ export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeNa
  * A root stack navigator is often used for displaying modals on top of all other content.
  * https://reactnavigation.org/docs/modal
  */
-const Stack = createNativeStackNavigator<RootStackParamList>();
+const HomeStack = createNativeStackNavigator<HomeStackParamList>();
 
-function RootNavigator() {
+function HomeStackNavigator() {
   return (
-    <Stack.Navigator>
-      <Stack.Screen name="Root" component={BottomTabNavigator} options={{ headerShown: false }} />
-      <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
-      <Stack.Group screenOptions={{ presentation: 'modal' }}>
-        <Stack.Screen name="Modal" component={ModalScreen} />
-      </Stack.Group>
-    </Stack.Navigator>
+    <HomeStack.Navigator>
+      <HomeStack.Screen
+        name="Root"
+        component={BottomTabNavigator}
+        options={{ headerShown: false }}
+      />
+      <HomeStack.Screen
+        name="NotFound"
+        component={NotFoundScreen}
+        options={{ title: 'Oops!' }}
+      />
+      <HomeStack.Group screenOptions={{ presentation: 'modal' }}>
+        <HomeStack.Screen name="Modal" component={ModalScreen} />
+      </HomeStack.Group>
+    </HomeStack.Navigator>
   );
 }
 
@@ -51,29 +118,31 @@ function RootNavigator() {
  * A bottom tab navigator displays tab buttons on the bottom of the display to switch screens.
  * https://reactnavigation.org/docs/bottom-tab-navigator
  */
-const BottomTab = createBottomTabNavigator<RootTabParamList>();
+const BottomTab = createBottomTabNavigator<HomeTabParamList>();
 
 function BottomTabNavigator() {
   const colorScheme = useColorScheme();
 
   return (
     <BottomTab.Navigator
-      initialRouteName="TabOne"
+      initialRouteName="Home"
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme].tint,
-      }}>
+      }}
+    >
       <BottomTab.Screen
-        name="TabOne"
-        component={TabOneScreen}
-        options={({ navigation }: RootTabScreenProps<'TabOne'>) => ({
-          title: 'Tab One',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+        name="Home"
+        component={Home}
+        options={({ navigation }: HomeTabScreenProps<'Home'>) => ({
+          title: 'Home',
+          tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
           headerRight: () => (
             <Pressable
               onPress={() => navigation.navigate('Modal')}
               style={({ pressed }) => ({
                 opacity: pressed ? 0.5 : 1,
-              })}>
+              })}
+            >
               <FontAwesome
                 name="info-circle"
                 size={25}
@@ -85,11 +154,37 @@ function BottomTabNavigator() {
         })}
       />
       <BottomTab.Screen
-        name="TabTwo"
-        component={TabTwoScreen}
+        name="Services"
+        component={Services}
         options={{
-          title: 'Tab Two',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          title: 'Services',
+          tabBarIcon: ({ color }) => <TabBarIcon name="dog" color={color} />,
+        }}
+      />
+      <BottomTab.Screen
+        name="Store"
+        component={Store}
+        options={{
+          title: 'Store',
+          tabBarIcon: ({ color }) => <TabBarIcon name="store" color={color} />,
+        }}
+      />
+      <BottomTab.Screen
+        name="Account"
+        component={Account}
+        options={{
+          title: 'Account',
+          tabBarIcon: ({ color }) => <TabBarIcon name="user" color={color} />,
+        }}
+      />
+      <BottomTab.Screen
+        name="Cart"
+        component={Cart}
+        options={{
+          title: 'Cart',
+          tabBarIcon: ({ color }) => (
+            <TabBarIcon name="shopping-cart" color={color} />
+          ),
         }}
       />
     </BottomTab.Navigator>
@@ -100,8 +195,8 @@ function BottomTabNavigator() {
  * You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
  */
 function TabBarIcon(props: {
-  name: React.ComponentProps<typeof FontAwesome>['name'];
+  name: React.ComponentProps<typeof FontAwesome5>['name'];
   color: string;
 }) {
-  return <FontAwesome size={30} style={{ marginBottom: -3 }} {...props} />;
+  return <FontAwesome5 size={30} style={{ marginBottom: -3 }} {...props} />;
 }
