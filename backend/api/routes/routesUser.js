@@ -159,6 +159,21 @@ const uploadGovernmentId = (app) => {
 };
 // End Upload Government ID/Request Verification
 
+/*
+Forgot password request
+*/
+const forgotPassword = (app) => {
+  app.post(pathPrefix + '/forgot-password/:email', async (req, res, next) => {
+    try {
+      const result = await
+      userService.sendOTPEmail(req.params.email);
+      res.status(200).json(result);
+    } catch (error) {
+      next(error);
+    }
+  });
+};
+
 // Start get user info
 const getUser = (app) => {
   app.get(pathPrefix + '/self', verifyToken, async (req, res, next) => {
@@ -253,6 +268,8 @@ module.exports = (app) => {
   register(app);
   // Route for logging in returning user
   login(app);
+  // Route for forgot password request
+  forgotPassword(app);
   // Route for uploading government id
   uploadGovernmentId(app);
   // Route for getting user information

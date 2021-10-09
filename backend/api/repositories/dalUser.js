@@ -5,6 +5,8 @@ const mongoose = require('mongoose');
 const User = require('../models/modelUser');
 const UserCredential = require('../models/modelUserCredential');
 const VerificationRequest = require('../models/modelVerificationRequest');
+const OTP = require('../models/modelOTP');
+const otpGenerator = require('otp-generator');
 
 module.exports = {
   /**
@@ -61,6 +63,27 @@ module.exports = {
    */
   getUser: async (userId) => {
     return await User.findOne({_id: userId});
+  },
+
+  /**
+   * Generate OTP and save it into the database
+   */
+  createAndPostOTP: async () => {
+    const otp = otpGenerator.generate(
+        6, {alphabets: false, upperCase: false, specialChars: false});
+    const expirationTime = new Date(new Date().getTime() + 30*60000);
+
+    const newOTP = new OTP({
+      otp: otp,
+      expiration_time: expirationTime,
+    });
+
+    try {
+      const savedOTP = await newOTP.save();
+      return savedOTP;
+    } catch (error) {
+      throw ApiError.badRequestError(`The OTP ${otp.id} cannot be saved`);
+    }
   },
 
   /**
@@ -126,4 +149,6 @@ module.exports = {
     return await VerificationRequest
         .find().skip(limit * skip).limit(limit).sort('_id');
   },
+
 };
+

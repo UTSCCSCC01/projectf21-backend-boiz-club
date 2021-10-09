@@ -1,6 +1,8 @@
 const ApiError = require('../../error/ApiError');
 const userDal = require('../repositories/dalUser');
 const crypto = require('crypto');
+const {transporter, emailForgotPassword} =
+require('../../api/utils/emailConfig');
 const s3 = require('../utils/s3');
 
 module.exports = {
@@ -45,6 +47,55 @@ module.exports = {
     if (saltedHash != cred.password) {
       throw ApiError.badRequestError('Invalid credentials');
     } else return await userDal.getUser(cred.user_id);
+  },
+
+  /**
+     * Send the verification code for forgot password request
+     * @param {Object} email - email of the user requesting for password reset
+     * @return {String} encrypted email
+     * @return {String} encrypted OTP ID
+     *
+  */
+  sendOTPEmail: async (email) => {
+    const user = await userDal.getCredential(email);
+    if (user == null) {
+      throw ApiError.notFoundError(`The email ${email} is not registered`);
+    }
+
+    let otpInstance;
+    try {
+      otpInstance = await userDal.createAndPostOTP();
+    } catch (error) {
+      throw ApiError.badRequestError('The OTP cannot be generated', error);
+    }
+
+    const emailTemplate = emailForgotPassword(user, otpInstance.otp);
+
+    await transporter.verify();
+    await transporter.sendMail(emailTemplate, (error) => {
+      if (error) {
+        throw ApiError.badRequestError('Failed to send the email', error);
+      }
+    });
+
+    const algorithm = 'aes-256-cbc';
+    let cipher = crypto.createCipheriv(
+        algorithm, process.env.SECURITY_KEY, process.env.INITVECTOR);
+
+    let encryptedEmail = cipher.update(email, 'utf-8', 'hex');
+    encryptedEmail += cipher.final('hex');
+
+    cipher = crypto.createCipheriv(
+        algorithm, process.env.SECURITY_KEY, process.env.INITVECTOR);
+
+    let encryptedOTPId = cipher.update(otpInstance.id, 'utf-8', 'hex');
+    encryptedOTPId += cipher.final('hex');
+
+    return {
+      encryptedEmail: encryptedEmail,
+      encryptedOTPId: encryptedOTPId,
+      message: 'Forgot password request has been sent successfully',
+    };
   },
 
   /**
