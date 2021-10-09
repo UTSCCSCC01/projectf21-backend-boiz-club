@@ -1,12 +1,17 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { NativeBaseProvider } from 'native-base';
 
-import useCachedResources from './hooks/useCachedResources';
-import useColorScheme from './hooks/useColorScheme';
-import Navigation from './navigation';
+import useCachedResources from '@/hooks/useCachedResources';
+import useColorScheme from '@/hooks/useColorScheme';
+import Navigation from '@/navigation';
+import StorybookUIRoot from './storybook';
 
-export default function App() {
+import store from '@/redux';
+import Constants from 'expo-constants';
+import { Provider } from 'react-redux';
+
+const App = () => {
   const isLoadingComplete = useCachedResources();
   const colorScheme = useColorScheme();
 
@@ -14,10 +19,14 @@ export default function App() {
     return null;
   } else {
     return (
-      <SafeAreaProvider>
-        <Navigation colorScheme={colorScheme} />
-        <StatusBar />
-      </SafeAreaProvider>
+      <NativeBaseProvider>
+        <Provider store={store}>
+          <Navigation colorScheme={colorScheme} />
+          <StatusBar />
+        </Provider>
+      </NativeBaseProvider>
     );
   }
-}
+};
+
+export default Constants.manifest?.extra.LOAD_STORYBOOK ? StorybookUIRoot : App;

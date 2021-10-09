@@ -7,22 +7,37 @@
 import { LinkingOptions } from '@react-navigation/native';
 import * as Linking from 'expo-linking';
 
-import { RootStackParamList } from '../types';
+import { HomeStackParamList } from '@/types';
 
-const linking: LinkingOptions<RootStackParamList> = {
+const linking: LinkingOptions<HomeStackParamList> = {
   prefixes: [Linking.makeUrl('/')],
   config: {
     screens: {
       Root: {
         screens: {
-          TabOne: {
+          Home: {
             screens: {
-              TabOneScreen: 'one',
+              HomeScreen: 'home',
             },
           },
-          TabTwo: {
+          Services: {
             screens: {
-              TabTwoScreen: 'two',
+              ServicesScreen: 'services',
+            },
+          },
+          Store: {
+            screens: {
+              StoreScreen: 'store',
+            },
+          },
+          Account: {
+            screens: {
+              AccountScreen: 'store',
+            },
+          },
+          Cart: {
+            screens: {
+              CartScreen: 'cart',
             },
           },
         },

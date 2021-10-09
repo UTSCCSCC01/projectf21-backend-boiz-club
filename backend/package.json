@@ -3,12 +3,38 @@
   "version": "1.0.0",
   "description": "Backend API for Pawsup",
   "main": "server.js",
-  "scripts": {},
+  "scripts": {
+    "start": "nodemon server.js",
+    "lint": "eslint . --ext .jsx --ext .js --ext .ts --ext .tsx --fix",
+    "test": "mocha"
+  },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "aws-sdk": "^2.998.0",
     "body-parser": "^1.19.0",
+    "crypto": "^1.0.1",
     "express": "^4.17.1",
-    "mongodb": "^4.1.2"
-  }
+    "express-validator": "^6.12.2",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.0.8",
+    "morgan": "^1.10.0",
+    "multer": "^1.4.3",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^4.32.0",
+    "@typescript-eslint/parser": "^4.32.0",
+    "chai": "^4.3.4",
+    "chai-http": "^4.3.0",
+    "chai-things": "^0.2.0",
+    "dotenv": "^10.0.0",
+    "eslint": "^7.32.0",
+    "eslint-config-google": "^0.14.0",
+    "eslint-plugin-react": "^7.26.0",
+    "mocha": "^9.1.2",
+    "nodemon": "^2.0.13",
+    "typescript": "^4.4.3"
+  },
+  "keywords": []
 }
