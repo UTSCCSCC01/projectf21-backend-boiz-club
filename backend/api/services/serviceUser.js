@@ -160,7 +160,6 @@ module.exports = {
     } catch (error) {
       throw ApiError.badRequestError('Failed to delete the OTP', error);
     }
-
   },
 
   /**
