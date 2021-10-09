@@ -266,7 +266,8 @@ const resetPassword = (app) => {
             throw ApiError.badRequestError('Bad request', errors.array());
           }
           await userService.resetPassword(req.params.email, req.body);
-          res.status(200).send('Password has been succesfully updated');
+          res.status(200).json({
+            message: 'Password has been successfully updated'});
         } catch (error) {
           next(error);
         }
