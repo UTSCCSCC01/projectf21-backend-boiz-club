@@ -9,19 +9,27 @@ interface Props {
 }
 
 const Map = ({ lat, long, radius = 200 }: Props) => {
+  const delta = 0.005; // viewport of map (complicated explanation found on lib docs)
+
   return (
     <MapView
       style={styles.map}
       initialRegion={{
         latitude: 43.76055603963581,
         longitude: -79.40877280352363,
-        latitudeDelta: 0.005,
-        longitudeDelta: 0.005,
+        latitudeDelta: delta,
+        longitudeDelta: delta,
+      }}
+      region={{
+        latitude: lat,
+        longitude: long,
+        latitudeDelta: delta,
+        longitudeDelta: delta,
       }}
     >
       <Circle
-        center={{ latitude: lat, longitude: long }}
         radius={radius}
+        center={{ latitude: lat, longitude: long }}
         strokeColor={'rgba(159, 191, 223, 0.5)'}
         fillColor={'rgba(159, 191, 223, 0.5)'}
       />
