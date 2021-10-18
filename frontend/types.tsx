@@ -30,6 +30,7 @@ export type AccountStackParamList = {
   NotificationScreen: undefined;
   VerificationApprovalModal: { user: User; request: VerificationRequest };
   VerificationUploadModal: undefined;
+  FeesAdministrationModal: undefined;
 };
 
 export type AccountStackScreenProps<
