@@ -156,7 +156,7 @@ module.exports = {
    * Verifies a user is an admin
    * @param {Object} userId - current user's id
    */
-  verifyAdmin: async (userId) => {
+  assertAdmin: async (userId) => {
     const user = await userDal.getUser(userId);
     if (user.authentication_lvl != 'admin') {
       throw ApiError.accessDeniedError();

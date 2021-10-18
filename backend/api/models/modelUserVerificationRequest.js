@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const verificationRequestSchema = new Schema({
+const userVerificationRequestSchema = new Schema({
   user_id: {
     type: String,
     required: true,
@@ -16,7 +16,7 @@ const verificationRequestSchema = new Schema({
   },
 });
 
-const VerificationRequest = mongoose.model(
-    'Verification_Request', verificationRequestSchema);
+const UserVerificationRequest = mongoose.model(
+    'User_Verification_Request', userVerificationRequestSchema);
 
-module.exports = VerificationRequest;
+module.exports = UserVerificationRequest;

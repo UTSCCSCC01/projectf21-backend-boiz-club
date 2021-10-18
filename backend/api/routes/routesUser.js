@@ -201,7 +201,7 @@ const verifyUser = (app) => {
             throw ApiError
                 .badRequestError('user_id and approved not in payload');
           }
-          await userService.verifyAdmin(user.user_id);
+          await userService.assertAdmin(user.user_id);
           await userService.verifyUser(userId, approved);
           res.status(200).send({
             status: 200,
@@ -226,7 +226,7 @@ const retrieveVerification = (app) => {
           const {user} = req;
           const limit = parseInt(req.query.limit);
           const skip = parseInt(req.query.skip);
-          await userService.verifyAdmin(user.user_id);
+          await userService.assertAdmin(user.user_id);
           const verificationRequestList =
           await userService.getPagableVerificationRequests(
               limit, skip,
