@@ -2,6 +2,7 @@
 const Service = require('../models/modelService');
 const ServiceVerificationRequest =
 require('../models/modelServiceVerificationRequest');
+const serviceService = require('../services/serviceService');
 
 module.exports = {
 
@@ -26,5 +27,9 @@ module.exports = {
     );
     return await serviceVerificationRequest.save();
   },
+
+  retrieveServicesList: async() => {
+    return await Service.find();
+  }
 
 };
