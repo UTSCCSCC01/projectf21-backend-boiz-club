@@ -78,12 +78,7 @@ module.exports = {
       expiration_time: expirationTime,
     });
 
-    try {
-      const savedOTP = await newOTP.save();
-      return savedOTP;
-    } catch (error) {
-      throw ApiError.badRequestError(`The OTP ${otp.id} cannot be saved`);
-    }
+    return await newOTP.save();
   },
 
   /**
