@@ -201,30 +201,36 @@ Tracking on Jira Total Mark: 17 / 20
 ---
 ## Sprint Demo (Max 14 marks) 
   - Attendance (max 2 marks)
-    - 2 marks = full team is present
+    - **2 marks = full team is present**
     - 1 mark = one member is not present
     - 0 marks = more than one member is not present
   
   - Working software (max 2 marks)
-    - 8 marks = features presented work flawlessly
+    - **8 marks = features presented work flawlessly**
     - 1 mark removed for each bug/error identified or for missing records on Jira
 
   - Presentation (max 2 marks)
-    - 2 marks = UI demonstrated is visually appealing and intuitive for users
+    - **2 marks = UI demonstrated is visually appealing and intuitive for users**
     - 1 mark = one or more errors identified by the demo TA
     - 0 marks = UI is visually unappealing
 
   - Documentation (max 2 marks)
+    - **2 marks = documentation has been created for frontend and backend systems with great detail**
+    - 1 mark = documentation has been created for frontend and backend systems with some errors
+    - 0 marks = documentation has not been created
 
-  - 2 marks = documentation has been created for frontend and backend systems with great detail
-  - 1 mark = documentation has been created for frontend and backend systems with some errors
-  - 0 marks = documentation has not been created
+  Your Mark: 14 / 14
 
-  Your Mark: __ / 14
+Comments:
+- Add a toast after signing up to show registration was successful
+- Modal shouldnt go all the way up, the empty blank space looks odd
+- Colour of dog/cat icons doesnt match the color scheme, consider matching or changing to a more pastel blue/purple
+- Swap approve/reject
 
 ---
 
 
+
 ## Total Mark
 
-68.06/ 89
+82.06/ 89
