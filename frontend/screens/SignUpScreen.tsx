@@ -10,12 +10,14 @@ import {
   Text,
   HStack,
   VStack,
+  useToast,
 } from 'native-base';
 
 import { RootStackScreenProps } from '@/types';
 import signup from '@/services/signup';
 
 const SignUpScreen = ({ navigation }: RootStackScreenProps<'SignUp'>) => {
+  const toast = useToast();
   const emailRegex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w\w+)+$/;
 
   interface user {
@@ -176,6 +178,12 @@ const SignUpScreen = ({ navigation }: RootStackScreenProps<'SignUp'>) => {
     });
 
     if (userSignUp !== null) {
+      toast.show({
+        status: 'success',
+        title: 'You are successfully registered.',
+        placement: 'bottom',
+      });
+
       console.log('Sign Up Succeed');
       navigation.navigate('SignIn');
     }
