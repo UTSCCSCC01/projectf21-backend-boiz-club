@@ -1,3 +1,4 @@
+/* eslint-disable new-cap */
 const ApiError = require('../../error/ApiError');
 const userDal = require('../repositories/dalUser');
 const crypto = require('crypto');
@@ -150,6 +151,65 @@ module.exports = {
    */
   getUser: async (userId) => {
     return await userDal.getUser(userId);
+  },
+
+  /**
+     * Resets an existing user's password
+     * @param {String} email - email of the user requesting the password reset
+     * @param {Object} body - encryptedEmail, encryptedOTPId, otp, password
+  */
+  resetPassword: async (email, body) => {
+    const currentDate = new Date();
+    const {encryptedEmail, encryptedOTPId, otp, password} = body;
+
+    if (!email) {
+      throw ApiError.badRequestError('Email is not provided');
+    }
+
+    const algorithm = 'aes-256-cbc';
+
+    let decipher = crypto.createDecipheriv(
+        algorithm, process.env.SECURITY_KEY, process.env.INITVECTOR);
+    let decryptedEmail = decipher.update(
+        encryptedEmail, 'hex', 'utf-8');
+    decryptedEmail += decipher.final('utf8');
+
+    decipher = crypto.createDecipheriv(
+        algorithm, process.env.SECURITY_KEY, process.env.INITVECTOR);
+    let decryptedOTPId = decipher.update(
+        encryptedOTPId, 'hex', 'utf-8');
+    decryptedOTPId += decipher.final('utf8');
+
+    if (decryptedEmail != email) {
+      throw ApiError.badRequestError(
+          `The OTP was not sent to the email ${email}`);
+    }
+
+    const otpInstance = await userDal.getOTP(
+        mongoose.Types.ObjectId(decryptedOTPId));
+    if (!otpInstance) {
+      throw ApiError.notFoundError('The OTP does not exist in the database');
+    }
+
+    if (currentDate > otpInstance.expiration_time) {
+      throw ApiError.badRequestError('The OTP is already expired');
+    }
+    if (otp != otpInstance.otp) {
+      throw ApiError.badRequestError('The entered OTP is incorrect');
+    }
+
+    try {
+      await userDal.updatePassword(email, password);
+    } catch (error) {
+      throw ApiError.badRequestError(
+          'Failed to reset the user\'s password', error);
+    }
+
+    try {
+      await userDal.deleteOTP(mongoose.Types.ObjectId(decryptedOTPId));
+    } catch (error) {
+      throw ApiError.badRequestError('Failed to delete the OTP', error);
+    }
   },
 
   /**
