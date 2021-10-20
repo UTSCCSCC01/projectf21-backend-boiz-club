@@ -79,14 +79,14 @@ const postServiceAndRequestVerification = (app) => {
 };
 
 const getServicesList = (app) => {
-  app.get(pathPrefix + '/services-list', async(req, res, next) => {
+  app.get(pathPrefix + '/services-list', async (req, res, next) => {
     try {
       const servicesList = await serviceService.getServicesList();
       res.status(200).json(servicesList);
     } catch (error) {
       next(error);
     }
-  })
+  });
 };
 
 module.exports = (app) => {
