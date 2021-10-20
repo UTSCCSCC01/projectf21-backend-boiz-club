@@ -7,7 +7,7 @@ module.exports = {
         serviceInfo, userId);
   },
 
-  getServicesList: async() => {
+  getServicesList: async () => {
     return await serviceDal.retrieveServicesList();
-  }
+  },
 };
