@@ -7,7 +7,7 @@ module.exports = {
         serviceInfo, userId);
   },
 
-  getServicesList: async () => {
-    return await serviceDal.retrieveServicesList();
+  getServicesList: async (limit, skip) => {
+    return await serviceDal.retrievePageableServicesList(limit, skip);
   },
 };

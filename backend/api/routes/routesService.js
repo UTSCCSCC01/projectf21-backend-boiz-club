@@ -81,7 +81,9 @@ const postServiceAndRequestVerification = (app) => {
 const getServicesList = (app) => {
   app.get(pathPrefix + '/services-list', async (req, res, next) => {
     try {
-      const servicesList = await serviceService.getServicesList();
+      const limit = parseInt(req.query.limit);
+      const skip = parseInt(req.query.skip);
+      const servicesList = await serviceService.getServicesList(limit, skip);
       if (!servicesList) {
         throw ApiError.badRequestError('Failed to retrieve list of services');
       }
