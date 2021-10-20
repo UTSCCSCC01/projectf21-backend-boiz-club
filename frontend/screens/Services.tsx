@@ -1,26 +1,85 @@
 import * as React from 'react';
-import { View, Text, Button, HStack } from 'native-base';
+import { Text, Button, ScrollView, Box } from 'native-base';
 
-import EditScreenInfo from '@/components/EditScreenInfo';
-import { useAppSelector, useAppDispatch } from '@/hooks/react-redux';
-import { increment, decrement, incrementByAmount } from '@/redux/counter';
+import { ServiceStackParamList, ServiceStackScreenProps } from '@/types';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { RefreshControl } from 'react-native';
+import CreateServiceModalDescription from './CreateServiceModalDescription';
+import CreateServiceModalContact from './CreateServiceModalContact';
 
-export default function Services() {
-  // The `state` arg is correctly typed as `RootState` already
-  const count = useAppSelector((state) => state.counter.value);
-  const dispatch = useAppDispatch();
+function ServicesIndexScreen({
+  navigation,
+}: ServiceStackScreenProps<'ServiceIndexScreen'>) {
+  const [isLoading, setIsLoading] = React.useState(true);
 
+  const updateServices = async () => {
+    setIsLoading(true);
+
+    // UPDATE SERVICES FROM BACKEND HERE.
+
+    setIsLoading(false);
+  };
+
+  React.useEffect(() => {
+    updateServices();
+  }, []);
+
+  const DisplayServices = () => <Text> Services goes here. </Text>;
+
+  const CreateServiceButton = () => (
+    <Button
+      size="lg"
+      key="createServiceButton"
+      width="70%"
+      onPress={() => navigation.navigate('CreateServiceModalDescription')}
+      marginBottom={7}
+      justifyContent="center"
+    >
+      Create Service
+    </Button>
+  );
   return (
-    <View flex={1} alignItems="center" justifyContent="center">
-      <Text fontSize="2xl">Services</Text>
-      <View marginY={30} height={1} width="80%" />
-      <EditScreenInfo path="/screens/Services.tsx" />
-      <Text>{`Global Counter Variable :${count}`}</Text>
-      <HStack space={3}>
-        <Button onPress={() => dispatch(increment())}>+</Button>
-        <Button onPress={() => dispatch(decrement())}>-</Button>
-        <Button onPress={() => dispatch(incrementByAmount(33))}> +33 </Button>
-      </HStack>
-    </View>
+    <Box justifyContent="space-between" alignItems="center" marginBottom={5}>
+      <ScrollView
+        refreshControl={
+          <RefreshControl
+            refreshing={isLoading}
+            onRefresh={() => {
+              updateServices();
+            }}
+          />
+        }
+      >
+        <DisplayServices />
+      </ScrollView>
+
+      <CreateServiceButton />
+    </Box>
+  );
+}
+
+const ServiceStack = createNativeStackNavigator<ServiceStackParamList>();
+createNativeStackNavigator();
+export default function Services() {
+  return (
+    <ServiceStack.Navigator>
+      <ServiceStack.Screen
+        name="ServiceIndexScreen"
+        component={ServicesIndexScreen}
+        options={{ headerShown: false }}
+      />
+      <ServiceStack.Group screenOptions={{ presentation: 'modal' }}>
+        <ServiceStack.Screen
+          name="CreateServiceModalDescription"
+          component={CreateServiceModalDescription}
+          options={{ headerShown: false }}
+        />
+        <ServiceStack.Screen
+          name="CreateServiceModalContact"
+          component={CreateServiceModalContact}
+          options={{ headerShown: false }}
+        />
+      </ServiceStack.Group>
+    </ServiceStack.Navigator>
   );
 }
