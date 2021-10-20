@@ -137,7 +137,7 @@ module.exports = {
    * @param {Object} userId - user id
    */
   removeVerificationRequest: async (userId) => {
-    return UserVerificationRequest.findOneAndRemove({user_id: userId});
+    return await UserVerificationRequest.findOneAndRemove({user_id: userId});
   },
   /**
    * Verifies an user

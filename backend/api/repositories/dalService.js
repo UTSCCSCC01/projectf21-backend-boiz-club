@@ -1,5 +1,6 @@
 // Schema Models
 const Service = require('../models/modelService');
+const mongoose = require('mongoose');
 const ServiceVerificationRequest =
 require('../models/modelServiceVerificationRequest');
 
@@ -30,6 +31,44 @@ module.exports = {
   getPageableVerificationRequests: async (limit, skip) =>{
     return await ServiceVerificationRequest
         .find().skip(limit * skip).limit(limit).sort('createdAt');
+  },
+
+  getService: async (serviceId) => {
+    return await Service.findOne({_id: serviceId});
+  },
+
+  getVerificationRequest: async (serviceId) => {
+    return await ServiceVerificationRequest.findOne({service_id: serviceId});
+  },
+
+  verifyService: async (serviceId) => {
+    const session = await mongoose.startSession();
+    session.startTransaction();
+    try {
+      // verify service
+      await Service.findOneAndUpdate(
+          {_id: serviceId},
+          {verified: true},
+      );
+
+      // remove verification request
+      await ServiceVerificationRequest.findOneAndRemove(
+          {service_id: serviceId},
+      );
+
+      // send changes
+      await session.commitTransaction();
+    } catch (error) {
+      await session.abortTransaction();
+      throw error;
+    } finally {
+      await session.endSession();
+    }
+  },
+
+  removeVerificationRequestAndService: async (serviceId) => {
+    await ServiceVerificationRequest.findOneAndRemove({service_id: serviceId});
+    return await Service.findOneAndRemove({_id: serviceId});
   },
 
 };
