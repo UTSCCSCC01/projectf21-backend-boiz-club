@@ -240,6 +240,56 @@ const retrieveVerification = (app) => {
 };
 // End get verification requests
 
+// Start reset password
+const resetPasswordSchema = {
+  encryptedEmail: {
+    notEmpty: true,
+    errorMessage: 'Encrypted email cannot be empty',
+    bail: true,
+  },
+  encryptedOTPId: {
+    notEmpty: true,
+    errorMessage: 'Encrypted OTP ID cannot be empty',
+    bail: true,
+  },
+  otp: {
+    isLength: {
+      options: {min: 6, max: 6},
+      errorMessage: 'OTP must be exactly 6 characters long',
+    },
+    isInt: {
+      errorMessage: 'OTP must consist of only integers',
+    },
+    bail: true,
+  },
+  password: {
+    isLength: {
+      options: {min: 8, max: 12},
+      errorMessage: 'Password must be between 8 to 12 characters long',
+    },
+    bail: true,
+  },
+};
+
+const resetPassword = (app) => {
+  app.post(pathPrefix + '/reset-password/:email',
+      checkSchema(resetPasswordSchema),
+      async (req, res, next) => {
+        try {
+          const errors = validationResult(req);
+          if (!errors.isEmpty()) {
+            throw ApiError.badRequestError('Bad request', errors.array());
+          }
+          await userService.resetPassword(req.params.email, req.body);
+          res.status(200).json({
+            message: 'Password has been successfully updated'});
+        } catch (error) {
+          next(error);
+        }
+      });
+};
+// End reset password
+
 // Start get user info by user id
 const getUserById = (app) => {
   app.get(pathPrefix + '/:userId', async (req, res, next) => {
@@ -274,6 +324,8 @@ module.exports = (app) => {
   uploadGovernmentId(app);
   // Route for getting user information
   getUser(app);
+  // Route for resetting a user's password
+  resetPassword(app);
   // Route for verifying users
   verifyUser(app);
   // Route for retrieving a pagable verification request

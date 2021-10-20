@@ -79,12 +79,7 @@ module.exports = {
       expiration_time: expirationTime,
     });
 
-    try {
-      const savedOTP = await newOTP.save();
-      return savedOTP;
-    } catch (error) {
-      throw ApiError.badRequestError(`The OTP ${otp.id} cannot be saved`);
-    }
+    return await newOTP.save();
   },
 
   /**
@@ -98,6 +93,36 @@ module.exports = {
       img_key: imgKey,
     });
     return await request.save();
+  },
+
+  /**
+   * Find the OTP's ID and retrieve the OTP
+   * @param {Object} otpId - the OTP's ID
+   */
+  getOTP: async (otpId) => {
+    return await OTP.findOne({_id: otpId});
+  },
+
+  /**
+     * Find the OTP's ID and delete the OTP
+     * @param {Object} otpId - the OTP's ID
+     */
+  deleteOTP: async (otpId) => {
+    return await OTP.findOneAndDelete({_id: otpId});
+  },
+
+  /**
+     * Update an existing user's password
+     * @param {Object} email - email of the user resetting the password
+     * @param {string} newPassword - desired new password
+     */
+  updatePassword: async (email, newPassword) => {
+    const salt = crypto.randomBytes(16).toString('base64');
+    const hash = crypto.createHmac('sha512', salt);
+    hash.update(newPassword);
+    const saltedHash = hash.digest('base64');
+    await UserCredential.findOneAndUpdate({email: email},
+        {password: saltedHash, salt: salt, updatedAt: new Date()});
   },
 
   /**
