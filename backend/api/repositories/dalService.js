@@ -1,7 +1,9 @@
+/* eslint-disable new-cap */
 // Schema Models
 const Service = require('../models/modelService');
 const ServiceVerificationRequest =
 require('../models/modelServiceVerificationRequest');
+const mongoose = require('mongoose');
 
 module.exports = {
 
@@ -32,4 +34,7 @@ module.exports = {
         .find().skip(limit * skip).limit(limit).sort('createdAt');
   },
 
+  retrieveService: async (serviceId) => {
+    return await Service.findById(mongoose.Types.ObjectId(serviceId));
+  },
 };

@@ -11,4 +11,7 @@ module.exports = {
     return await serviceDal.getPageableVerificationRequests(limit, skip);
   },
 
+  getServiceDetails: async (serviceId) => {
+    return await serviceDal.retrieveService(serviceId);
+  },
 };

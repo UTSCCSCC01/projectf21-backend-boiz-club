@@ -102,7 +102,20 @@ const retrieveVerification = (app) => {
 };
 // End get verification requests
 
+const getServiceDetails = (app) => {
+  app.get(pathPrefix + '/sevice-details/:serviceId', async (req, res, next) => {
+    try {
+      const serviceDetails =
+      await serviceService.getServiceDetails(req.params.serviceId);
+      res.status(200).json(serviceDetails);
+    } catch (error) {
+      console.log('Here');
+      next(error);
+    }
+  });
+};
+
 module.exports = (app) => {
   postServiceAndRequestVerification(app);
-  retrieveVerification(app);
+  getServiceDetails(app);
 };
