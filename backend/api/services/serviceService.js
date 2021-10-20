@@ -8,6 +8,6 @@ module.exports = {
   },
 
   getServicesList: async (limit, skip) => {
-    return await serviceDal.retrievePageableServicesList(limit, skip);
+    return await serviceDal.retrieveVerifiedServicesList(limit, skip);
   },
 };

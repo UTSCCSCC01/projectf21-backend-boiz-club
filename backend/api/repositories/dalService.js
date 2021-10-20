@@ -27,7 +27,7 @@ module.exports = {
     return await serviceVerificationRequest.save();
   },
 
-  retrievePageableServicesList: async (limit, skip) => {
+  retrieveVerifiedServicesList: async (limit, skip) => {
     return await Service.find({verified: true}).
         skip(limit * skip).limit(limit).sort('_id');
   },
