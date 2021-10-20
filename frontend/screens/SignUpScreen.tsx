@@ -181,7 +181,7 @@ const SignUpScreen = ({ navigation }: RootStackScreenProps<'SignUp'>) => {
       toast.show({
         status: 'success',
         title: 'You are successfully registered.',
-        placement: 'bottom',
+        placement: 'top',
       });
 
       console.log('Sign Up Succeed');
