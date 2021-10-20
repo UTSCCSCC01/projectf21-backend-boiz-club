@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export async function getVerificationRequests(token: string) {
+export async function getAccountVerificationRequests(token: string) {
   return axios
     .get(
       'https://pawsup-dev-oznda.ondigitalocean.app/api/v1/users/verification-request?limit=0&skip=0',
@@ -17,13 +17,43 @@ export async function getVerificationRequests(token: string) {
     });
 }
 
+export async function getServiceInfoByID(serviceID: string) {
+  return {
+    user_id: '615750353994b8f4f25e6f57',
+    service_name: 'Dog care service',
+    service_description: 'Provide care to your dog, duh?',
+    service_price: 14,
+    contact_number: '1234567890',
+    country: 'Canada',
+    city: 'Markham',
+    postal_code: 'A1B2C3',
+    address: '123 Adress Rd',
+    verified: false,
+  };
+}
+
+export async function getServiceVerificationRequests(token: string) {
+  return [
+    { _id: '1', service_id: '1', createdAt: '2021-10-01T18:15:17.249+00:00' },
+    { _id: '2', service_id: '2', createdAt: '2021-10-02T18:15:17.249+00:00' },
+  ];
+}
+
 export async function getUserInfoByID(userID: string) {
   return axios
     .get(`https://pawsup-dev-oznda.ondigitalocean.app/api/v1/users/${userID}`)
+    .then((resp) => resp.data)
     .catch((err) => {
       console.log('Get operation for user info failed. ' + err);
       throw err;
     });
+}
+export async function verifyServiceByID(
+  serviceId: string,
+  approval: boolean,
+  token: string
+) {
+  await new Promise((res) => setTimeout(res, 1000));
 }
 export async function verifyUserByID(
   userId: string,
