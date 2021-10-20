@@ -30,6 +30,6 @@ module.exports = {
   },
 
   retrieveService: async (serviceId) => {
-    return await Service.findById(mongoose.Types.ObjectId(serviceId));
+    return await Service.findOne({_id: mongoose.Types.ObjectId(serviceId)});
   },
 };
