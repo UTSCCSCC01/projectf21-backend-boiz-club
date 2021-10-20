@@ -4,7 +4,8 @@ const mongoose = require('mongoose');
 // Schema Models
 const User = require('../models/modelUser');
 const UserCredential = require('../models/modelUserCredential');
-const VerificationRequest = require('../models/modelVerificationRequest');
+const UserVerificationRequest =
+require('../models/modelUserVerificationRequest');
 const OTP = require('../models/modelOTP');
 const otpGenerator = require('otp-generator');
 
@@ -92,7 +93,7 @@ module.exports = {
    * @param {Object} imgKey - image key in s3 bucket to government id
    */
   createVerificationRequest: async (userId, imgKey) => {
-    const request = new VerificationRequest({
+    const request = new UserVerificationRequest({
       user_id: userId,
       img_key: imgKey,
     });
@@ -104,14 +105,14 @@ module.exports = {
    * @param {Object} userId - user id
    */
   getVerificationRequest: async (userId) => {
-    return await VerificationRequest.findOne({user_id: userId});
+    return await UserVerificationRequest.findOne({user_id: userId});
   },
   /**
    * Removes a verification request created by a user
    * @param {Object} userId - user id
    */
   removeVerificationRequest: async (userId) => {
-    return VerificationRequest.findOneAndRemove({user_id: userId});
+    return UserVerificationRequest.findOneAndRemove({user_id: userId});
   },
   /**
    * Verifies an user
@@ -128,7 +129,7 @@ module.exports = {
       );
 
       // remove verification request
-      await VerificationRequest.findOneAndRemove({user_id: userId});
+      await UserVerificationRequest.findOneAndRemove({user_id: userId});
 
       // send changes
       await session.commitTransaction();
@@ -146,7 +147,7 @@ module.exports = {
    * @param {int} skip - number of pages to skip
    */
   getPageableVerificationRequests: async (limit, skip) =>{
-    return await VerificationRequest
+    return await UserVerificationRequest
         .find().skip(limit * skip).limit(limit).sort('_id');
   },
 
