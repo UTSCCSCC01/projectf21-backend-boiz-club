@@ -79,7 +79,7 @@ const postServiceAndRequestVerification = (app) => {
 };
 
 const getServicesList = (app) => {
-  app.get(pathPrefix + '/services-list', async (req, res, next) => {
+  app.get(pathPrefix, async (req, res, next) => {
     try {
       const limit = parseInt(req.query.limit);
       const skip = parseInt(req.query.skip);
