@@ -28,7 +28,8 @@ module.exports = {
   },
 
   retrievePageableServicesList: async (limit, skip) => {
-    return await Service.find().skip(limit * skip).limit(limit);
+    return await Service.find({verified: true}).
+        skip(limit * skip).limit(limit).sort('_id');
   },
 
 };
