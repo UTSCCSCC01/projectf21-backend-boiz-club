@@ -103,8 +103,7 @@ const retrieveVerification = (app) => {
 // End get verification requests
 
 const getServiceDetails = (app) => {
-  app.get(pathPrefix +
-    '/service-details/:serviceId', async (req, res, next) => {
+  app.get(pathPrefix + '/:serviceId', async (req, res, next) => {
     try {
       const serviceDetails =
       await serviceService.getServiceDetails(req.params.serviceId);
