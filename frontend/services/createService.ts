@@ -19,12 +19,16 @@ async function createService(
   country: string,
   city: string,
   postal_code: string,
-  address: string
+  address: string,
+  token: any
 ) {
   await axios
     .post(
       'https://pawsup-dev-oznda.ondigitalocean.app/api/v1/services/request-verification',
       {
+        headers: {
+          'auth-token': token,
+        },
         service_name: service_name,
         service_description: service_description,
         service_price: service_price,

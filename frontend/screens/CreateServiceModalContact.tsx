@@ -1,3 +1,4 @@
+import { useAppSelector } from '@/hooks/react-redux';
 import React, { useState } from 'react';
 import {
   Button,
@@ -15,6 +16,7 @@ export default function CreateServiceModalContact({
   navigation,
   route,
 }: ServiceStackScreenProps<'CreateServiceModalContact'>) {
+  const token = useAppSelector((state) => state.userCredential.userToken);
   const toast = useToast();
   const { serviceName, serviceDescription, servicePrice } = route.params;
   interface service {
@@ -155,8 +157,9 @@ export default function CreateServiceModalContact({
     console.log(city);
     console.log(postalCode);
     console.log(address);
+    console.log(token);
 
-    const serviceCreation = createService(
+    const serviceCreation = await createService(
       serviceName,
       serviceDescription,
       servicePrice,
@@ -164,13 +167,15 @@ export default function CreateServiceModalContact({
       country,
       city,
       postalCode,
-      address
+      address,
+      token
     ).catch((err) => {
       // Change this to extensively handle each type of error.
       console.log(err);
+      return null;
     });
 
-    if (serviceCreation === null) {
+    if (serviceCreation != null) {
       toast.show({
         status: 'success',
         title: 'Service request has been sent.',
