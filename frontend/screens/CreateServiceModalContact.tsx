@@ -1,15 +1,12 @@
 import React, { useState } from 'react';
 import {
   Button,
-  HStack,
   VStack,
   Box,
   FormControl,
   Input,
   Heading,
-  Alert,
-  IconButton,
-  CloseIcon,
+  useToast,
 } from 'native-base';
 import { ServiceStackScreenProps } from '@/types';
 import createService from '@/services/createService';
@@ -18,6 +15,7 @@ export default function CreateServiceModalContact({
   navigation,
   route,
 }: ServiceStackScreenProps<'CreateServiceModalContact'>) {
+  const toast = useToast();
   const { serviceName, serviceDescription, servicePrice } = route.params;
   interface service {
     contactNumber: string;
@@ -149,6 +147,15 @@ export default function CreateServiceModalContact({
       return;
     }
 
+    console.log(serviceName);
+    console.log(serviceDescription);
+    console.log(servicePrice);
+    console.log(contactNumber);
+    console.log(country);
+    console.log(city);
+    console.log(postalCode);
+    console.log(address);
+
     const serviceCreation = createService(
       serviceName,
       serviceDescription,
@@ -159,82 +166,17 @@ export default function CreateServiceModalContact({
       postalCode,
       address
     ).catch((err) => {
-      console.log('Failed to Create Service');
-
-      // let feedback = err.response.data.errors[0].param;
-
       // Change this to extensively handle each type of error.
       console.log(err);
-
-      // Return this if error is not on user side.
-      //   return (
-      //     <Alert w="100%" status="error">
-      //       <VStack space={2} flexShrink={1} w="100%">
-      //         <HStack flexShrink={1} space={2} justifyContent="space-between">
-      //           <HStack space={2} flexShrink={1}>
-      //             <Alert.Icon mt="1" />
-      //             <Heading fontSize="md" color="coolGray.800">
-      //               Request for services failed.
-      //             </Heading>
-      //           </HStack>
-      //           <IconButton
-      //             variant="unstyled"
-      //             icon={<CloseIcon size="3" color="coolGray.600" />}
-      //             onPress={() => {
-      //               navigation.navigate('ServiceIndexScreen');
-      //             }}
-      //           />
-      //         </HStack>
-      //       </VStack>
-      //     </Alert>
-      //   );
-
-      // Remove this return when backend connection and error handling are fully functional.
-      return (
-        <Alert w="100%" status="success">
-          <VStack space={2} flexShrink={1} w="100%">
-            <HStack flexShrink={1} space={2} justifyContent="space-between">
-              <HStack space={2} flexShrink={1}>
-                <Alert.Icon mt="1" />
-                <Heading fontSize="md" color="coolGray.800">
-                  Your request for creating service has been sent.
-                </Heading>
-              </HStack>
-              <IconButton
-                variant="unstyled"
-                icon={<CloseIcon size="3" color="coolGray.600" />}
-                onPress={() => {
-                  navigation.navigate('ServiceIndexScreen');
-                }}
-              />
-            </HStack>
-          </VStack>
-        </Alert>
-      );
     });
 
-    if (serviceCreation !== null) {
-      return (
-        <Alert w="100%" status="success">
-          <VStack space={2} flexShrink={1} w="100%">
-            <HStack flexShrink={1} space={2} justifyContent="space-between">
-              <HStack space={2} flexShrink={1}>
-                <Alert.Icon mt="1" />
-                <Heading fontSize="md" color="coolGray.800">
-                  Your request for creating service has been sent.
-                </Heading>
-              </HStack>
-              <IconButton
-                variant="unstyled"
-                icon={<CloseIcon size="3" color="coolGray.600" />}
-                onPress={() => {
-                  navigation.navigate('ServiceIndexScreen');
-                }}
-              />
-            </HStack>
-          </VStack>
-        </Alert>
-      );
+    if (serviceCreation === null) {
+      toast.show({
+        status: 'success',
+        title: 'Service request has been sent.',
+        placement: 'top',
+      });
+      navigation.navigate('ServiceIndexScreen');
     }
 
     return;

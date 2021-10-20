@@ -21,13 +21,13 @@ export default function CreateServiceModalDesciption({
   interface service {
     name: string;
     description: string;
-    price: string;
+    price: number;
   }
 
   const [serviceData, setServiceData] = useState<service>({
     name: '',
     description: '',
-    price: '',
+    price: 20,
   });
 
   const handleNameChange = (input: string) => {
@@ -47,7 +47,7 @@ export default function CreateServiceModalDesciption({
   const handlePriceChange = (input: number) => {
     setServiceData({
       ...serviceData,
-      price: String(input),
+      price: input,
     });
   };
 
@@ -84,7 +84,7 @@ export default function CreateServiceModalDesciption({
   const proceedContact = async (
     name: string,
     description: string,
-    price: string
+    price: number
   ) => {
     if (!validateInput(name, description)) {
       return;
@@ -92,7 +92,7 @@ export default function CreateServiceModalDesciption({
     navigation.navigate('CreateServiceModalContact', {
       serviceName: name,
       serviceDescription: description,
-      servicePrice: price,
+      servicePrice: String(price),
     });
     return;
   };
@@ -166,11 +166,11 @@ export default function CreateServiceModalDesciption({
               maxValue={maxMoney}
               accessibilityLabel="Price"
               step={1}
-              onChange={(v) => {
-                setSliderMoney(Math.floor(v));
+              onChange={(price) => {
+                setSliderMoney(Math.floor(price));
               }}
-              onChangeEnd={(v) => {
-                v && handlePriceChange(Math.floor(v));
+              onChangeEnd={(price) => {
+                handlePriceChange(Math.floor(price));
               }}
             >
               <Slider.Track>
