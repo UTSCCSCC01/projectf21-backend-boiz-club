@@ -29,7 +29,7 @@ export default function CreateServiceModalContact({
 
   const [serviceData, setServiceData] = useState<service>({
     contactNumber: '',
-    country: '',
+    country: 'Canada',
     city: '',
     postalCode: '',
     address: '',
@@ -266,11 +266,12 @@ export default function CreateServiceModalContact({
           </FormControl.ErrorMessage>
         </FormControl>
 
-        <FormControl isInvalid={inputError.countryError}>
+        <FormControl isInvalid={inputError.countryError} isDisabled mb="0">
           <Input
+            backgroundColor="gray.200"
             size="lg"
             keyboardType="default"
-            placeholder="Country"
+            placeholder="Canada" // Change this to 'Country', if the system supports.
             onChangeText={(text) => handleCountryChange(text)}
           />
           <FormControl.ErrorMessage
