@@ -82,6 +82,9 @@ const getServicesList = (app) => {
   app.get(pathPrefix + '/services-list', async (req, res, next) => {
     try {
       const servicesList = await serviceService.getServicesList();
+      if (!servicesList) {
+        throw ApiError.badRequestError('Failed to retrieve list of services');
+      }
       res.status(200).json(servicesList);
     } catch (error) {
       next(error);
