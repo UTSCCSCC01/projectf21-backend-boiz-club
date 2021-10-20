@@ -39,6 +39,24 @@ export type AccountStackScreenProps<
   BottomTabScreenProps<HomeTabParamList>
 >;
 
+export type ServiceStackParamList = {
+  ServiceIndexScreen: undefined;
+  CreateServiceModalDescription: undefined;
+  CreateServiceModalContact: {
+    serviceName: string;
+    serviceDescription: string;
+    servicePrice: string;
+  };
+  ViewServiceModal: undefined;
+};
+
+export type ServiceStackScreenProps<
+  Screen extends keyof ServiceStackParamList
+> = CompositeScreenProps<
+  NativeStackScreenProps<ServiceStackParamList, Screen>,
+  BottomTabScreenProps<HomeTabParamList>
+>;
+
 export type HomeTabParamList = {
   Home: undefined;
   Services: undefined;
