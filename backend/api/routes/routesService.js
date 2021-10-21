@@ -131,7 +131,7 @@ const verifyService = (app) => {
 // End get verification requests
 
 const getServicesList = (app) => {
-  app.get(pathPrefix, async (req, res, next) => {
+  app.get(pathPrefix + '/services-list', async (req, res, next) => {
     try {
       const limit = parseInt(req.query.limit);
       const skip = parseInt(req.query.skip);
