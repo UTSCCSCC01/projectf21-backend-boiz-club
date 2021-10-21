@@ -173,7 +173,7 @@ module.exports = {
    */
   getPageableVerificationRequests: async (limit, skip) =>{
     return await UserVerificationRequest
-        .find().skip(limit * skip).limit(limit).sort('_id');
+        .find().skip(limit * skip).limit(limit).sort('createdAt');
   },
 
 };

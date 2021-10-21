@@ -27,4 +27,9 @@ module.exports = {
     return await serviceVerificationRequest.save();
   },
 
+  getPageableVerificationRequests: async (limit, skip) =>{
+    return await ServiceVerificationRequest
+        .find().skip(limit * skip).limit(limit).sort('createdAt');
+  },
+
 };

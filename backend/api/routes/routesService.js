@@ -78,6 +78,31 @@ const postServiceAndRequestVerification = (app) => {
   );
 };
 
+
+// Start get verification requests
+const retrieveVerification = (app) => {
+  app.get(pathPrefix+ '/verification-request',
+      verifyToken,
+      async (req, res, next) => {
+        try {
+          const {user} = req;
+          const limit = parseInt(req.query.limit);
+          const skip = parseInt(req.query.skip);
+          await userService.assertAdmin(user.user_id);
+          const verificationRequestList =
+          await serviceService.getPagableVerificationRequests(
+              limit, skip,
+          );
+          res.status(200).send({status: 200, data: verificationRequestList});
+        } catch (error) {
+          next(error);
+        }
+      },
+  );
+};
+// End get verification requests
+
 module.exports = (app) => {
   postServiceAndRequestVerification(app);
+  retrieveVerification(app);
 };

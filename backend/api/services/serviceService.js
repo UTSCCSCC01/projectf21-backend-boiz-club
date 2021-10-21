@@ -7,4 +7,8 @@ module.exports = {
         serviceInfo, userId);
   },
 
+  getPagableVerificationRequests: async (limit, skip) => {
+    return await serviceDal.getPageableVerificationRequests(limit, skip);
+  },
+
 };
