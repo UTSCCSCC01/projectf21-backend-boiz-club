@@ -78,7 +78,6 @@ const postServiceAndRequestVerification = (app) => {
   );
 };
 
-
 // Start get verification requests
 const retrieveVerification = (app) => {
   app.get(pathPrefix+ '/verification-request',
