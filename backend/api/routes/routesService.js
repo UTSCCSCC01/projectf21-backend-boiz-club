@@ -100,9 +100,38 @@ const retrieveVerification = (app) => {
       },
   );
 };
+
+const verifyService = (app) => {
+  app.put(
+      pathPrefix + '/verification-request',
+      checkSchema(newServiceSchema),
+      verifyToken,
+      async (req, res, next) => {
+        const {user} = req;
+        const {service_id: serviceId, approved} = req.body;
+        try {
+          if (!serviceId || approved == null) {
+            throw ApiError
+                .badRequestError('service_id and approved not in payload');
+          }
+          await userService.assertAdmin(user.user_id);
+          await serviceService.verifyService(serviceId, approved);
+          res.status(200).send({
+            status: 200,
+            message: approved ?
+            'Successfully verified service' :
+            'Successfully declined verification request',
+          });
+        } catch (error) {
+          next(error);
+        }
+      },
+  );
+};
 // End get verification requests
 
 module.exports = (app) => {
   postServiceAndRequestVerification(app);
   retrieveVerification(app);
+  verifyService(app);
 };
