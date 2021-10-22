@@ -1,23 +1,16 @@
 import { useAppSelector } from '@/hooks/react-redux';
-import {
-  verifyUserByID,
-  getIDPhotoData,
-  verifyServiceByID,
-} from '@/services/verification';
+import { verifyServiceByID } from '@/services/verification';
 import { AccountStackScreenProps, User } from '@/types';
 import {
-  Avatar,
   Button,
   Center,
   Heading,
-  Image,
   Row,
   ScrollView,
+  Spinner,
   Text,
   useToast,
   View,
-  Spinner,
-  Spacer,
 } from 'native-base';
 import React, { Fragment, useEffect, useState } from 'react';
 
