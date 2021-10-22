@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { View, Text } from 'native-base';
-
+import { Text, View } from 'native-base';
 import EditScreenInfo from '@/components/EditScreenInfo';
+
 export default function Cart() {
   return (
     <View flex={1} alignItems="center" justifyContent="center">

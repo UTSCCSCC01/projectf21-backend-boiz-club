@@ -4,7 +4,8 @@ const mongoose = require('mongoose');
 // Schema Models
 const User = require('../models/modelUser');
 const UserCredential = require('../models/modelUserCredential');
-const VerificationRequest = require('../models/modelVerificationRequest');
+const UserVerificationRequest =
+require('../models/modelUserVerificationRequest');
 const OTP = require('../models/modelOTP');
 const otpGenerator = require('otp-generator');
 
@@ -78,12 +79,7 @@ module.exports = {
       expiration_time: expirationTime,
     });
 
-    try {
-      const savedOTP = await newOTP.save();
-      return savedOTP;
-    } catch (error) {
-      throw ApiError.badRequestError(`The OTP ${otp.id} cannot be saved`);
-    }
+    return await newOTP.save();
   },
 
   /**
@@ -92,7 +88,7 @@ module.exports = {
    * @param {Object} imgKey - image key in s3 bucket to government id
    */
   createVerificationRequest: async (userId, imgKey) => {
-    const request = new VerificationRequest({
+    const request = new UserVerificationRequest({
       user_id: userId,
       img_key: imgKey,
     });
@@ -100,18 +96,48 @@ module.exports = {
   },
 
   /**
+   * Find the OTP's ID and retrieve the OTP
+   * @param {Object} otpId - the OTP's ID
+   */
+  getOTP: async (otpId) => {
+    return await OTP.findOne({_id: otpId});
+  },
+
+  /**
+     * Find the OTP's ID and delete the OTP
+     * @param {Object} otpId - the OTP's ID
+     */
+  deleteOTP: async (otpId) => {
+    return await OTP.findOneAndDelete({_id: otpId});
+  },
+
+  /**
+     * Update an existing user's password
+     * @param {Object} email - email of the user resetting the password
+     * @param {string} newPassword - desired new password
+     */
+  updatePassword: async (email, newPassword) => {
+    const salt = crypto.randomBytes(16).toString('base64');
+    const hash = crypto.createHmac('sha512', salt);
+    hash.update(newPassword);
+    const saltedHash = hash.digest('base64');
+    await UserCredential.findOneAndUpdate({email: email},
+        {password: saltedHash, salt: salt, updatedAt: new Date()});
+  },
+
+  /**
    * Gets a verification request created by a user
    * @param {Object} userId - user id
    */
   getVerificationRequest: async (userId) => {
-    return await VerificationRequest.findOne({user_id: userId});
+    return await UserVerificationRequest.findOne({user_id: userId});
   },
   /**
    * Removes a verification request created by a user
    * @param {Object} userId - user id
    */
   removeVerificationRequest: async (userId) => {
-    return VerificationRequest.findOneAndRemove({user_id: userId});
+    return await UserVerificationRequest.findOneAndRemove({user_id: userId});
   },
   /**
    * Verifies an user
@@ -128,7 +154,7 @@ module.exports = {
       );
 
       // remove verification request
-      await VerificationRequest.findOneAndRemove({user_id: userId});
+      await UserVerificationRequest.findOneAndRemove({user_id: userId});
 
       // send changes
       await session.commitTransaction();
@@ -146,8 +172,8 @@ module.exports = {
    * @param {int} skip - number of pages to skip
    */
   getPageableVerificationRequests: async (limit, skip) =>{
-    return await VerificationRequest
-        .find().skip(limit * skip).limit(limit).sort('_id');
+    return await UserVerificationRequest
+        .find().skip(limit * skip).limit(limit).sort('createdAt');
   },
 
 };
