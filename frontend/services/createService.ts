@@ -22,13 +22,10 @@ async function createService(
   address: string,
   token: any
 ) {
-  await axios
+  const res = await axios
     .post(
-      'https://pawsup-dev-oznda.ondigitalocean.app/api/v1/services/request-verification',
+      'http://192.168.1.21:8080/api/v1/services/request-verification',
       {
-        headers: {
-          'auth-token': token,
-        },
         service_name: service_name,
         service_description: service_description,
         service_price: service_price,
@@ -37,12 +34,19 @@ async function createService(
         city: city,
         postal_code: postal_code,
         address: address,
+      },
+      {
+        headers: {
+          'auth-token': token,
+        },
       }
     )
     .catch((err) => {
       console.log('Post operation for Create Service failed.' + err);
       throw err;
     });
+
+  return res;
 }
 
 export default createService;

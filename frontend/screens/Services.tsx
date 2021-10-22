@@ -1,9 +1,8 @@
 import * as React from 'react';
-import { Text, Button, ScrollView, Box } from 'native-base';
-
+import { Text, Button, Center, Box, VStack, HStack } from 'native-base';
 import { ServiceStackParamList, ServiceStackScreenProps } from '@/types';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { RefreshControl } from 'react-native';
+import { RefreshControl, ScrollView } from 'react-native';
 import CreateServiceModalDescription from './CreateServiceModalDescription';
 import CreateServiceModalContact from './CreateServiceModalContact';
 
@@ -24,37 +23,62 @@ function ServicesIndexScreen({
     updateServices();
   }, []);
 
-  const DisplayServices = () => <Text> Services goes here. </Text>;
+  const DisplayServices = () => (
+    <Center padding={5}>
+      <Text> Services goes here. </Text>
+    </Center>
+  );
 
-  const CreateServiceButton = () => (
-    <Button
-      size="lg"
-      key="createServiceButton"
-      width="70%"
-      onPress={() => navigation.navigate('CreateServiceModalDescription')}
-      marginBottom={7}
+  const ServiceButtons = () => (
+    <Box
+      width="100%"
+      padding="5"
+      backgroundColor="gray.100"
       justifyContent="center"
+      alignItems="center"
     >
-      Create Service
-    </Button>
+      <Box
+        width="90%"
+        backgroundColor="gray.400"
+        justifyContent="center"
+        alignItems="center"
+      >
+        <VStack space="md">
+          <Button
+            size="lg"
+            key="createServiceButton"
+            onPress={() => navigation.navigate('CreateServiceModalDescription')}
+            justifyContent="center"
+          >
+            Create Service
+          </Button>
+          <HStack space="md">
+            <Button size="lg" key="ServicesButton" justifyContent="center">
+              All Services
+            </Button>
+            <Button size="lg" key="MyServicesButton" justifyContent="center">
+              My Services
+            </Button>
+          </HStack>
+        </VStack>
+      </Box>
+    </Box>
   );
   return (
-    <Box justifyContent="space-between" alignItems="center" marginBottom={5}>
-      <ScrollView
-        refreshControl={
-          <RefreshControl
-            refreshing={isLoading}
-            onRefresh={() => {
-              updateServices();
-            }}
-          />
-        }
-      >
-        <DisplayServices />
-      </ScrollView>
-
-      <CreateServiceButton />
-    </Box>
+    <ScrollView
+      refreshControl={
+        <RefreshControl
+          refreshing={isLoading}
+          onRefresh={() => {
+            updateServices();
+          }}
+        />
+      }
+      stickyHeaderIndices={[0]}
+    >
+      <ServiceButtons />
+      <DisplayServices />
+    </ScrollView>
   );
 }
 
