@@ -1,10 +1,11 @@
 import * as React from 'react';
-import { Text, Button, Center, Box, VStack, HStack } from 'native-base';
+import { Text, Button, Center, HStack } from 'native-base';
 import { ServiceStackParamList, ServiceStackScreenProps } from '@/types';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { RefreshControl, ScrollView } from 'react-native';
 import CreateServiceModalDescription from './CreateServiceModalDescription';
 import CreateServiceModalContact from './CreateServiceModalContact';
+import { FontAwesome5 } from '@expo/vector-icons';
 
 function ServicesIndexScreen({
   navigation,
@@ -30,39 +31,30 @@ function ServicesIndexScreen({
   );
 
   const ServiceButtons = () => (
-    <Box
+    <HStack
       width="100%"
-      padding="5"
+      padding="2"
       backgroundColor="gray.100"
       justifyContent="center"
       alignItems="center"
+      space={2}
     >
-      <Box
-        width="90%"
-        backgroundColor="gray.400"
+      <Button
+        size="lg"
+        key="createServiceButton"
+        onPress={() => navigation.navigate('CreateServiceModalDescription')}
         justifyContent="center"
-        alignItems="center"
+        leftIcon={<FontAwesome5 name="plus" size={12} color="white" />}
       >
-        <VStack space="md">
-          <Button
-            size="lg"
-            key="createServiceButton"
-            onPress={() => navigation.navigate('CreateServiceModalDescription')}
-            justifyContent="center"
-          >
-            Create Service
-          </Button>
-          <HStack space="md">
-            <Button size="lg" key="ServicesButton" justifyContent="center">
-              All Services
-            </Button>
-            <Button size="lg" key="MyServicesButton" justifyContent="center">
-              My Services
-            </Button>
-          </HStack>
-        </VStack>
-      </Box>
-    </Box>
+        Create
+      </Button>
+      <Button size="lg" key="ServicesButton" justifyContent="center">
+        All Services
+      </Button>
+      <Button size="lg" key="MyServicesButton" justifyContent="center">
+        My Services
+      </Button>
+    </HStack>
   );
   return (
     <ScrollView

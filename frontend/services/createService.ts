@@ -24,7 +24,7 @@ async function createService(
 ) {
   const res = await axios
     .post(
-      'http://192.168.1.21:8080/api/v1/services/request-verification',
+      'https://pawsup-dev-oznda.ondigitalocean.app/api/v1/services/request-verification',
       {
         service_name: service_name,
         service_description: service_description,
