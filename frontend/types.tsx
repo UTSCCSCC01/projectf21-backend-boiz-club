@@ -12,7 +12,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 declare global {
   namespace ReactNavigation {
-    interface RootParamList extends HomeStackParamList {}
+    interface RootParamList extends RootStackParamList, AccountStackParamList {}
   }
 }
 
@@ -25,11 +25,25 @@ export type HomeStackParamList = {
 export type HomeStackScreenProps<Screen extends keyof HomeStackParamList> =
   NativeStackScreenProps<HomeStackParamList, Screen>;
 
+export type AccountStackParamList = {
+  AccountIndexScreen: undefined;
+  NotificationScreen: undefined;
+  VerificationApprovalModal: { user: User; request: VerificationRequest };
+  VerificationUploadModal: undefined;
+};
+
+export type AccountStackScreenProps<
+  Screen extends keyof AccountStackParamList
+> = CompositeScreenProps<
+  NativeStackScreenProps<AccountStackParamList, Screen>,
+  BottomTabScreenProps<HomeTabParamList>
+>;
+
 export type HomeTabParamList = {
   Home: undefined;
   Services: undefined;
   Store: undefined;
-  Account: undefined;
+  Account: NavigatorScreenParams<AccountStackParamList> | undefined;
   Cart: undefined;
 };
 
@@ -52,3 +66,23 @@ export type RootStackParamList = {
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> =
   NativeStackScreenProps<RootStackParamList, Screen>;
+
+export type User = {
+  _id: string;
+  username: string;
+  first_name: string | null;
+  last_name: string | null;
+  address: string | null;
+  phone_number: string | null;
+  authentication_lvl: 'verified' | 'unverified' | 'admin';
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type VerificationRequest = {
+  _id: string;
+  user_id: string;
+  img_key: string;
+  createdAt: string;
+  __v?: undefined | string | number;
+};

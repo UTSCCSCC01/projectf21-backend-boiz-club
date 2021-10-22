@@ -29,4 +29,5 @@ const App = () => {
   }
 };
 
+// @ts-ignore
 export default Constants.manifest?.extra.LOAD_STORYBOOK ? StorybookUIRoot : App;
