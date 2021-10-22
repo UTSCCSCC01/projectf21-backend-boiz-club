@@ -3,6 +3,7 @@ const Service = require('../models/modelService');
 const mongoose = require('mongoose');
 const ServiceVerificationRequest =
 require('../models/modelServiceVerificationRequest');
+const ServiceFee=require('../models/modelServiceFee');
 
 module.exports = {
 
@@ -69,6 +70,46 @@ module.exports = {
   removeVerificationRequestAndService: async (serviceId) => {
     await ServiceVerificationRequest.findOneAndRemove({service_id: serviceId});
     return await Service.findOneAndRemove({_id: serviceId});
+  },
+  
+  updateCostomerFee: async(fee) =>{
+    const session = await mongoose.startSession();
+    session.startTransaction();
+    try {
+      // update costumer fee
+      await ServiceFee.findOneAndUpdate(
+          {type: "customer"},
+          {fee: fee},
+      );
+
+      // send changes
+      await session.commitTransaction();
+    } catch (error) {
+      await session.abortTransaction();
+      throw error;
+    } finally {
+      await session.endSession();
+    }
+  },
+
+  updateProviderFee: async(fee) =>{
+    const session = await mongoose.startSession();
+    session.startTransaction();
+    try {
+      // update costumer fee
+      await ServiceFee.findOneAndUpdate(
+          {type: "provider"},
+          {fee: fee},
+      );
+
+      // send changes
+      await session.commitTransaction();
+    } catch (error) {
+      await session.abortTransaction();
+      throw error;
+    } finally {
+      await session.endSession();
+    }
   },
 
   retrieveVerifiedServicesList: async (limit, skip) => {
