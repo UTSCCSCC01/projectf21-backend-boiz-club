@@ -4,7 +4,7 @@ import axios from 'axios';
 
 async function forgotPassword(email: string) {
   const url =
-    'https://pawsup-dev-oznda.ondigitalocean.app/api/v1/users/forgot-password/' +
+    'http://pawsup-dev-oznda.ondigitalocean.app/api/v1/users/forgot-password/' +
     email;
   const res = await axios
     .post(url, {

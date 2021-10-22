@@ -33,20 +33,22 @@ const ResetPasswordScreen = ({
   });
 
   const [backendError, setBackendError] = useState({
-    passwordLengthError: false,
     samePasswordError: false,
     invalidVerificationCodeError: false,
   });
 
   const validateInput = () => {
-    if (newPassword === null || newPassword.length === 0) {
+    if (
+      newPassword === null ||
+      newPassword.length < 8 ||
+      newPassword.length > 12
+    ) {
       setInputError({
         invalidPasswordError: true,
         invalidCPasswordError: false,
         invalidVerificationCodeError: false,
       });
       setBackendError({
-        passwordLengthError: false,
         samePasswordError: false,
         invalidVerificationCodeError: false,
       });
@@ -61,18 +63,16 @@ const ResetPasswordScreen = ({
         invalidVerificationCodeError: false,
       });
       setBackendError({
-        passwordLengthError: false,
         samePasswordError: false,
         invalidVerificationCodeError: false,
       });
-    } else if (verificationCode === null || verificationCode.length === 0) {
+    } else if (verificationCode === null || verificationCode.length !== 6) {
       setInputError({
         invalidPasswordError: false,
         invalidCPasswordError: false,
         invalidVerificationCodeError: true,
       });
       setBackendError({
-        passwordLengthError: false,
         samePasswordError: false,
         invalidVerificationCodeError: false,
       });
@@ -83,7 +83,6 @@ const ResetPasswordScreen = ({
         invalidVerificationCodeError: false,
       });
       setBackendError({
-        passwordLengthError: false,
         samePasswordError: false,
         invalidVerificationCodeError: false,
       });
@@ -98,12 +97,6 @@ const ResetPasswordScreen = ({
       return;
     }
 
-    console.log(email);
-    console.log(encryptedEmail);
-    console.log(encrpytedOTPId);
-    console.log(verificationCode);
-    console.log(newPassword);
-
     const request = await resetPassword(
       email,
       encryptedEmail,
@@ -111,8 +104,26 @@ const ResetPasswordScreen = ({
       verificationCode,
       newPassword
     ).catch((err) => {
-      let feedback = err.response.data.errors[0].param;
-      console.log(feedback);
+      if (
+        err.response.data.message === 'The entered OTP is incorrect' ||
+        err.response.data.status === 404
+      ) {
+        setInputError({
+          invalidPasswordError: false,
+          invalidCPasswordError: false,
+          invalidVerificationCodeError: false,
+        });
+        setBackendError({
+          samePasswordError: false,
+          invalidVerificationCodeError: true,
+        });
+      } else if (err.response.data.message === 'The OTP is already  expired') {
+        toast.show({
+          status: 'error',
+          title: 'The OTP is expired, try resending',
+          placement: 'top',
+        });
+      }
       return;
     });
 
@@ -195,7 +206,7 @@ const ResetPasswordScreen = ({
             _text={{ fontSize: 'sm', color: 'error.500', fontWeight: 400 }}
           >
             {inputError.invalidPasswordError
-              ? 'Invalid Password'
+              ? 'Please enter 8-12 character password'
               : backendError.samePasswordError
               ? 'You cannot use your previous password'
               : ''}

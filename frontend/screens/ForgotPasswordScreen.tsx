@@ -49,14 +49,26 @@ const ForgotPasswordScreen = ({
     }
 
     const request = await forgotPassword(email).catch((err) => {
-      if (err !== null) {
-        console.log('Forgot-Password Error');
+      let feedback = err.response.data.status;
+      console.log(feedback);
+      if (feedback === 400) {
+        toast.show({
+          status: 'error',
+          title: 'The OTP cannot be generated / Failed to send the email',
+          placement: 'top',
+        });
+      }
+      if (feedback === 404) {
+        setEmailError({
+          wrongFormatError: false,
+          noMatchingEmailError: true,
+        });
       }
       return;
     });
 
     if (request != null) {
-      console.log(request);
+      console.log('Email is sent successfully');
       toast.show({
         status: 'success',
         title: 'Verification code has been sent.',
