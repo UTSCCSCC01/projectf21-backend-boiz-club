@@ -15,7 +15,9 @@ async function resetPassword(
   otp: string,
   password: string
 ) {
-  const url = 'http://.../api/v1/users/reset-password/' + email;
+  const url =
+    'http://pawsup-dev-oznda.ondigitalocean.app/api/v1/users/reset-password/' +
+    email;
   const res = await axios
     .post(url, {
       encryptedEmail: encryptedEmail,

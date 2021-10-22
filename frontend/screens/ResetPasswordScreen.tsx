@@ -10,6 +10,7 @@ import {
   Text,
   HStack,
   VStack,
+  useToast,
 } from 'native-base';
 import { RootStackScreenProps } from '@/types';
 import resetPassword from '@/services/resetPassword';
@@ -19,6 +20,7 @@ const ResetPasswordScreen = ({
   route,
 }: RootStackScreenProps<'ResetPassword'>) => {
   const { email, encryptedEmail, encrpytedOTPId } = route.params;
+  const toast = useToast();
 
   const [verificationCode, setVerificationCode] = useState('');
   const [newPassword, setNewPassword] = useState('');
@@ -102,20 +104,26 @@ const ResetPasswordScreen = ({
     console.log(verificationCode);
     console.log(newPassword);
 
-    await resetPassword(
+    const request = await resetPassword(
       email,
       encryptedEmail,
       encrpytedOTPId,
       verificationCode,
       newPassword
     ).catch((err) => {
-      if (err !== null) {
-        console.log('Reset-Password Error');
-      }
+      let feedback = err.response.data.errors[0].param;
+      console.log(feedback);
       return;
     });
 
-    navigation.navigate('SignIn');
+    if (request != null) {
+      toast.show({
+        status: 'success',
+        title: 'Successfully resetted password.',
+        placement: 'top',
+      });
+      navigation.navigate('SignIn');
+    }
   };
 
   const handleResend = () => {

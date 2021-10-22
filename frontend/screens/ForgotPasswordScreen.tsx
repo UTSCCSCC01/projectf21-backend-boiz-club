@@ -10,6 +10,7 @@ import {
   Text,
   HStack,
   VStack,
+  useToast,
 } from 'native-base';
 import { RootStackScreenProps } from '@/types';
 import forgotPassword from '@/services/forgotPassword';
@@ -18,6 +19,7 @@ const ForgotPasswordScreen = ({
   navigation,
 }: RootStackScreenProps<'ForgotPassword'>) => {
   const [email, setEmail] = useState('');
+  const toast = useToast();
 
   const [emailError, setEmailError] = useState({
     wrongFormatError: false,
@@ -53,12 +55,19 @@ const ForgotPasswordScreen = ({
       return;
     });
 
-    console.log(request);
-    navigation.navigate('ResetPassword', {
-      email: email,
-      encryptedEmail: request.encryptedEmail,
-      encrpytedOTPId: request.encryptedOTPId,
-    });
+    if (request != null) {
+      console.log(request);
+      toast.show({
+        status: 'success',
+        title: 'Verification code has been sent.',
+        placement: 'top',
+      });
+      navigation.navigate('ResetPassword', {
+        email: email,
+        encryptedEmail: request.encryptedEmail,
+        encrpytedOTPId: request.encryptedOTPId,
+      });
+    }
   };
 
   return (
