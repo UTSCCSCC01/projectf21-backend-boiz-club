@@ -38,6 +38,7 @@ export type AccountStackParamList = {
     service: Service;
   };
   VerificationUploadModal: undefined;
+  FeesAdministrationModal: undefined;
 };
 
 export type AccountStackScreenProps<
