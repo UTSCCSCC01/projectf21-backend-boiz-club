@@ -5,6 +5,7 @@ const crypto = require('crypto');
 const {transporter, emailForgotPassword} =
 require('../../api/utils/emailConfig');
 const s3 = require('../utils/s3');
+const mongoose = require('mongoose');
 
 module.exports = {
   /**
