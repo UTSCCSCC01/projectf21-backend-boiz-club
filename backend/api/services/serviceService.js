@@ -32,4 +32,8 @@ module.exports = {
     else await serviceDal.removeVerificationRequestAndService(serviceId);
   },
 
+  getService: async (serviceId) => {
+    return await serviceDal.getService(serviceId);
+  },
+
 };

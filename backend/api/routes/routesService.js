@@ -130,8 +130,24 @@ const verifyService = (app) => {
 };
 // End get verification requests
 
+const getServiceDetails = (app) => {
+  app.get(pathPrefix + '/:serviceId', async (req, res, next) => {
+    try {
+      const serviceDetails =
+      await serviceService.getService(req.params.serviceId);
+      if (!serviceDetails) {
+        throw ApiError.notFoundError(`The service ID does not exist`);
+      }
+      res.status(200).json(serviceDetails);
+    } catch (error) {
+      next(error);
+    }
+  });
+};
+
 module.exports = (app) => {
   postServiceAndRequestVerification(app);
   retrieveVerification(app);
   verifyService(app);
+  getServiceDetails(app);
 };
