@@ -149,16 +149,6 @@ export default function CreateServiceModalContact({
       return;
     }
 
-    console.log(serviceName);
-    console.log(serviceDescription);
-    console.log(servicePrice);
-    console.log(contactNumber);
-    console.log(country);
-    console.log(city);
-    console.log(postalCode);
-    console.log(address);
-    console.log(token);
-
     const serviceCreation = await createService(
       serviceName,
       serviceDescription,
@@ -170,8 +160,16 @@ export default function CreateServiceModalContact({
       address,
       token
     ).catch((err) => {
-      // Change this to extensively handle each type of error.
-      console.log(err);
+      let feedback = err.response.status;
+
+      if (feedback === 400 || feedback === 500) {
+        toast.show({
+          status: 'error',
+          title: 'Error occured, please try again later.',
+          placement: 'top',
+        });
+      }
+
       return null;
     });
 
