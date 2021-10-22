@@ -14,6 +14,7 @@ import {
   Column,
   Row,
   ScrollView,
+  Spinner,
   Text,
   View,
 } from 'native-base';
@@ -168,23 +169,25 @@ function AccountIndexScreen({
         Messages
       </Button>
 
-      <Button
-        size="lg"
-        key="feesBtn"
-        width="70%"
-        style={{ justifyContent: 'flex-start' }}
-        marginBottom={5}
-        startIcon={
-          <FontAwesome5
-            style={{ color: 'white' }}
-            name="hand-holding-usd"
-            size={18}
-          />
-        }
-        onPress={() => navigation.navigate('FeesAdministrationModal')}
-      >
-        Fees
-      </Button>
+      {userInfo?.authentication_lvl === 'admin' ? (
+        <Button
+          size="lg"
+          key="feesBtn"
+          width="70%"
+          style={{ justifyContent: 'flex-start' }}
+          marginBottom={5}
+          startIcon={
+            <FontAwesome5
+              style={{ color: 'white' }}
+              name="hand-holding-usd"
+              size={18}
+            />
+          }
+          onPress={() => navigation.navigate('FeesAdministrationModal')}
+        >
+          Fees
+        </Button>
+      ) : null}
 
       <Button
         size="lg"
@@ -204,6 +207,14 @@ function AccountIndexScreen({
       </Button>
     </View>
   );
+
+  if (isLoading) {
+    return (
+      <View safeArea flex={1} alignItems="center" justifyContent="center">
+        <Spinner size="lg" />
+      </View>
+    );
+  }
   return (
     <ScrollView
       refreshControl={
