@@ -112,6 +112,10 @@ module.exports = {
     }
   },
 
+  getServiceFees: async () => {
+    return await ServiceFee.findOne({type: "provider"});
+  },
+
   retrieveVerifiedServicesList: async (limit, skip) => {
     return await Service.find({verified: true}).
         skip(limit * skip).limit(limit).sort('_id');

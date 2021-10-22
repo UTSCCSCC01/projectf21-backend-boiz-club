@@ -44,6 +44,10 @@ module.exports = {
   updateServiceFees: async (fee)=>{
     await serviceDal.updateCostomerFee(fee);
     await serviceDal.updateProviderFee(fee);
-  }
+  },
+
+  getServiceFees: async () => {
+    return await serviceDal.getServiceFees();
+  },
 
 };
