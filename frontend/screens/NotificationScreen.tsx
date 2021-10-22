@@ -1,8 +1,15 @@
 import {
   getUserInfoByID,
-  getVerificationRequests,
+  getAccountVerificationRequests,
+  getServiceInfoByID,
+  getServiceVerificationRequests,
 } from '@/services/verification';
-import { AccountStackScreenProps, VerificationRequest } from '@/types';
+import {
+  AccountStackScreenProps,
+  AccountVerificationRequest,
+  ServiceVerificationRequest,
+  User,
+} from '@/types';
 import {
   Avatar,
   Box,
@@ -29,7 +36,9 @@ export const NotificationScreen = ({
     date: Date;
     description: string;
     payload: any;
+    type: 'AccountVerificationRequest' | 'ServiceVerificationRequest';
   };
+
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const token = useAppSelector((state) => state.userCredential.userToken);
@@ -37,19 +46,22 @@ export const NotificationScreen = ({
   const updateNotifications = async () => {
     setNotifications([]);
     setIsLoading(true);
-    //Parse verification requests
-    const parseVerificationRequests = async () => {
+    //Parse account verification requests
+    const parseAccountVerificationRequests = async () => {
       try {
-        const verificationRequests = await getVerificationRequests(token);
+        const verificationRequests = await getAccountVerificationRequests(
+          token
+        );
         const newNotifications: Notification[] = [];
         await Promise.all(
-          verificationRequests.map((request: VerificationRequest) =>
-            getUserInfoByID(request.user_id).then(({ data: user }) => {
+          verificationRequests.map((request: AccountVerificationRequest) =>
+            getUserInfoByID(request.user_id).then((user: User) => {
               newNotifications.push({
                 username: user.username,
                 date: new Date(request.createdAt),
                 description: 'Requested account verification.',
                 payload: { user, request },
+                type: 'AccountVerificationRequest',
               });
             })
           )
@@ -64,7 +76,42 @@ export const NotificationScreen = ({
         console.log(err);
       }
     };
-    await parseVerificationRequests();
+    //Parse services verification requests
+    const parseServiceVerificationRequests = async () => {
+      try {
+        const serviceVerificationRequests =
+          await getServiceVerificationRequests(token);
+        const newNotifications: Notification[] = [];
+        await Promise.all(
+          serviceVerificationRequests.map(
+            (request: ServiceVerificationRequest) =>
+              (async () => {
+                const service = await getServiceInfoByID(request.service_id);
+                const user = await getUserInfoByID(service.user_id);
+                newNotifications.push({
+                  username: user.username,
+                  date: new Date(request.createdAt),
+                  description: 'Requested service approval.',
+                  payload: { user, request, service },
+                  type: 'ServiceVerificationRequest',
+                });
+              })()
+          )
+        );
+        setNotifications((prevNotifications) => {
+          return [...prevNotifications, ...newNotifications].sort(
+            (a: Notification, b: Notification) =>
+              b.date.getTime() - a.date.getTime()
+          );
+        });
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    await Promise.all([
+      parseAccountVerificationRequests(),
+      parseServiceVerificationRequests(),
+    ]);
     setIsLoading(false);
   };
   useEffect(() => {
@@ -106,7 +153,19 @@ export const NotificationScreen = ({
         renderItem={({ item }: { item: Notification }) => (
           <Pressable
             onPress={() => {
-              navigation.navigate('VerificationApprovalModal', item.payload);
+              switch (item.type) {
+                case 'ServiceVerificationRequest': {
+                  navigation.navigate('ServiceApprovalModal', item.payload);
+                  break;
+                }
+                case 'AccountVerificationRequest': {
+                  navigation.navigate(
+                    'VerificationApprovalModal',
+                    item.payload
+                  );
+                  break;
+                }
+              }
             }}
           >
             {({ isPressed }) => {
@@ -153,7 +212,7 @@ export const NotificationScreen = ({
                           color: 'warmGray.200',
                         }}
                       >
-                        {'Requested account verification.'}
+                        {item.description}
                       </Text>
                     </VStack>
                     <Spacer />
@@ -173,7 +232,7 @@ export const NotificationScreen = ({
             }}
           </Pressable>
         )}
-        keyExtractor={(item) => item.date.toString()}
+        keyExtractor={(item) => item.date.toString() + item.payload.request._id}
       />
     </View>
   );

@@ -28,7 +28,15 @@ export type HomeStackScreenProps<Screen extends keyof HomeStackParamList> =
 export type AccountStackParamList = {
   AccountIndexScreen: undefined;
   NotificationScreen: undefined;
-  VerificationApprovalModal: { user: User; request: VerificationRequest };
+  VerificationApprovalModal: {
+    user: User;
+    request: AccountVerificationRequest;
+  };
+  ServiceApprovalModal: {
+    user: User;
+    request: ServiceVerificationRequest;
+    service: Service;
+  };
   VerificationUploadModal: undefined;
   FeesAdministrationModal: undefined;
 };
@@ -37,6 +45,24 @@ export type AccountStackScreenProps<
   Screen extends keyof AccountStackParamList
 > = CompositeScreenProps<
   NativeStackScreenProps<AccountStackParamList, Screen>,
+  BottomTabScreenProps<HomeTabParamList>
+>;
+
+export type ServiceStackParamList = {
+  ServiceIndexScreen: undefined;
+  CreateServiceModalDescription: undefined;
+  CreateServiceModalContact: {
+    serviceName: string;
+    serviceDescription: string;
+    servicePrice: string;
+  };
+  ViewServiceModal: undefined;
+};
+
+export type ServiceStackScreenProps<
+  Screen extends keyof ServiceStackParamList
+> = CompositeScreenProps<
+  NativeStackScreenProps<ServiceStackParamList, Screen>,
   BottomTabScreenProps<HomeTabParamList>
 >;
 
@@ -57,7 +83,12 @@ export type HomeTabScreenProps<Screen extends keyof HomeTabParamList> =
 export type RootStackParamList = {
   SignIn: undefined;
   SignUp: undefined;
-  ResetPassword: undefined;
+  ForgotPassword: undefined;
+  ResetPassword: {
+    email: string;
+    encryptedEmail: string;
+    encrpytedOTPId: string;
+  };
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> =
@@ -75,10 +106,33 @@ export type User = {
   updatedAt: string;
 };
 
-export type VerificationRequest = {
+export type Service = {
+  _id: string;
+  user_id: string;
+  service_name: string | null;
+  service_description: string | null;
+  service_price: number | null;
+  contact_number: string | null;
+  country: string | null;
+  city: string | null;
+  postal_code: string | null;
+  address: string | null;
+  verified: boolean;
+  createdAt?: string;
+  updatedAt?: string;
+};
+
+export type AccountVerificationRequest = {
   _id: string;
   user_id: string;
   img_key: string;
+  createdAt: string;
+  __v?: undefined | string | number;
+};
+
+export type ServiceVerificationRequest = {
+  _id: string;
+  service_id: string;
   createdAt: string;
   __v?: undefined | string | number;
 };

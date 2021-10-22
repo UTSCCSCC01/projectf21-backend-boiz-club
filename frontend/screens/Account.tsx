@@ -3,6 +3,7 @@ import NotificationScreen from '@/screens/NotificationScreen';
 import VerificationApprovalModal from '@/screens/VerificationApprovalModal';
 import VerificationUploadModal from '@/screens/VerificationUploadModal';
 import FeesAdministrationModal from '@/screens/FeesAdministrationModal';
+import ServiceApprovalModal from '@/screens/ServiceApprovalModal';
 import { whoAmI } from '@/services/account';
 import { AccountStackParamList, AccountStackScreenProps, User } from '@/types';
 import { FontAwesome5 } from '@expo/vector-icons';
@@ -251,6 +252,11 @@ export default function Account() {
         <AccountStack.Screen
           name="VerificationApprovalModal"
           component={VerificationApprovalModal}
+          options={{ headerShown: false }}
+        />
+        <AccountStack.Screen
+          name="ServiceApprovalModal"
+          component={ServiceApprovalModal}
           options={{ headerShown: false }}
         />
         <AccountStack.Screen
