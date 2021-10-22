@@ -168,25 +168,23 @@ function AccountIndexScreen({
         Messages
       </Button>
 
-      {userInfo?.authentication_lvl == 'unverified' ? (
-        <Button
-          size="lg"
-          key="feesBtn"
-          width="70%"
-          style={{ justifyContent: 'flex-start' }}
-          marginBottom={5}
-          startIcon={
-            <FontAwesome5
-              style={{ color: 'white' }}
-              name="hand-holding-usd"
-              size={18}
-            />
-          }
-          onPress={() => navigation.navigate('FeesAdministrationModal')}
-        >
-          Fees
-        </Button>
-      ) : null}
+      <Button
+        size="lg"
+        key="feesBtn"
+        width="70%"
+        style={{ justifyContent: 'flex-start' }}
+        marginBottom={5}
+        startIcon={
+          <FontAwesome5
+            style={{ color: 'white' }}
+            name="hand-holding-usd"
+            size={18}
+          />
+        }
+        onPress={() => navigation.navigate('FeesAdministrationModal')}
+      >
+        Fees
+      </Button>
 
       <Button
         size="lg"

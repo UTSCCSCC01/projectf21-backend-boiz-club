@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { AccountStackScreenProps } from '@/types';
+import { AccountStackScreenProps, User } from '@/types';
 import {
   Button,
   FormControl,
   Heading,
   Input,
+  Spinner,
   Text,
   View,
   VStack,
 } from 'native-base';
+import { whoAmI } from '@/services/account';
+import { useAppSelector } from '@/hooks/react-redux';
 
 interface Fees {
   customerFee: number;
@@ -26,6 +29,8 @@ const FeesAdministrationModal = ({
     customerFee: 0,
     serviceProviderFee: 0,
   });
+  const token = useAppSelector((state) => state.userCredential.userToken);
+  const [userInfo, setUserInfo] = React.useState<User | null>(null);
 
   // variables for form validation
   const [inputError, setInputError] = useState({
@@ -82,8 +87,17 @@ const FeesAdministrationModal = ({
     });
   };
 
+  const updateUserInfo = async () => {
+    setIsLoading(true);
+    whoAmI(token).then((res) => {
+      setUserInfo(res.data);
+      setIsLoading(false);
+    });
+  };
+
   useEffect(() => {
     // TODO: Get current fees and update currentFee variable
+    updateUserInfo();
     setIsLoading(false);
   }, []);
 
@@ -99,9 +113,46 @@ const FeesAdministrationModal = ({
     setIsLoading(false);
   };
 
-  const onPressCancel = () => {
-    navigation.goBack();
-  };
+  if (isLoading) {
+    return (
+      <View safeArea flex={1} alignItems="center" justifyContent="center">
+        <Spinner size="lg" />
+      </View>
+    );
+  }
+
+  const feeAdministration = () => (
+    <View flex={1}>
+      <VStack alignItems="center">
+        <FormControl isInvalid={inputError.serviceProviderFeeError}>
+          <FormControl.Label>New Service Fee (%)</FormControl.Label>
+          <Input
+            size="lg"
+            keyboardType="number-pad"
+            placeholder="0-100"
+            onChangeText={(text) =>
+              handleServiceProviderFeeChange(parseInt(text, 10))
+            }
+            returnKeyType="done"
+          />
+          <FormControl.ErrorMessage
+            _text={{ fontSize: 'sm', color: 'error.500', fontWeight: 400 }}
+          >
+            Invalid fee value. Enter a number between 0-100
+          </FormControl.ErrorMessage>
+        </FormControl>
+      </VStack>
+      <Button.Group space={2} marginTop={2}>
+        <Button
+          width="100%"
+          disabled={isLoading}
+          onPress={() => onPressUpdateFees(fees)}
+        >
+          Update
+        </Button>
+      </Button.Group>
+    </View>
+  );
 
   return (
     <View
@@ -111,8 +162,8 @@ const FeesAdministrationModal = ({
       backgroundColor="white"
       padding={5}
     >
-      <Heading fontSize="sm" p="4" pb="3">
-        Fees & Administration
+      <Heading fontSize="3xl" p="4" pb="3" marginBottom={4}>
+        Service Fees
       </Heading>
       <VStack alignItems="flex-start">
         <View marginBottom="8">
@@ -151,43 +202,24 @@ const FeesAdministrationModal = ({
               {currentFees.serviceProviderFee}%
             </Text>
           </Text>
-          <Text marginBottom="2">
-            The percentage cut of revenue Pawsup takes from a purchase of a
-            service for the maintenance and usage of the platform to advertise
-            services
+          <Text fontSize="md" fontWeight="semibold">
+            What is the Service Fee?
           </Text>
-          <FormControl isInvalid={inputError.serviceProviderFeeError}>
-            <FormControl.Label>New Service Provider Fee (%)</FormControl.Label>
-            <Input
-              size="lg"
-              keyboardType="number-pad"
-              placeholder="0-100"
-              onChangeText={(text) =>
-                handleServiceProviderFeeChange(parseInt(text, 10))
-              }
-              returnKeyType="done"
-            />
-            <FormControl.ErrorMessage
-              _text={{ fontSize: 'sm', color: 'error.500', fontWeight: 400 }}
-            >
-              Invalid fee value. Enter a number between 0-100
-            </FormControl.ErrorMessage>
-          </FormControl>
+          <Text marginBottom="2">
+            The service fee is a small percentage cut of revenue Pawsup takes
+            from a purchase of a service.
+          </Text>
+          <Text marginBottom="4">
+            The service fee helps Pawsup keep up with maintenance costs and make
+            further investments to enhance our platform. This allows Pawsup to
+            bring improvements to the app such as new features that enhance the
+            usability for both service providers and pet owners.
+          </Text>
         </View>
+        {userInfo?.authentication_lvl === 'unverified'
+          ? feeAdministration()
+          : null}
       </VStack>
-      <Button.Group space={2} marginTop={5}>
-        <Button
-          variant="ghost"
-          colorScheme="blueGray"
-          disabled={isLoading}
-          onPress={onPressCancel}
-        >
-          Cancel
-        </Button>
-        <Button disabled={isLoading} onPress={() => onPressUpdateFees(fees)}>
-          Update
-        </Button>
-      </Button.Group>
     </View>
   );
 };
