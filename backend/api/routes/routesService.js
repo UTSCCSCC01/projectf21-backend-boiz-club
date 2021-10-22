@@ -161,10 +161,34 @@ const getServiceDetails = (app) => {
   });
 };
 
+//update service endpoint
+const updateServiceFees=(app) =>{
+  app.put(pathPrefix +"/updateFees",
+    verifyToken,
+    async(req,res,next)=>{
+      const{user}=req;
+      const{fee}=req.body;
+      try{
+        await userService.assertAdmin(user.user_id);
+        console.log(fee);
+        await serviceService.updateServiceFees(fee);
+        res.status(200).send({
+            status: 200,
+            message: 'Updated fees',
+          });
+      }
+      catch(e){
+       next(e) 
+      }
+    });
+};
+
+
 module.exports = (app) => {
   postServiceAndRequestVerification(app);
   retrieveVerification(app);
   verifyService(app);
   getServicesList(app);
   getServiceDetails(app);
+  updateServiceFees(app);
 };

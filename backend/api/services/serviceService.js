@@ -32,6 +32,7 @@ module.exports = {
     else await serviceDal.removeVerificationRequestAndService(serviceId);
   },
 
+
   getService: async (serviceId) => {
     return await serviceDal.getService(serviceId);
   },
@@ -39,4 +40,10 @@ module.exports = {
   getServicesList: async (limit, skip) => {
     return await serviceDal.retrieveVerifiedServicesList(limit, skip);
   },
+
+  updateServiceFees: async (fee)=>{
+    await serviceDal.updateCostomerFee(fee);
+    await serviceDal.updateProviderFee(fee);
+  }
+
 };
