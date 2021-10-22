@@ -17,6 +17,7 @@ import {
   useToast,
   View,
   Spinner,
+  Spacer,
 } from 'native-base';
 import React, { Fragment, useEffect, useState } from 'react';
 
@@ -42,23 +43,23 @@ export default function ServiceApprovalModal({
 
   useEffect(() => {}, []);
   const handleRequest = async (approval: boolean) => {
-    // setIsProcessing(true);
-    // await verifyServiceById(request.service_id, approval, token)
-    //   .catch((err) => {
-    //     toast.show({
-    //       status: 'error',
-    //       title: err,
-    //       placement: 'top',
-    //     });
-    //   })
-    //   .then((resp) => {
-    //     toast.show({
-    //       status: resp.status === 200 ? 'success' : 'error',
-    //       title: resp.data.message,
-    //       placement: 'top',
-    //     });
-    //   });
-    // navigation.goBack();
+    setIsProcessing(true);
+    await verifyServiceByID(request.service_id, approval, token)
+      .catch((err) => {
+        toast.show({
+          status: 'error',
+          title: err,
+          placement: 'top',
+        });
+      })
+      .then((resp) => {
+        toast.show({
+          status: resp.status === 200 ? 'success' : 'error',
+          title: resp.data.message,
+          placement: 'top',
+        });
+      });
+    navigation.goBack();
   };
   return (
     <View flex={1} alignItems="center" backgroundColor="white">
@@ -75,13 +76,6 @@ export default function ServiceApprovalModal({
           }}
         >
           <Center flex={1}>
-            <Avatar
-              size="150px"
-              // source={{
-              //   uri: '',
-              // }}
-            />
-
             <Center>
               <Row maxWidth="100%" alignItems="center" justifyContent="center">
                 <Text bold underline>
@@ -120,10 +114,18 @@ export default function ServiceApprovalModal({
               marginTop="10%"
               marginBottom="30%"
             >
-              <Button colorScheme="danger" onPress={() => handleRequest(false)}>
+              <Button
+                colorScheme="danger"
+                onPress={() => handleRequest(false)}
+                marginRight="10%"
+              >
                 Reject
               </Button>
-              <Button colorScheme="teal" onPress={() => handleRequest(true)}>
+              <Button
+                marginLeft="10%"
+                colorScheme="teal"
+                onPress={() => handleRequest(true)}
+              >
                 Approve
               </Button>
             </Row>

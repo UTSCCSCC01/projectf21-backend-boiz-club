@@ -1,8 +1,8 @@
 import {
   getUserInfoByID,
   getAccountVerificationRequests,
-  getServiceVerificationRequests,
   getServiceInfoByID,
+  getServiceVerificationRequests,
 } from '@/services/verification';
 import {
   AccountStackScreenProps,
@@ -232,7 +232,7 @@ export const NotificationScreen = ({
             }}
           </Pressable>
         )}
-        keyExtractor={(item) => item.date.toString()}
+        keyExtractor={(item) => item.date.toString() + item.payload.request._id}
       />
     </View>
   );
