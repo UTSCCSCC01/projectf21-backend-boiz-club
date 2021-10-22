@@ -38,10 +38,10 @@ function ServicesIndexScreen({
     let verificationStatus;
 
     whoAmI(token).then((res) => {
-      if (res.data.authentication_lvl === 'verified') {
-        verificationStatus = true;
-      } else {
+      if (res.data.authentication_lvl === 'unverified') {
         verificationStatus = false;
+      } else {
+        verificationStatus = true;
       }
     });
 
