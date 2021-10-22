@@ -2,6 +2,7 @@ import * as React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import SignInScreen from '@/screens/SignInScreen';
 import SignUpScreen from '@/screens/SignUpScreen';
+import ForgotPasswordScreen from '@/screens/ForgotPasswordScreen';
 import ResetPasswordScreen from '@/screens/ResetPasswordScreen';
 import { RootStackParamList } from '@/types';
 
@@ -20,7 +21,16 @@ function RootStackNavigator() {
         component={SignUpScreen}
         options={{ headerShown: false }}
       />
-      <RootStack.Screen name="ResetPassword" component={ResetPasswordScreen} />
+      <RootStack.Screen 
+        name="ForgotPassword" 
+        component={ForgotPasswordScreen} 
+        options={{ headerShown: false}}
+      />
+      <RootStack.Screen 
+        name="ResetPassword" 
+        component={ResetPasswordScreen} 
+        options={{ headerShown: false}}
+      />
     </RootStack.Navigator>
   );
 }
