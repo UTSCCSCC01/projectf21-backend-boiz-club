@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Text, Button, Center, HStack, useToast } from 'native-base';
+import { Button, Center, HStack, Text, useToast } from 'native-base';
 import { ServiceStackParamList, ServiceStackScreenProps } from '@/types';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { RefreshControl, ScrollView } from 'react-native';
@@ -34,22 +34,14 @@ function ServicesIndexScreen({
     </Center>
   );
 
-  const checkVerification = () => {
-    let verificationStatus;
-
-    whoAmI(token).then((res) => {
-      if (res.data.authentication_lvl === 'unverified') {
-        verificationStatus = false;
-      } else {
-        verificationStatus = true;
-      }
+  const checkVerification = async () => {
+    return whoAmI(token).then((res) => {
+      return res.data.authentication_lvl !== 'unverified';
     });
-
-    return verificationStatus;
   };
 
-  const startCreatingService = () => {
-    if (!checkVerification()) {
+  const startCreatingService = async () => {
+    if (!(await checkVerification())) {
       toast.show({
         status: 'error',
         title: 'You have to be verified\nto create service',
