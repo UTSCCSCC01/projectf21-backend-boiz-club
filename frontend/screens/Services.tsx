@@ -1,16 +1,20 @@
 import * as React from 'react';
-import { Text, Button, Center, HStack } from 'native-base';
+import { Text, Button, Center, HStack, useToast } from 'native-base';
 import { ServiceStackParamList, ServiceStackScreenProps } from '@/types';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { RefreshControl, ScrollView } from 'react-native';
 import CreateServiceModalDescription from './CreateServiceModalDescription';
 import CreateServiceModalContact from './CreateServiceModalContact';
 import { FontAwesome5 } from '@expo/vector-icons';
+import { useAppSelector } from '@/hooks/react-redux';
+import { whoAmI } from '@/services/account';
 
 function ServicesIndexScreen({
   navigation,
 }: ServiceStackScreenProps<'ServiceIndexScreen'>) {
   const [isLoading, setIsLoading] = React.useState(true);
+  const token = useAppSelector((state) => state.userCredential.userToken);
+  const toast = useToast();
 
   const updateServices = async () => {
     setIsLoading(true);
@@ -30,6 +34,33 @@ function ServicesIndexScreen({
     </Center>
   );
 
+  const checkVerification = () => {
+    let verificationStatus;
+
+    whoAmI(token).then((res) => {
+      if (res.data.authentication_lvl === 'verified') {
+        verificationStatus = true;
+      } else {
+        verificationStatus = false;
+      }
+    });
+
+    return verificationStatus;
+  };
+
+  const startCreatingService = () => {
+    if (!checkVerification()) {
+      toast.show({
+        status: 'error',
+        title: 'You have to be verified\nto create service',
+        placement: 'top',
+      });
+    } else {
+      navigation.navigate('CreateServiceModalDescription');
+    }
+    return;
+  };
+
   const ServiceButtons = () => (
     <HStack
       width="100%"
@@ -42,7 +73,7 @@ function ServicesIndexScreen({
       <Button
         size="lg"
         key="createServiceButton"
-        onPress={() => navigation.navigate('CreateServiceModalDescription')}
+        onPress={startCreatingService}
         justifyContent="center"
         leftIcon={<FontAwesome5 name="plus" size={12} color="white" />}
       >
