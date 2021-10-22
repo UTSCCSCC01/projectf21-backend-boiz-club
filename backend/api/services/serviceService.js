@@ -36,4 +36,7 @@ module.exports = {
     return await serviceDal.getService(serviceId);
   },
 
+  getServicesList: async (limit, skip) => {
+    return await serviceDal.retrieveVerifiedServicesList(limit, skip);
+  },
 };

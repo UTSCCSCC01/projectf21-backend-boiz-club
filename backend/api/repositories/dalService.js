@@ -71,4 +71,9 @@ module.exports = {
     return await Service.findOneAndRemove({_id: serviceId});
   },
 
+  retrieveVerifiedServicesList: async (limit, skip) => {
+    return await Service.find({verified: true}).
+        skip(limit * skip).limit(limit).sort('_id');
+  },
+
 };

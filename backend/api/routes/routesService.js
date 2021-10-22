@@ -130,6 +130,22 @@ const verifyService = (app) => {
 };
 // End get verification requests
 
+const getServicesList = (app) => {
+  app.get(pathPrefix + '/verified', async (req, res, next) => {
+    try {
+      const limit = parseInt(req.query.limit);
+      const skip = parseInt(req.query.skip);
+      const servicesList = await serviceService.getServicesList(limit, skip);
+      if (!servicesList) {
+        throw ApiError.badRequestError('Failed to retrieve list of services');
+      }
+      res.status(200).json(servicesList);
+    } catch (error) {
+      next(error);
+    }
+  });
+};
+
 const getServiceDetails = (app) => {
   app.get(pathPrefix + '/:serviceId', async (req, res, next) => {
     try {
@@ -149,5 +165,6 @@ module.exports = (app) => {
   postServiceAndRequestVerification(app);
   retrieveVerification(app);
   verifyService(app);
+  getServicesList(app);
   getServiceDetails(app);
 };
