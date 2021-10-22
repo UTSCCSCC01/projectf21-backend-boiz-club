@@ -158,14 +158,14 @@ const SignInScreen = ({ navigation }: RootStackScreenProps<'SignIn'>) => {
             _text={{ fontSize: 'sm', fontWeight: '500', color: '#E6973F' }}
             alignSelf="flex-end"
             marginTop="1"
-            onPress={() => navigation.navigate('ResetPassword')}
+            onPress={() => navigation.navigate('ForgotPassword')}
           >
             Forgot Password?
           </Link>
         </FormControl>
         <Button
           height="12"
-          marginTop="16"
+          marginTop="0"
           color="#72BCC1"
           _text={{ color: 'white', fontSize: 18 }}
           onPress={() => signInHandle(userData.email, userData.password)}

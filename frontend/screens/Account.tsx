@@ -2,6 +2,8 @@ import { useAppSelector } from '@/hooks/react-redux';
 import NotificationScreen from '@/screens/NotificationScreen';
 import VerificationApprovalModal from '@/screens/VerificationApprovalModal';
 import VerificationUploadModal from '@/screens/VerificationUploadModal';
+import FeesAdministrationModal from '@/screens/FeesAdministrationModal';
+import ServiceApprovalModal from '@/screens/ServiceApprovalModal';
 import { whoAmI } from '@/services/account';
 import { AccountStackParamList, AccountStackScreenProps, User } from '@/types';
 import { FontAwesome5 } from '@expo/vector-icons';
@@ -13,6 +15,7 @@ import {
   Column,
   Row,
   ScrollView,
+  Spinner,
   Text,
   View,
 } from 'native-base';
@@ -98,7 +101,7 @@ function AccountIndexScreen({
         key="personalInformationBtn"
         width="70%"
         style={{ justifyContent: 'flex-start' }}
-        marginBottom={7}
+        marginBottom={5}
         startIcon={
           <FontAwesome5 style={{ color: 'white' }} name="home" size={18} />
         }
@@ -111,7 +114,7 @@ function AccountIndexScreen({
         key="paymentInformationBtn"
         width="70%"
         style={{ justifyContent: 'flex-start' }}
-        marginBottom={7}
+        marginBottom={5}
         startIcon={
           <FontAwesome5
             style={{ color: 'white' }}
@@ -128,7 +131,7 @@ function AccountIndexScreen({
         key="verifyAccountBtn"
         width="70%"
         onPress={() => navigation.navigate('VerificationUploadModal')}
-        marginBottom={7}
+        marginBottom={5}
         style={{ justifyContent: 'flex-start' }}
         startIcon={
           <FontAwesome5
@@ -145,7 +148,7 @@ function AccountIndexScreen({
         key="notificationsBtn"
         width="70%"
         style={{ justifyContent: 'flex-start' }}
-        marginBottom={7}
+        marginBottom={5}
         startIcon={
           <FontAwesome5 style={{ color: 'white' }} name="bell" size={18} />
         }
@@ -159,13 +162,33 @@ function AccountIndexScreen({
         key="messagesBtn"
         width="70%"
         style={{ justifyContent: 'flex-start' }}
-        marginBottom={7}
+        marginBottom={5}
         startIcon={
           <FontAwesome5 style={{ color: 'white' }} name="envelope" size={18} />
         }
       >
         Messages
       </Button>
+
+      {userInfo?.authentication_lvl === 'admin' ? (
+        <Button
+          size="lg"
+          key="feesBtn"
+          width="70%"
+          style={{ justifyContent: 'flex-start' }}
+          marginBottom={5}
+          startIcon={
+            <FontAwesome5
+              style={{ color: 'white' }}
+              name="hand-holding-usd"
+              size={18}
+            />
+          }
+          onPress={() => navigation.navigate('FeesAdministrationModal')}
+        >
+          Fees
+        </Button>
+      ) : null}
 
       <Button
         size="lg"
@@ -185,6 +208,14 @@ function AccountIndexScreen({
       </Button>
     </View>
   );
+
+  if (isLoading) {
+    return (
+      <View safeArea flex={1} alignItems="center" justifyContent="center">
+        <Spinner size="lg" />
+      </View>
+    );
+  }
   return (
     <ScrollView
       refreshControl={
@@ -224,8 +255,18 @@ export default function Account() {
           options={{ headerShown: false }}
         />
         <AccountStack.Screen
+          name="ServiceApprovalModal"
+          component={ServiceApprovalModal}
+          options={{ headerShown: false }}
+        />
+        <AccountStack.Screen
           name="VerificationUploadModal"
           component={VerificationUploadModal}
+          options={{ headerShown: false }}
+        />
+        <AccountStack.Screen
+          name="FeesAdministrationModal"
+          component={FeesAdministrationModal}
           options={{ headerShown: false }}
         />
       </AccountStack.Group>
