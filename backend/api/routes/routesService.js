@@ -170,7 +170,7 @@ const updateServiceFees=(app) =>{
       const{fee}=req.body;
       try{
         await userService.assertAdmin(user.user_id);
-        console.log(fee);
+        // console.log(fee);
         await serviceService.updateServiceFees(fee);
         res.status(200).send({
             status: 200,
@@ -183,12 +183,35 @@ const updateServiceFees=(app) =>{
     });
 };
 
+//get service endpoint
+const getServiceFees=(app) =>{
+  app.get(pathPrefix +"/getFees",
+    verifyToken,
+    async(req,res,next)=>{
+      const{user}=req;
+      try{
+        await userService.assertAdmin(user.user_id);
+        feeObj = await serviceService.getServiceFees();
+        // console.log(feeObj.fee)
+        res.status(200).send({
+          status: 200,
+          fee: feeObj.fee.toString()
+        });
+      }
+      catch(e){
+       next(e) 
+      }
+    });
+};
+
+
 
 module.exports = (app) => {
   postServiceAndRequestVerification(app);
   retrieveVerification(app);
   verifyService(app);
   getServicesList(app);
+  getServiceFees(app);
   getServiceDetails(app);
   updateServiceFees(app);
 };
