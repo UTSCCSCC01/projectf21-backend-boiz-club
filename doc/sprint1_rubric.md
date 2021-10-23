@@ -107,7 +107,7 @@ Your Mark: 3
     - 1 mark  = two or more tasks are missing
     - 0 marks = no tasks or tasks do not match at all
     
-    Your Mark: 1 missing BAC26, BAC46, BAC35, at least
+    Your Mark: 2
 
   - Is the pull request done by the person to whom the task has been assigned to?  (max 2 marks)
     - 2 marks = all assigned tasks are completed
@@ -115,7 +115,7 @@ Your Mark: 3
     - 0 marks = no task was completed by anyone
     
 
-  Your Mark: 1 the aformentioned tasks were not completed as a PR
+  Your Mark: 2
 
   - Is each pull request made from a separate branch for each individual task? (max 5 marks)
     - 5 marks = pull request for each task made from own separate branch
@@ -233,4 +233,4 @@ Comments:
 
 ## Total Mark
 
-82.06/ 89
+84.06/ 89
