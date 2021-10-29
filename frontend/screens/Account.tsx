@@ -24,6 +24,8 @@ import { RefreshControl } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { clearToken } from '@/redux/userCredential';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import EditProfileScreen from '@/screens/EditProfileScreen';
+
 function AccountIndexScreen({
   navigation,
 }: AccountStackScreenProps<'AccountIndexScreen'>) {
@@ -96,6 +98,20 @@ function AccountIndexScreen({
   );
   const UserButtons = () => (
     <View justifyContent="center" alignItems="center" marginBottom={5}>
+      <Button
+        size="lg"
+        key="editProfileBtn"
+        width="70%"
+        style={{ justifyContent: 'flex-start' }}
+        marginBottom={5}
+        startIcon={
+          <FontAwesome5 style={{ color: 'white' }} name="user-edit" size={18} />
+        }
+        onPress={() => navigation.navigate('EditProfileScreen')}
+      >
+        Edit Profile
+      </Button>
+
       <Button
         size="lg"
         key="personalInformationBtn"
@@ -246,6 +262,11 @@ export default function Account() {
       <AccountStack.Screen
         name="NotificationScreen"
         component={NotificationScreen}
+        options={{ headerShown: false }}
+      />
+      <AccountStack.Screen
+        name="EditProfileScreen"
+        component={EditProfileScreen}
         options={{ headerShown: false }}
       />
       <AccountStack.Group screenOptions={{ presentation: 'modal' }}>

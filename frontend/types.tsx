@@ -28,6 +28,7 @@ export type HomeStackScreenProps<Screen extends keyof HomeStackParamList> =
 export type AccountStackParamList = {
   AccountIndexScreen: undefined;
   NotificationScreen: undefined;
+  EditProfileScreen: undefined;
   VerificationApprovalModal: {
     user: User;
     request: AccountVerificationRequest;
