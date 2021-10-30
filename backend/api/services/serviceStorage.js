@@ -12,5 +12,12 @@ module.exports = {
       throw ApiError.badRequestError('Image could not be loaded');
     }
     return data;
-  }
+  },
+  uploadMedia: async (file) => {
+    const data = await s3.upload(file);
+    if (!data) {
+      throw ApiError.badRequestError('Image could not be uploaded');
+    }
+    return data.key;
+  },
 };

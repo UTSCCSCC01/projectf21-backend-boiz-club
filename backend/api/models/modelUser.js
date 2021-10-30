@@ -31,6 +31,11 @@ const userSchema = new Schema({
     enum: ['unverified', 'verified', 'admin'],
     default: 'unverified',
   },
+  profile_pic: {
+    type: String,
+    required: false,
+    default: '0306ae8a-9eef-4b9f-b145-84093a025120.jpg',
+  },
 }, {timestamps: true, versionKey: false});
 
 
