@@ -36,6 +36,16 @@ const userSchema = new Schema({
     required: false,
     default: '0306ae8a-9eef-4b9f-b145-84093a025120.jpg',
   },
+  num_dogs: {
+    type: Number,
+    required: false,
+    default: 0,
+  },
+  num_cats: {
+    type: Number,
+    required: false,
+    default: 0,
+  },
 }, {timestamps: true, versionKey: false});
 
 
