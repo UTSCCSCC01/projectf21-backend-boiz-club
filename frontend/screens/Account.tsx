@@ -1,4 +1,6 @@
 import { useAppSelector } from '@/hooks/react-redux';
+import ProfileInformationScreen from '@/screens/ProfileInformation';
+import EditProfileScreen from '@/screens/EditProfileScreen';
 import NotificationScreen from '@/screens/NotificationScreen';
 import VerificationApprovalModal from '@/screens/VerificationApprovalModal';
 import VerificationUploadModal from '@/screens/VerificationUploadModal';
@@ -105,6 +107,7 @@ function AccountIndexScreen({
         startIcon={
           <FontAwesome5 style={{ color: 'white' }} name="home" size={18} />
         }
+        onPress={() => navigation.navigate('ProfileInformationScreen')}
       >
         Personal Information
       </Button>
@@ -241,6 +244,16 @@ export default function Account() {
       <AccountStack.Screen
         name="AccountIndexScreen"
         component={AccountIndexScreen}
+        options={{ headerShown: false }}
+      />
+      <AccountStack.Screen
+        name="ProfileInformationScreen"
+        component={ProfileInformationScreen}
+        options={{ headerShown: false }}
+      />
+      <AccountStack.Screen
+        name="EditProfileScreen"
+        component={EditProfileScreen}
         options={{ headerShown: false }}
       />
       <AccountStack.Screen
