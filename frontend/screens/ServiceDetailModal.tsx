@@ -1,6 +1,7 @@
 import * as React from 'react';
-import { Box, Heading, VStack } from 'native-base';
+import { Box, Heading, VStack, Divider } from 'native-base';
 import { ServiceStackScreenProps } from '@/types';
+import { Map } from '../components';
 
 export default function ServiceDetailModal({
   route,
@@ -15,30 +16,41 @@ export default function ServiceDetailModal({
   //console.log(service.updatedAt);
   console.log(service.service_name); //
   console.log(service.service_description); //
-  console.log(service.service_price);
+  console.log(service.service_price); //
   console.log(service.contact_number);
   console.log(service.country); //
   console.log(service.city); //
   console.log(service.postal_code); //
-  console.log(service.address);
-
-  // {service.city}, {service.postal_code}, {service.country}
+  console.log(service.address); //
 
   return (
     <Box safeArea flex={1} paddingTop="5" paddingX="10">
       <VStack space={3}>
         <Box justifyContent="space-between" flexDirection="row">
-          <Heading fontSize="xl" pb="3" flex="1">
+          <Heading fontSize="2xl" pb="3" flex="1">
             {service.service_name}
           </Heading>
           <Box width="10" />
-          <Heading fontSize="xl" pb="3">
+          <Heading fontSize="2xl" pb="3">
             {service.service_price} $CAD/hour
           </Heading>
         </Box>
         <Heading fontSize="sm" fontWeight="light">
           {service.service_description}
         </Heading>
+        <Divider />
+        <Heading fontSize="lg">Location</Heading>
+        <Box width="100%" height="40%">
+          <Map lat={43.65107} long={-79.347015} />
+        </Box>
+        <Heading fontSize="sm" fontWeight="light">
+          {service.address}
+          {'\n'}
+          {service.city}, {service.postal_code}
+          {'\n'}
+          {service.country}
+        </Heading>
+        <Divider />
       </VStack>
     </Box>
   );
