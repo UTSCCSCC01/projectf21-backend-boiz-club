@@ -1,9 +1,13 @@
 import axios from 'axios';
+import Constants from 'expo-constants';
+
+// @ts-ignore
+const { BACKEND_ENDPOINT } = Constants.manifest?.extra;
 
 export async function getAccountVerificationRequests(token: string) {
   return axios
     .get(
-      'https://pawsup-dev-oznda.ondigitalocean.app/api/v1/users/verification-request?limit=0&skip=0',
+      `${BACKEND_ENDPOINT}/api/v1/users/verification-request?limit=0&skip=0`,
       {
         headers: {
           'auth-token': token,
@@ -19,9 +23,7 @@ export async function getAccountVerificationRequests(token: string) {
 
 export async function getServiceInfoByID(serviceID: string) {
   return axios
-    .get(
-      `https://pawsup-dev-oznda.ondigitalocean.app/api/v1/services/${serviceID}`
-    )
+    .get(`${BACKEND_ENDPOINT}/api/v1/services/${serviceID}`)
     .then((resp) => resp.data)
     .catch((err) => {
       console.log('Get operation for service info failed. ' + err);
@@ -32,7 +34,7 @@ export async function getServiceInfoByID(serviceID: string) {
 export async function getServiceVerificationRequests(token: string) {
   return axios
     .get(
-      'https://pawsup-dev-oznda.ondigitalocean.app/api/v1/services/verification-request?limit=0&skip=0',
+      `${BACKEND_ENDPOINT}/api/v1/services/verification-request?limit=0&skip=0`,
       {
         headers: {
           'auth-token': token,
@@ -50,13 +52,14 @@ export async function getServiceVerificationRequests(token: string) {
 
 export async function getUserInfoByID(userID: string) {
   return axios
-    .get(`https://pawsup-dev-oznda.ondigitalocean.app/api/v1/users/${userID}`)
+    .get(`${BACKEND_ENDPOINT}/api/v1/users/${userID}`)
     .then((resp) => resp.data)
     .catch((err) => {
       console.log('Get operation for user info failed. ' + err);
       throw err;
     });
 }
+
 export async function verifyServiceByID(
   serviceId: string,
   approval: boolean,
@@ -64,7 +67,7 @@ export async function verifyServiceByID(
 ) {
   return axios
     .put(
-      'https://pawsup-dev-oznda.ondigitalocean.app/api/v1/services/verification-request',
+      `${BACKEND_ENDPOINT}/api/v1/services/verification-request`,
       {
         service_id: serviceId,
         approved: approval,
@@ -85,6 +88,7 @@ export async function verifyServiceByID(
       throw err;
     });
 }
+
 export async function verifyUserByID(
   userId: string,
   approval: boolean,
@@ -92,7 +96,7 @@ export async function verifyUserByID(
 ) {
   return axios
     .put(
-      'https://pawsup-dev-oznda.ondigitalocean.app/api/v1/users/verification-request',
+      `${BACKEND_ENDPOINT}/api/v1/users/verification-request`,
       {
         user_id: userId,
         approved: approval,
@@ -114,9 +118,7 @@ export async function verifyUserByID(
 
 export async function getIDPhotoData(key: string) {
   return axios
-    .get(
-      `https://pawsup-dev-oznda.ondigitalocean.app/api/v1/storage/media/${key}`
-    )
+    .get(`${BACKEND_ENDPOINT}/api/v1/storage/media/${key}`)
     .catch((err) => {
       console.log('Get operation for ID photo failed. ' + err);
       throw err;

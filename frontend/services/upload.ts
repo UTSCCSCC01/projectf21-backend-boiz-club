@@ -1,5 +1,9 @@
 import * as FileSystem from 'expo-file-system';
 import { FileSystemUploadType } from 'expo-file-system';
+import Constants from 'expo-constants';
+
+// @ts-ignore
+const { BACKEND_ENDPOINT } = Constants.manifest?.extra;
 
 async function requestVerification(uri: string, token: string) {
   const options = {
@@ -9,7 +13,7 @@ async function requestVerification(uri: string, token: string) {
   };
 
   return FileSystem.uploadAsync(
-    'https://pawsup-dev-oznda.ondigitalocean.app/api/v1/users/self/request-verification',
+    `${BACKEND_ENDPOINT}/api/v1/users/self/request-verification`,
     uri,
     options
   ).catch((err) => {

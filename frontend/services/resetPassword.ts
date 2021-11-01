@@ -1,4 +1,8 @@
 import axios from 'axios';
+import Constants from 'expo-constants';
+
+// @ts-ignore
+const { BACKEND_ENDPOINT } = Constants.manifest?.extra;
 
 /**
  * type resetPassword = (email: string,
@@ -15,9 +19,7 @@ async function resetPassword(
   otp: string,
   password: string
 ) {
-  const url =
-    'http://pawsup-dev-oznda.ondigitalocean.app/api/v1/users/reset-password/' +
-    email;
+  const url = `${BACKEND_ENDPOINT}/api/v1/users/reset-password/` + email;
   const res = await axios
     .post(url, {
       encryptedEmail: encryptedEmail,

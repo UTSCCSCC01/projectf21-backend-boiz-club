@@ -1,17 +1,18 @@
 import axios from 'axios';
+import Constants from 'expo-constants';
+
+// @ts-ignore
+const { BACKEND_ENDPOINT } = Constants.manifest?.extra;
 
 // type login = (email: string, password: string) => string;
 
 async function getServiceFee(token: string) {
   const res = await axios
-    .get(
-      'https://pawsup-dev-oznda.ondigitalocean.app/api/v1/services/getFees',
-      {
-        headers: {
-          'auth-token': token,
-        },
-      }
-    )
+    .get(`${BACKEND_ENDPOINT}/api/v1/services/getFees`, {
+      headers: {
+        'auth-token': token,
+      },
+    })
     .catch((err) => {
       console.log('Get operation for fees failed. ' + err);
       throw err;
@@ -23,7 +24,7 @@ async function getServiceFee(token: string) {
 async function updateServiceFee(fee: number, token: string) {
   await axios
     .put(
-      'https://pawsup-dev-oznda.ondigitalocean.app/api/v1/services/updateFees',
+      `${BACKEND_ENDPOINT}/api/v1/services/updateFees`,
       {
         fee: fee,
       },

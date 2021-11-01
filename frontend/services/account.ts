@@ -1,8 +1,12 @@
 import axios from 'axios';
+import Constants from 'expo-constants';
 
-export const whoAmI = async (token) => {
+// @ts-ignore
+const { BACKEND_ENDPOINT } = Constants.manifest?.extra;
+
+export const whoAmI = async (token: string) => {
   return axios
-    .get('https://pawsup-dev-oznda.ondigitalocean.app/api/v1/users/self', {
+    .get(`${BACKEND_ENDPOINT}/api/v1/users/self`, {
       headers: {
         'auth-token': token,
       },

@@ -1,4 +1,8 @@
 import axios from 'axios';
+import Constants from 'expo-constants';
+
+// @ts-ignore
+const { BACKEND_ENDPOINT } = Constants.manifest?.extra;
 
 /**
  * type createService = (service_name: string,
@@ -24,7 +28,7 @@ async function createService(
 ) {
   const res = await axios
     .post(
-      'https://pawsup-dev-oznda.ondigitalocean.app/api/v1/services/request-verification',
+      `${BACKEND_ENDPOINT}/api/v1/services/request-verification`,
       {
         service_name: service_name,
         service_description: service_description,

@@ -32,7 +32,8 @@
       "favicon": "./assets/images/favicon.png"
     },
     "extra": {
-      "LOAD_STORYBOOK": false
+      "LOAD_STORYBOOK": false,
+      "BACKEND_ENDPOINT": "https://pawsup-dev-oznda.ondigitalocean.app"
     }
   }
 }
