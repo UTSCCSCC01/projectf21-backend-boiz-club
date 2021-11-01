@@ -1,6 +1,23 @@
 import * as React from 'react';
-import { Button, Center, HStack, Text, useToast } from 'native-base';
-import { ServiceStackParamList, ServiceStackScreenProps } from '@/types';
+import {
+  Button,
+  Center,
+  HStack,
+  Text,
+  useToast,
+  Pressable,
+  Box,
+  Avatar,
+  VStack,
+  Spacer,
+  Image,
+  View,
+} from 'native-base';
+import {
+  ServiceStackParamList,
+  ServiceStackScreenProps,
+  Service,
+} from '@/types';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { RefreshControl, ScrollView } from 'react-native';
 import CreateServiceModalDescription from './CreateServiceModalDescription';
@@ -8,6 +25,7 @@ import CreateServiceModalContact from './CreateServiceModalContact';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { useAppSelector } from '@/hooks/react-redux';
 import { whoAmI } from '@/services/account';
+import { getVerifiedServices } from '@/services/services';
 
 function ServicesIndexScreen({
   navigation,
@@ -15,11 +33,13 @@ function ServicesIndexScreen({
   const [isLoading, setIsLoading] = React.useState(true);
   const token = useAppSelector((state) => state.userCredential.userToken);
   const toast = useToast();
+  const [services, setServices] = React.useState<Service[]>([]);
 
   const updateServices = async () => {
     setIsLoading(true);
 
-    // UPDATE SERVICES FROM BACKEND HERE.
+    const verifiedServices = await getVerifiedServices();
+    setServices(verifiedServices);
 
     setIsLoading(false);
   };
@@ -29,9 +49,88 @@ function ServicesIndexScreen({
   }, []);
 
   const DisplayServices = () => (
-    <Center padding={5}>
-      <Text> Services goes here. </Text>
-    </Center>
+    <View flex={1} alignItems="center" width={'100%'}>
+      {services.map((service) => {
+        return (
+          <Pressable
+            width={'100%'}
+            onPress={() => {
+              console.log('Go to service detail page');
+            }}
+          >
+            {({ isPressed }) => {
+              return (
+                <Box
+                  p="5"
+                  rounded="8"
+                  style={{
+                    transform: [
+                      {
+                        scale: isPressed ? 0.96 : 1,
+                      },
+                    ],
+                  }}
+                  borderBottomWidth="1"
+                  _dark={{
+                    borderColor: 'gray.600',
+                  }}
+                  borderColor="coolGray.200"
+                  pl="4"
+                  pr="5"
+                  py="2"
+                >
+                  <HStack space={3} justifyContent="space-between">
+                    <VStack maxWidth="40%">
+                      <Image
+                        style={{ backgroundColor: 'grey' }}
+                        size={'xl'}
+                        resizeMode="contain"
+                        alt={'Service picture'}
+                      />
+                    </VStack>
+                    <VStack maxWidth="60%" flex={1}>
+                      <HStack space={3} justifyContent="space-between">
+                        <Text
+                          _dark={{
+                            color: 'warmGray.50',
+                          }}
+                          color="coolGray.800"
+                          bold
+                        >
+                          {service.service_name}
+                        </Text>
+                        <Text
+                          noOfLines={3}
+                          fontSize="xs"
+                          _dark={{
+                            color: 'warmGray.50',
+                          }}
+                          color="coolGray.800"
+                          alignSelf="flex-start"
+                        >
+                          {'$'}
+                          {service.service_price}
+                        </Text>
+                      </HStack>
+                      <HStack space={3} justifyContent="space-between">
+                        <Text
+                          color="coolGray.600"
+                          _dark={{
+                            color: 'warmGray.200',
+                          }}
+                        >
+                          {service.service_description}
+                        </Text>
+                      </HStack>
+                    </VStack>
+                  </HStack>
+                </Box>
+              );
+            }}
+          </Pressable>
+        );
+      })}
+    </View>
   );
 
   const checkVerification = async () => {
@@ -91,8 +190,10 @@ function ServicesIndexScreen({
       }
       stickyHeaderIndices={[0]}
     >
-      <ServiceButtons />
-      <DisplayServices />
+      <View flex={1} alignItems="center">
+        <ServiceButtons />
+        <DisplayServices />
+      </View>
     </ScrollView>
   );
 }
