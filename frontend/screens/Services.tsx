@@ -50,9 +50,10 @@ function ServicesIndexScreen({
 
   const DisplayServices = () => (
     <View flex={1} alignItems="center" width={'100%'}>
-      {services.map((service) => {
+      {services.map((service, index) => {
         return (
           <Pressable
+            key={index}
             width={'100%'}
             onPress={() => {
               console.log('Go to service detail page');
