@@ -24,6 +24,7 @@ import { RefreshControl } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { clearToken } from '@/redux/userCredential';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
 function AccountIndexScreen({
   navigation,
 }: AccountStackScreenProps<'AccountIndexScreen'>) {
@@ -87,8 +88,8 @@ function AccountIndexScreen({
             &nbsp; Toronto, Canada
           </Text>
           <Text fontSize="md">
-            3 <FontAwesome5 name="dog" size={24} color="blue" />
-            3 <FontAwesome5 name="cat" size={24} color="purple" />
+            3 <FontAwesome5 name="dog" size={24} color="#779ecb" />
+            3 <FontAwesome5 name="cat" size={24} color="#966fd6" />
           </Text>
         </Column>
       </Row>
