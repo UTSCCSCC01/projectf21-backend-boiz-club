@@ -50,6 +50,9 @@ export type AccountStackScreenProps<
 
 export type ServiceStackParamList = {
   ServiceIndexScreen: undefined;
+  ServiceDetailModal: {
+    service: Service;
+  };
   CreateServiceModalDescription: undefined;
   CreateServiceModalContact: {
     serviceName: string;
