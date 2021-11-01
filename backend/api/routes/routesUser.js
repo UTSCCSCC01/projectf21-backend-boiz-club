@@ -313,6 +313,45 @@ const getUserById = (app) => {
 };
 // Start get user info by user id
 
+// Start update account info
+const updateAccountInfo = (app) => {
+  app.post(pathPrefix + '/update-info/:userId', async (req, res, next) => {
+    try {
+      const userId = req.params.userId;
+      if (!userId) {
+        throw ApiError.badRequestError('User ID is required');
+      }
+
+      const user = await userService.getUser(userId);
+      if (!user) {
+        throw ApiError.notFoundError(`The user ${userId} cannot be found`);
+      }
+
+      const username = req.body.username;
+      if (username) {
+        const usernameExists =
+        await userService.isUsernameUnique(req.body.username);
+
+        if (!usernameExists) {
+          throw ApiError
+              .badRequestError(`The username ${username} already exists`);
+        }
+      }
+
+      const update = await userService.updateUserInfo(userId, req.body);
+      if (!update) {
+        throw ApiError.badRequestError('Update cannot be performed');
+      }
+
+      res.status(200).json({
+        message: 'User information has been successfully updated'});
+    } catch (error) {
+      next(error);
+    }
+  });
+};
+// End update account info
+
 module.exports = (app) => {
   // Route for registering a new user
   register(app);
@@ -332,4 +371,6 @@ module.exports = (app) => {
   retrieveVerification(app);
   // Route for getting user information by user id
   getUserById(app);
+  // Route for updating a user account's information
+  updateAccountInfo(app);
 };
