@@ -315,7 +315,7 @@ const getUserById = (app) => {
 
 // Start update account info
 const updateAccountInfo = (app) => {
-  app.post(pathPrefix + '/update-info/:userId', async (req, res, next) => {
+  app.put(pathPrefix + '/update-info/:userId', async (req, res, next) => {
     try {
       const userId = req.params.userId;
       if (!userId) {
