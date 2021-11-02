@@ -106,6 +106,8 @@ export type User = {
   createdAt: string;
   updatedAt: string;
   profile_pic: string;
+  num_dogs: number;
+  num_cats: number;
 };
 
 export type Service = {
@@ -122,8 +124,6 @@ export type Service = {
   verified: boolean;
   createdAt?: string;
   updatedAt?: string;
-  num_dogs: number;
-  num_cats: number;
 };
 
 export type AccountVerificationRequest = {
