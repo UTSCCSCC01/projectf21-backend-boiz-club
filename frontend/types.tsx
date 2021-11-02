@@ -123,8 +123,8 @@ export type Service = {
   verified: boolean;
   createdAt?: string;
   updatedAt?: string;
-  latitude: number;
-  longitude: number;
+  latitude: string | undefined;
+  longitude: string | undefined;
 };
 
 export type AccountVerificationRequest = {

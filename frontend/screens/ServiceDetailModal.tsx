@@ -74,12 +74,12 @@ export default function ServiceDetailModal({
           <Map
             lat={
               typeof service.latitude !== 'undefined'
-                ? service.latitude
+                ? parseFloat(service.latitude)
                 : 43.76055603963581
             }
             long={
               typeof service.longitude !== 'undefined'
-                ? service.longitude
+                ? parseFloat(service.longitude)
                 : -79.40877280352363
             }
           />
