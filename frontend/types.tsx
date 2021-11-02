@@ -105,6 +105,7 @@ export type User = {
   authentication_lvl: 'verified' | 'unverified' | 'admin';
   createdAt: string;
   updatedAt: string;
+  profile_pic: string;
 };
 
 export type Service = {
@@ -121,6 +122,8 @@ export type Service = {
   verified: boolean;
   createdAt?: string;
   updatedAt?: string;
+  num_dogs: number;
+  num_cats: number;
 };
 
 export type AccountVerificationRequest = {
