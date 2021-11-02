@@ -89,8 +89,8 @@ function AccountIndexScreen({
             &nbsp; Toronto, Canada
           </Text>
           <Text fontSize="md">
-            3 <FontAwesome5 name="dog" size={24} color="blue" />
-            3 <FontAwesome5 name="cat" size={24} color="purple" />
+            3 <FontAwesome5 name="dog" size={24} color="#779ecb" />
+            3 <FontAwesome5 name="cat" size={24} color="#966fd6" />
           </Text>
         </Column>
       </Row>
