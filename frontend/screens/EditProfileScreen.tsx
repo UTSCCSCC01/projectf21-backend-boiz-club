@@ -72,6 +72,7 @@ export default function EditProfileScreen() {
           </Row>
           <Row>
             <Pressable onPress={pickImage}>
+              {/* eslint-disable-next-line react-native/no-inline-styles */}
               <Text underline style={{ color: 'blue' }}>
                 Change Profile Photo
               </Text>
