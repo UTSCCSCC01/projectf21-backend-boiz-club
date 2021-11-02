@@ -313,6 +313,28 @@ const getUserById = (app) => {
 };
 // Start get user info by user id
 
+// Start update account info
+const updateAccountInfo = (app) => {
+  app.put(pathPrefix + '/self',
+      verifyToken, async (req, res, next) => {
+        try {
+          const {user} = req;
+          const userId = user.user_id;
+          const update = await userService.updateUserInfo(userId, req.body);
+          if (!update) {
+            throw ApiError.badRequestError('Update cannot be performed');
+          }
+
+          const updatedInfo = await userService.getUser(user.user_id);
+
+          res.status(200).json(updatedInfo);
+        } catch (error) {
+          next(error);
+        }
+      });
+};
+// End update account info
+
 module.exports = (app) => {
   // Route for registering a new user
   register(app);
@@ -332,4 +354,6 @@ module.exports = (app) => {
   retrieveVerification(app);
   // Route for getting user information by user id
   getUserById(app);
+  // Route for updating a user account's information
+  updateAccountInfo(app);
 };

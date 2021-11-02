@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 const crypto = require('crypto');
 const mongoose = require('mongoose');
 
@@ -174,6 +175,28 @@ module.exports = {
   getPageableVerificationRequests: async (limit, skip) =>{
     return await UserVerificationRequest
         .find().skip(limit * skip).limit(limit).sort('createdAt');
+  },
+
+  /**
+   * Update a user account's info
+   * @param {String} userId - the user's ID
+   * @param {String} newInfo - the new information to be updated
+   */
+  updateAccountInfo: async (userId, newInfo) => {
+    const {first_name, last_name, address,
+      phone_number, num_dogs, num_cats, profile_pic} = newInfo;
+
+    return await User.findOneAndUpdate({_id: userId},
+        {
+          first_name: first_name,
+          last_name: last_name,
+          address: address,
+          phone_number: phone_number,
+          num_dogs: num_dogs,
+          num_cats: num_cats,
+          profile_pic: profile_pic,
+          updatedAt: new Date(),
+        });
   },
 
 };
