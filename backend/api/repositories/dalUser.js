@@ -183,16 +183,17 @@ module.exports = {
    * @param {String} newInfo - the new information to be updated
    */
   updateAccountInfo: async (userId, newInfo) => {
-    const {username, first_name, last_name,
-      address, phone_number, profile_pic} = newInfo;
+    const {first_name, last_name, address,
+      phone_number, num_dogs, num_cats, profile_pic} = newInfo;
 
     return await User.findOneAndUpdate({_id: userId},
         {
-          username: username,
           first_name: first_name,
           last_name: last_name,
           address: address,
           phone_number: phone_number,
+          num_dogs: num_dogs,
+          num_cats: num_cats,
           profile_pic: profile_pic,
           updatedAt: new Date(),
         });

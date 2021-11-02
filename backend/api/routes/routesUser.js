@@ -327,17 +327,6 @@ const updateAccountInfo = (app) => {
         throw ApiError.notFoundError(`The user ${userId} cannot be found`);
       }
 
-      const username = req.body.username;
-      if (username) {
-        const usernameExists =
-        await userService.isUsernameUnique(req.body.username);
-
-        if (!usernameExists) {
-          throw ApiError
-              .badRequestError(`The username ${username} already exists`);
-        }
-      }
-
       const update = await userService.updateUserInfo(userId, req.body);
       if (!update) {
         throw ApiError.badRequestError('Update cannot be performed');
