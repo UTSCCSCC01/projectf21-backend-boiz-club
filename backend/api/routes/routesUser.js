@@ -325,7 +325,7 @@ const updateAccountInfo = (app) => {
             throw ApiError.badRequestError('Update cannot be performed');
           }
 
-          const updatedInfo = userService.getUser(user.user_id);
+          const updatedInfo = await userService.getUser(user.user_id);
 
           res.status(200).json(updatedInfo);
         } catch (error) {
