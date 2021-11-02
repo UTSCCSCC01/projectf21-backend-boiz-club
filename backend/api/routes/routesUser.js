@@ -315,29 +315,23 @@ const getUserById = (app) => {
 
 // Start update account info
 const updateAccountInfo = (app) => {
-  app.put(pathPrefix + '/update-info/:userId', async (req, res, next) => {
-    try {
-      const userId = req.params.userId;
-      if (!userId) {
-        throw ApiError.badRequestError('User ID is required');
-      }
+  app.put(pathPrefix + '/self',
+      verifyToken, async (req, res, next) => {
+        try {
+          const {user} = req;
+          const userId = user.user_id;
+          const update = await userService.updateUserInfo(userId, req.body);
+          if (!update) {
+            throw ApiError.badRequestError('Update cannot be performed');
+          }
 
-      const user = await userService.getUser(userId);
-      if (!user) {
-        throw ApiError.notFoundError(`The user ${userId} cannot be found`);
-      }
+          const updatedInfo = userService.getUser(user.user_id);
 
-      const update = await userService.updateUserInfo(userId, req.body);
-      if (!update) {
-        throw ApiError.badRequestError('Update cannot be performed');
-      }
-
-      res.status(200).json({
-        message: 'User information has been successfully updated'});
-    } catch (error) {
-      next(error);
-    }
-  });
+          res.status(200).json(updatedInfo);
+        } catch (error) {
+          next(error);
+        }
+      });
 };
 // End update account info
 
