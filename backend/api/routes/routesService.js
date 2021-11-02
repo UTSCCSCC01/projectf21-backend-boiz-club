@@ -161,49 +161,46 @@ const getServiceDetails = (app) => {
   });
 };
 
-//update service endpoint
+// update service endpoint
 const updateServiceFees=(app) =>{
-  app.put(pathPrefix +"/updateFees",
-    verifyToken,
-    async(req,res,next)=>{
-      const{user}=req;
-      const{fee}=req.body;
-      try{
-        await userService.assertAdmin(user.user_id);
-        // console.log(fee);
-        await serviceService.updateServiceFees(fee);
-        res.status(200).send({
+  app.put(pathPrefix +'/updateFees',
+      verifyToken,
+      async (req, res, next)=>{
+        const {user}=req;
+        const {fee}=req.body;
+        try {
+          await userService.assertAdmin(user.user_id);
+          // console.log(fee);
+          await serviceService.updateServiceFees(fee);
+          res.status(200).send({
             status: 200,
             message: 'Updated fees',
           });
-      }
-      catch(e){
-       next(e) 
-      }
-    });
+        } catch (e) {
+          next(e);
+        }
+      });
 };
 
-//get service endpoint
+// get service endpoint
 const getServiceFees=(app) =>{
-  app.get(pathPrefix +"/getFees",
-    verifyToken,
-    async(req,res,next)=>{
-      const{user}=req;
-      try{
-        await userService.assertAdmin(user.user_id);
-        feeObj = await serviceService.getServiceFees();
-        // console.log(feeObj.fee)
-        res.status(200).send({
-          status: 200,
-          fee: feeObj.fee.toString()
-        });
-      }
-      catch(e){
-       next(e) 
-      }
-    });
+  app.get(pathPrefix +'/getFees',
+      verifyToken,
+      async (req, res, next)=>{
+        const {user}=req;
+        try {
+          await userService.assertAdmin(user.user_id);
+          feeObj = await serviceService.getServiceFees();
+          // console.log(feeObj.fee)
+          res.status(200).send({
+            status: 200,
+            fee: feeObj.fee.toString(),
+          });
+        } catch (e) {
+          next(e);
+        }
+      });
 };
-
 
 
 module.exports = (app) => {

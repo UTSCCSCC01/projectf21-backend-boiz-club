@@ -1,11 +1,27 @@
 const serviceDal = require('../repositories/dalService');
 const ApiError = require('../../error/ApiError');
+const axios = require('axios');
 
 module.exports = {
 
   handleNewServiceRequest: async (serviceInfo, userId) => {
+    const params = {
+      access_key: process.env.AXIOS_API_KEY,
+      query: `${serviceInfo.country} ${serviceInfo.city}
+       ${serviceInfo.postal_code} ${serviceInfo.address}`,
+    };
+    const location =
+    await axios.get('http://api.positionstack.com/v1/forward', {params}, (error) => {
+      if (error) {
+        throw ApiError.badRequestError('Failed to get location', error);
+      }
+    });
+    const locationData = location.data.data[0];
+    if (!locationData) {
+      throw ApiError.badRequestError('Failed to get location');
+    }
     return await serviceDal.createServiceAndVerificationRequest(
-        serviceInfo, userId);
+        serviceInfo, locationData, userId);
   },
 
   getPagableVerificationRequests: async (limit, skip) => {
