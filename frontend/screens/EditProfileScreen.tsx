@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useAppSelector } from '@/hooks/react-redux';
-import { AccountStackScreenProps } from '@/types';
+import { AccountStackScreenProps, User } from '@/types';
 import { whoAmI } from '@/services/account';
 import {
   Button,
@@ -12,35 +12,32 @@ import {
   HStack,
   VStack,
   Heading,
+  useToast,
 } from 'native-base';
 import { FontAwesome5 } from '@expo/vector-icons';
-
-interface ProfileInfo {
-  first_name: string;
-  last_name: string;
-  phone_number: string;
-  address: string;
-  profile_pic: string;
-  num_dogs: number;
-  num_cats: number;
-}
+import { updateAccountInfo } from '@/services/account';
 
 const EditProfileScreen = ({
   navigation,
 }: AccountStackScreenProps<'EditProfileScreen'>) => {
   const [isLoading, setIsLoading] = React.useState(true);
   const token = useAppSelector((state) => state.userCredential.userToken);
-  // const [userInfo, setUserInfo] = React.useState<User | null>(null);
-  const [newProfileInfo, setNewProfileInfo] = React.useState<ProfileInfo>({
+  const [newProfileInfo, setNewProfileInfo] = React.useState<User>({
+    _id: '',
+    username: '',
     first_name: '',
     last_name: '',
     phone_number: '',
     address: '',
+    authentication_lvl: 'unverified',
     profile_pic: '',
     num_dogs: 0,
     num_cats: 0,
+    createdAt: '',
+    updatedAt: '',
   });
   const [inputError, setInputError] = React.useState(false);
+  const toast = useToast();
 
   // const initNewProfileInfo = () => {
   //   let firstName = userInfo?.first_name == null ? '' : userInfo.first_name;
@@ -67,15 +64,14 @@ const EditProfileScreen = ({
     setIsLoading(true);
     const res = await whoAmI(token);
     setNewProfileInfo(res.data);
-    console.log(newProfileInfo.first_name, 'blah');
   };
 
   React.useEffect(() => {
     updateUserInfo();
     setIsLoading(false);
-    console.log('hi');
-    console.log(newProfileInfo.first_name);
   }, []);
+
+  const petOptions = [0, 1, 2, 3, 4, 5];
 
   const handleFirstName = (input: string) => {
     setNewProfileInfo({ ...newProfileInfo, first_name: input });
@@ -123,11 +119,23 @@ const EditProfileScreen = ({
     return false;
   };
 
-  const onSaveProfile = () => {
+  const onSaveProfile = async () => {
+    setIsLoading(true);
     if (!validateInput()) {
+      setIsLoading(false);
       return;
     }
-    console.log(newProfileInfo);
+    try {
+      updateAccountInfo(token, newProfileInfo);
+      toast.show({
+        status: 'success',
+        title: 'Profile Information Updated',
+        placement: 'top',
+      });
+    } catch (err) {
+      console.log('failed to update account information', err);
+    }
+    setIsLoading(false);
   };
 
   if (isLoading) {
@@ -231,12 +239,13 @@ const EditProfileScreen = ({
             selectedValue={newProfileInfo.num_dogs.toString(10)}
             onValueChange={(itemValue) => handleNumDogs(itemValue)}
           >
-            <Select.Item label="0" value="0" />
-            <Select.Item label="1" value="1" />
-            <Select.Item label="2" value="2" />
-            <Select.Item label="3" value="3" />
-            <Select.Item label="4" value="4" />
-            <Select.Item label="5" value="5" />
+            {petOptions.map((option) => (
+              <Select.Item
+                key={option}
+                label={option.toString()}
+                value={option.toString()}
+              />
+            ))}
           </Select>
         </HStack>
         <HStack space={10} width="100%">
@@ -249,12 +258,13 @@ const EditProfileScreen = ({
             selectedValue={newProfileInfo.num_cats.toString(10)}
             onValueChange={(itemValue) => handleNumCats(itemValue)}
           >
-            <Select.Item label="0" value="0" />
-            <Select.Item label="1" value="1" />
-            <Select.Item label="2" value="2" />
-            <Select.Item label="3" value="3" />
-            <Select.Item label="4" value="4" />
-            <Select.Item label="5" value="5" />
+            {petOptions.map((option) => (
+              <Select.Item
+                key={option}
+                label={option.toString()}
+                value={option.toString()}
+              />
+            ))}
           </Select>
         </HStack>
       </VStack>

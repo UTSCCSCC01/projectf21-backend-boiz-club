@@ -1,5 +1,4 @@
 import { useAppSelector } from '@/hooks/react-redux';
-import ProfileInformationScreen from '@/screens/ProfileInformation';
 import EditProfileScreen from '@/screens/EditProfileScreen';
 import NotificationScreen from '@/screens/NotificationScreen';
 import VerificationApprovalModal from '@/screens/VerificationApprovalModal';
@@ -90,8 +89,10 @@ function AccountIndexScreen({
             &nbsp; Toronto, Canada
           </Text>
           <Text fontSize="md">
-            3 <FontAwesome5 name="dog" size={24} color="#779ecb" />
-            3 <FontAwesome5 name="cat" size={24} color="#966fd6" />
+            {userInfo?.num_dogs != null ? userInfo.num_dogs : ' '}{' '}
+            <FontAwesome5 name="dog" size={24} color="#779ecb" />
+            {userInfo?.num_cats != null ? userInfo.num_cats : ' '}{' '}
+            <FontAwesome5 name="cat" size={24} color="#966fd6" />
           </Text>
         </Column>
       </Row>
@@ -101,6 +102,20 @@ function AccountIndexScreen({
     <View justifyContent="center" alignItems="center" marginBottom={5}>
       <Button
         size="lg"
+        key="editProfileInfo"
+        width="70%"
+        style={{ justifyContent: 'flex-start' }}
+        marginBottom={5}
+        startIcon={
+          <FontAwesome5 style={{ color: 'white' }} name="user-edit" size={18} />
+        }
+        onPress={() => navigation.navigate('EditProfileScreen')}
+      >
+        Edit Profile
+      </Button>
+
+      <Button
+        size="lg"
         key="personalInformationBtn"
         width="70%"
         style={{ justifyContent: 'flex-start' }}
@@ -108,7 +123,6 @@ function AccountIndexScreen({
         startIcon={
           <FontAwesome5 style={{ color: 'white' }} name="home" size={18} />
         }
-        onPress={() => navigation.navigate('ProfileInformationScreen')}
       >
         Personal Information
       </Button>
@@ -245,11 +259,6 @@ export default function Account() {
       <AccountStack.Screen
         name="AccountIndexScreen"
         component={AccountIndexScreen}
-        options={{ headerShown: false }}
-      />
-      <AccountStack.Screen
-        name="ProfileInformationScreen"
-        component={ProfileInformationScreen}
         options={{ headerShown: false }}
       />
       <AccountStack.Screen
