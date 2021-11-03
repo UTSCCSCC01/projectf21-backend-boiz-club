@@ -95,7 +95,8 @@ function AccountIndexScreen({
               size={20}
               style={{ padding: 10 }}
             />
-            &nbsp; Toronto, Canada
+            &nbsp;{' '}
+            {userInfo?.address != null ? userInfo.address : 'Toronto, Canada'}
           </Text>
           <Text fontSize="md">
             {userInfo?.num_dogs != null ? userInfo.num_dogs : ' '}{' '}
