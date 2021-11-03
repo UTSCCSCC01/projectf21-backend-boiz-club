@@ -121,11 +121,11 @@ export default function VerificationApprovalModal({
               marginTop="10%"
               marginBottom="30%"
             >
-              <Button colorScheme="teal" onPress={() => handleRequest(true)}>
-                Approve
-              </Button>
               <Button colorScheme="danger" onPress={() => handleRequest(false)}>
                 Reject
+              </Button>
+              <Button colorScheme="teal" onPress={() => handleRequest(true)}>
+                Approve
               </Button>
             </Row>
           )}
