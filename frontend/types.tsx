@@ -29,6 +29,7 @@ export type AccountStackParamList = {
   AccountIndexScreen: undefined;
   EditProfileScreen: undefined;
   NotificationScreen: undefined;
+  EditProfileScreen: undefined;
   VerificationApprovalModal: {
     user: User;
     request: AccountVerificationRequest;
@@ -51,6 +52,9 @@ export type AccountStackScreenProps<
 
 export type ServiceStackParamList = {
   ServiceIndexScreen: undefined;
+  ServiceDetailModal: {
+    service: Service;
+  };
   CreateServiceModalDescription: undefined;
   CreateServiceModalContact: {
     serviceName: string;
@@ -108,6 +112,9 @@ export type User = {
   num_cats: number;
   createdAt: string;
   updatedAt: string;
+  profile_pic: string;
+  num_dogs: number;
+  num_cats: number;
 };
 
 export type Service = {
@@ -124,6 +131,8 @@ export type Service = {
   verified: boolean;
   createdAt?: string;
   updatedAt?: string;
+  latitude: string | undefined;
+  longitude: string | undefined;
 };
 
 export type AccountVerificationRequest = {

@@ -1,15 +1,12 @@
 import * as React from 'react';
 import {
   Button,
-  Center,
   HStack,
   Text,
   useToast,
   Pressable,
   Box,
-  Avatar,
   VStack,
-  Spacer,
   Image,
   View,
 } from 'native-base';
@@ -22,6 +19,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { RefreshControl, ScrollView } from 'react-native';
 import CreateServiceModalDescription from './CreateServiceModalDescription';
 import CreateServiceModalContact from './CreateServiceModalContact';
+import ServiceDetailModal from './ServiceDetailModal';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { useAppSelector } from '@/hooks/react-redux';
 import { whoAmI } from '@/services/account';
@@ -48,6 +46,13 @@ function ServicesIndexScreen({
     updateServices();
   }, []);
 
+  const displayDetail = async (service: Service) => {
+    navigation.navigate('ServiceDetailModal', {
+      service: service,
+    });
+    return;
+  };
+
   const DisplayServices = () => (
     <View flex={1} alignItems="center" width={'100%'}>
       {services.map((service, index) => {
@@ -55,9 +60,7 @@ function ServicesIndexScreen({
           <Pressable
             key={index}
             width={'100%'}
-            onPress={() => {
-              console.log('Go to service detail page');
-            }}
+            onPress={() => displayDetail(service)}
           >
             {({ isPressed }) => {
               return (
@@ -83,7 +86,7 @@ function ServicesIndexScreen({
                   <HStack space={3} justifyContent="space-between">
                     <VStack maxWidth="40%">
                       <Image
-                        style={{ backgroundColor: 'grey' }}
+                        backgroundColor="grey"
                         size={'xl'}
                         resizeMode="contain"
                         alt={'Service picture'}
@@ -218,6 +221,11 @@ export default function Services() {
         <ServiceStack.Screen
           name="CreateServiceModalContact"
           component={CreateServiceModalContact}
+          options={{ headerShown: false }}
+        />
+        <ServiceStack.Screen
+          name="ServiceDetailModal"
+          component={ServiceDetailModal}
           options={{ headerShown: false }}
         />
       </ServiceStack.Group>

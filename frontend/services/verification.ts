@@ -57,6 +57,7 @@ export async function getUserInfoByID(userID: string) {
       throw err;
     });
 }
+
 export async function verifyServiceByID(
   serviceId: string,
   approval: boolean,
@@ -85,6 +86,7 @@ export async function verifyServiceByID(
       throw err;
     });
 }
+
 export async function verifyUserByID(
   userId: string,
   approval: boolean,

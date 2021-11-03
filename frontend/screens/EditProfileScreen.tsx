@@ -1,8 +1,12 @@
 import * as React from 'react';
 import { useAppSelector } from '@/hooks/react-redux';
 import { AccountStackScreenProps, User } from '@/types';
-import { whoAmI } from '@/services/account';
+import { getProfilePic, updateProfilePic, whoAmI } from '@/services/account';
 import {
+  Avatar,
+  Column,
+  Pressable,
+  Row,
   Button,
   Input,
   Select,
@@ -11,17 +15,17 @@ import {
   View,
   HStack,
   VStack,
-  Heading,
   useToast,
 } from 'native-base';
-import { FontAwesome5 } from '@expo/vector-icons';
 import { updateAccountInfo } from '@/services/account';
+import * as DocumentPicker from 'expo-document-picker';
 
 const EditProfileScreen = ({
   navigation,
 }: AccountStackScreenProps<'EditProfileScreen'>) => {
   const [isLoading, setIsLoading] = React.useState(true);
   const token = useAppSelector((state) => state.userCredential.userToken);
+  const [profilePic, setProfilePic] = React.useState('');
   const [newProfileInfo, setNewProfileInfo] = React.useState<User>({
     _id: '',
     username: '',
@@ -39,36 +43,38 @@ const EditProfileScreen = ({
   const [inputError, setInputError] = React.useState(false);
   const toast = useToast();
 
-  // const initNewProfileInfo = () => {
-  //   let firstName = userInfo?.first_name == null ? '' : userInfo.first_name;
-  //   let lastName = userInfo?.last_name == null ? '' : userInfo.last_name;
-  //   let phoneNumber =
-  //     userInfo?.phone_number == null ? '' : userInfo.phone_number;
-  //   let address = userInfo?.address == null ? '' : userInfo.address;
-  //   let profilePic = userInfo?.profile_pic == null ? '' : userInfo.profile_pic;
-  //   let numDogs = userInfo?.num_dogs == null ? 0 : userInfo.num_dogs;
-  //   let numCats = userInfo?.num_cats == null ? 0 : userInfo.num_cats;
-
-  //   setNewProfileInfo({
-  //     first_name: firstName,
-  //     last_name: lastName,
-  //     phone_number: phoneNumber,
-  //     address: address,
-  //     profile_pic: profilePic,
-  //     num_dogs: numDogs,
-  //     num_cats: numCats,
-  //   });
-  // };
-
   const updateUserInfo = async () => {
     setIsLoading(true);
     const res = await whoAmI(token);
     setNewProfileInfo(res.data);
+    setProfilePic(await getProfilePic(res.data));
+    setIsLoading(false);
+  };
+
+  const updateUserInfoAfterPic = async () => {
+    setIsLoading(true);
+    const res = await whoAmI(token);
+    setNewProfileInfo({
+      ...newProfileInfo,
+      profile_pic: res.data.profile_pic,
+    });
+    setProfilePic(await getProfilePic(res.data));
+    setIsLoading(false);
+  };
+
+  const pickImage = async () => {
+    await DocumentPicker.getDocumentAsync({
+      type: 'image/*',
+    }).then(async (resp) => {
+      if (resp.type === 'success') {
+        await updateProfilePic(resp.uri, token);
+        await updateUserInfoAfterPic();
+      }
+    });
   };
 
   React.useEffect(() => {
     updateUserInfo();
-    setIsLoading(false);
   }, []);
 
   const petOptions = [0, 1, 2, 3, 4, 5];
@@ -148,19 +154,45 @@ const EditProfileScreen = ({
 
   return (
     <View flex={1} p="2" alignItems="center">
-      <Heading size="lg" marginTop="10%" marginBottom="15%">
-        Edit Profile
-      </Heading>
-      <VStack space={4} width="95%" alignItems="flex-start" marginBottom="15%">
-        <HStack space={1} width="100%" alignItems="center">
-          <Text fontSize="lg" fontWeight="thin">
-            <FontAwesome5
-              name="id-card-alt"
-              size={26}
-              style={{ color: '#E6973F' }}
-            />{' '}
-            first
+      <Row>
+        <Column>
+          <Avatar
+            bg="lightBlue.400"
+            size="xl"
+            source={{
+              uri: profilePic,
+            }}
+          />
+        </Column>
+      </Row>
+      <Row>
+        <Column alignItems="center">
+          <Text
+            bold
+            fontSize="xl"
+            alignContent="center"
+            justifyContent="center"
+          >
+            {newProfileInfo?.username} &nbsp;
           </Text>
+        </Column>
+      </Row>
+      <Row marginBottom="5%">
+        <Pressable onPress={pickImage}>
+          {/* eslint-disable-next-line react-native/no-inline-styles */}
+          <Text underline style={{ color: 'blue' }}>
+            Change Profile Photo
+          </Text>
+        </Pressable>
+      </Row>
+      <VStack
+        space={2.5}
+        width="95%"
+        alignItems="flex-start"
+        marginBottom="15%"
+      >
+        <HStack space={1.5} width="100%" alignItems="center">
+          <Text fontSize="lg">first name</Text>
           <Input
             width="80%"
             size="lg"
@@ -172,15 +204,8 @@ const EditProfileScreen = ({
             onChangeText={handleFirstName}
           />
         </HStack>
-        <HStack space={1.5} width="100%">
-          <Text fontSize="lg" fontWeight="thin">
-            <FontAwesome5
-              name="id-card"
-              size={26}
-              style={{ color: '#E6973F' }}
-            />{' '}
-            last
-          </Text>
+        <HStack space={2} width="100%" alignItems="center">
+          <Text fontSize="lg">last name</Text>
           <Input
             width="80%"
             size="lg"
@@ -190,14 +215,8 @@ const EditProfileScreen = ({
             onChangeText={handleLastName}
           />
         </HStack>
-        <HStack space={10} width="100%">
-          <Text fontSize="lg">
-            <FontAwesome5
-              name="phone-alt"
-              size={26}
-              style={{ color: '#E6973F' }}
-            />
-          </Text>
+        <HStack space={5} width="100%" alignItems="center">
+          <Text fontSize="lg">phone #</Text>
           <Input
             width="80%"
             size="lg"
@@ -212,14 +231,8 @@ const EditProfileScreen = ({
             returnKeyType="done"
           />
         </HStack>
-        <HStack space={9} width="100%">
-          <Text fontSize="lg">
-            <FontAwesome5
-              name="house-user"
-              size={26}
-              style={{ color: '#E6973F' }}
-            />
-          </Text>
+        <HStack space={3} width="100%" alignItems="center">
+          <Text fontSize="lg">address{'  '}</Text>
           <Input
             width="80%"
             size="lg"
@@ -229,10 +242,8 @@ const EditProfileScreen = ({
             onChangeText={handleAddress}
           />
         </HStack>
-        <HStack space={9} width="100%">
-          <Text fontSize="lg">
-            <FontAwesome5 name="dog" size={26} style={{ color: '#E6973F' }} />
-          </Text>
+        <HStack space={4} width="100%" alignItems="center">
+          <Text fontSize="lg"># dogs {'  '}</Text>
           <Select
             style={{ fontSize: 15 }}
             minWidth="20%"
@@ -248,10 +259,8 @@ const EditProfileScreen = ({
             ))}
           </Select>
         </HStack>
-        <HStack space={10} width="100%">
-          <Text fontSize="lg">
-            <FontAwesome5 name="cat" size={26} style={{ color: '#E6973F' }} />
-          </Text>
+        <HStack space={9} width="100%" alignItems="center">
+          <Text fontSize="lg"># cats</Text>
           <Select
             style={{ fontSize: 15 }}
             minWidth="20%"
