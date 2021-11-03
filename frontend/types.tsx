@@ -50,6 +50,9 @@ export type AccountStackScreenProps<
 
 export type ServiceStackParamList = {
   ServiceIndexScreen: undefined;
+  ServiceDetailModal: {
+    service: Service;
+  };
   CreateServiceModalDescription: undefined;
   CreateServiceModalContact: {
     serviceName: string;
@@ -120,6 +123,8 @@ export type Service = {
   verified: boolean;
   createdAt?: string;
   updatedAt?: string;
+  latitude: string | undefined;
+  longitude: string | undefined;
 };
 
 export type AccountVerificationRequest = {
