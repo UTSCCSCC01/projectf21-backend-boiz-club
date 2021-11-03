@@ -108,18 +108,18 @@ export default function ServiceApprovalModal({
               marginBottom="30%"
             >
               <Button
-                marginLeft="10%"
-                colorScheme="teal"
-                onPress={() => handleRequest(true)}
-              >
-                Approve
-              </Button>
-              <Button
                 colorScheme="danger"
                 onPress={() => handleRequest(false)}
                 marginRight="10%"
               >
                 Reject
+              </Button>
+              <Button
+                marginLeft="10%"
+                colorScheme="teal"
+                onPress={() => handleRequest(true)}
+              >
+                Approve
               </Button>
             </Row>
           )}
