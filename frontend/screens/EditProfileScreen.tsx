@@ -194,8 +194,9 @@ const EditProfileScreen = ({
         <HStack space={1.5} width="100%" alignItems="center">
           <Text fontSize="lg">first name</Text>
           <Input
-            width="80%"
+            width="75%"
             size="lg"
+            style={{ backgroundColor: 'white' }}
             defaultValue={
               newProfileInfo?.first_name != null
                 ? newProfileInfo.first_name
@@ -207,8 +208,9 @@ const EditProfileScreen = ({
         <HStack space={2} width="100%" alignItems="center">
           <Text fontSize="lg">last name</Text>
           <Input
-            width="80%"
+            width="75%"
             size="lg"
+            style={{ backgroundColor: 'white' }}
             defaultValue={
               newProfileInfo.last_name != null ? newProfileInfo.last_name : ''
             }
@@ -218,9 +220,11 @@ const EditProfileScreen = ({
         <HStack space={5} width="100%" alignItems="center">
           <Text fontSize="lg">phone #</Text>
           <Input
-            width="80%"
+            width="75%"
             size="lg"
+            style={{ backgroundColor: 'white' }}
             keyboardType="phone-pad"
+            style={{ backgroundColor: 'white' }}
             maxLength={10}
             defaultValue={
               newProfileInfo?.phone_number != null
@@ -234,8 +238,9 @@ const EditProfileScreen = ({
         <HStack space={3} width="100%" alignItems="center">
           <Text fontSize="lg">address{'  '}</Text>
           <Input
-            width="80%"
+            width="75%"
             size="lg"
+            style={{ backgroundColor: 'white' }}
             defaultValue={
               newProfileInfo.address != null ? newProfileInfo.address : ''
             }
@@ -245,7 +250,7 @@ const EditProfileScreen = ({
         <HStack space={4} width="100%" alignItems="center">
           <Text fontSize="lg"># dogs {'  '}</Text>
           <Select
-            style={{ fontSize: 15 }}
+            style={{ fontSize: 15, backgroundColor: 'white' }}
             minWidth="20%"
             selectedValue={newProfileInfo.num_dogs.toString(10)}
             onValueChange={(itemValue) => handleNumDogs(itemValue)}
@@ -262,7 +267,7 @@ const EditProfileScreen = ({
         <HStack space={9} width="100%" alignItems="center">
           <Text fontSize="lg"># cats</Text>
           <Select
-            style={{ fontSize: 15 }}
+            style={{ fontSize: 15, backgroundColor: 'white' }}
             minWidth="20%"
             selectedValue={newProfileInfo.num_cats.toString(10)}
             onValueChange={(itemValue) => handleNumCats(itemValue)}
