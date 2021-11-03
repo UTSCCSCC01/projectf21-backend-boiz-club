@@ -194,10 +194,8 @@ function ServicesIndexScreen({
       }
       stickyHeaderIndices={[0]}
     >
-      <View flex={1} alignItems="center">
-        <ServiceButtons />
-        <DisplayServices />
-      </View>
+      <ServiceButtons />
+      <DisplayServices />
     </ScrollView>
   );
 }
