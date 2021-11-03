@@ -1,4 +1,5 @@
 import { useAppSelector } from '@/hooks/react-redux';
+import EditProfileScreen from '@/screens/EditProfileScreen';
 import NotificationScreen from '@/screens/NotificationScreen';
 import VerificationApprovalModal from '@/screens/VerificationApprovalModal';
 import VerificationUploadModal from '@/screens/VerificationUploadModal';
@@ -25,7 +26,6 @@ import { RefreshControl } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { clearToken } from '@/redux/userCredential';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import EditProfileScreen from '@/screens/EditProfileScreen';
 
 function AccountIndexScreen({
   navigation,
@@ -95,12 +95,13 @@ function AccountIndexScreen({
               size={20}
               style={{ padding: 10 }}
             />
-            &nbsp; Toronto, Canada
+            &nbsp;{' '}
+            {userInfo?.address != null ? userInfo.address : 'Toronto, Canada'}
           </Text>
           <Text fontSize="md">
-            {userInfo?.num_dogs}
+            {userInfo?.num_dogs != null ? userInfo.num_dogs : ' '}{' '}
             <FontAwesome5 name="dog" size={24} color="#779ecb" />
-            {userInfo?.num_cats}
+            {userInfo?.num_cats != null ? userInfo.num_cats : ' '}{' '}
             <FontAwesome5 name="cat" size={24} color="#966fd6" />
           </Text>
         </Column>
@@ -121,19 +122,6 @@ function AccountIndexScreen({
         onPress={() => navigation.navigate('EditProfileScreen')}
       >
         Edit Profile
-      </Button>
-
-      <Button
-        size="lg"
-        key="personalInformationBtn"
-        width="70%"
-        style={{ justifyContent: 'flex-start' }}
-        marginBottom={5}
-        startIcon={
-          <FontAwesome5 style={{ color: 'white' }} name="home" size={18} />
-        }
-      >
-        Personal Information
       </Button>
 
       <Button
@@ -271,13 +259,13 @@ export default function Account() {
         options={{ headerShown: false }}
       />
       <AccountStack.Screen
-        name="NotificationScreen"
-        component={NotificationScreen}
+        name="EditProfileScreen"
+        component={EditProfileScreen}
         options={{ headerShown: false }}
       />
       <AccountStack.Screen
-        name="EditProfileScreen"
-        component={EditProfileScreen}
+        name="NotificationScreen"
+        component={NotificationScreen}
         options={{ headerShown: false }}
       />
       <AccountStack.Group screenOptions={{ presentation: 'modal' }}>

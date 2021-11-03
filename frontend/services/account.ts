@@ -15,6 +15,24 @@ const whoAmI = async (token: string) => {
     });
 };
 
+const updateAccountInfo = async (token: string, info: User) => {
+  return axios
+    .put(
+      'https://pawsup-dev-oznda.ondigitalocean.app/api/v1/users/self',
+      {
+        ...info,
+      },
+      {
+        headers: {
+          'auth-token': token,
+        },
+      }
+    )
+    .catch((err) => {
+      console.log('Put operation for user information failed. ' + err);
+      throw err;
+    });
+};
 const getProfilePic = async (user: User) => {
   const base64Image = await getMedia(user?.profile_pic.trim())
     .then((resp) => resp.data.image)
@@ -47,4 +65,4 @@ const updateProfilePic = async (uri: string, token: string) => {
     });
 };
 
-export { whoAmI, getProfilePic, updateProfilePic };
+export { whoAmI, getProfilePic, updateProfilePic, updateAccountInfo };
