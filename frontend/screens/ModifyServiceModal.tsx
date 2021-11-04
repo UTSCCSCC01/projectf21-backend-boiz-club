@@ -118,7 +118,8 @@ export default function ModifyServiceModal({
     name: string,
     description: string,
     price: number,
-    contactNumber: string
+    contactNumber: string,
+    serviceId: string
   ) => {
     if (!validateInput(name, description, contactNumber)) {
       return;
@@ -129,6 +130,7 @@ export default function ModifyServiceModal({
       description,
       String(price),
       contactNumber,
+      serviceId,
       token
     ).catch((err) => {
       let feedback = err.response.status;
@@ -266,7 +268,8 @@ export default function ModifyServiceModal({
               serviceData.name,
               serviceData.description,
               serviceData.price,
-              serviceData.contactNumber
+              serviceData.contactNumber,
+              service._id
             );
           }}
           justifyContent="center"

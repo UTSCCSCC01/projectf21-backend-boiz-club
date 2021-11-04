@@ -4,7 +4,9 @@ import axios from 'axios';
  * type modifyService = (service_name: string,
  *                       service_description: string,
  *                       service_price: string,
- *                       contact_number: string
+ *                       contact_number: string,
+ *                       service_id: string,
+ *                       token: any
  */
 
 async function modifyService(
@@ -12,6 +14,7 @@ async function modifyService(
   service_description: string,
   service_price: string,
   contact_number: string,
+  service_id: string,
   token: any
 ) {
   const res = await axios
@@ -21,6 +24,7 @@ async function modifyService(
         service_name: service_name,
         service_description: service_description,
         service_price: service_price,
+        service_id: service_id,
         contact_number: contact_number,
       },
       {
