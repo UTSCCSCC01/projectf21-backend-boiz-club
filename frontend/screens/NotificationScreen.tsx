@@ -27,12 +27,14 @@ import {
 import React, { useEffect, useState } from 'react';
 import { RefreshControl } from 'react-native';
 import { useAppSelector } from '@/hooks/react-redux';
+import { getProfilePic } from '@/services/account';
 
 export const NotificationScreen = ({
   navigation,
 }: AccountStackScreenProps<'NotificationScreen'>) => {
   type Notification = {
     username: string;
+    profilePic: string;
     date: Date;
     description: string;
     payload: any;
@@ -55,15 +57,18 @@ export const NotificationScreen = ({
         const newNotifications: Notification[] = [];
         await Promise.all(
           verificationRequests.map((request: AccountVerificationRequest) =>
-            getUserInfoByID(request.user_id).then((user: User) => {
+            (async () => {
+              const user = await getUserInfoByID(request.user_id);
+              const userProfilePic = await getProfilePic(user);
               newNotifications.push({
                 username: user.username,
+                profilePic: userProfilePic,
                 date: new Date(request.createdAt),
                 description: 'Requested account verification.',
                 payload: { user, request },
                 type: 'AccountVerificationRequest',
               });
-            })
+            })()
           )
         );
         setNotifications((prevNotifications) => {
@@ -88,8 +93,10 @@ export const NotificationScreen = ({
               (async () => {
                 const service = await getServiceInfoByID(request.service_id);
                 const user = await getUserInfoByID(service.user_id);
+                const userProfilePic = await getProfilePic(user);
                 newNotifications.push({
                   username: user.username,
+                  profilePic: userProfilePic,
                   date: new Date(request.createdAt),
                   description: 'Requested service approval.',
                   payload: { user, request, service },
@@ -192,9 +199,9 @@ export const NotificationScreen = ({
                   <HStack space={3} justifyContent="space-between">
                     <Avatar
                       size="48px"
-                      // source={{
-                      //   uri: '',
-                      // }}
+                      source={{
+                        uri: item.profilePic,
+                      }}
                     />
                     <VStack maxWidth="60%">
                       <Text
