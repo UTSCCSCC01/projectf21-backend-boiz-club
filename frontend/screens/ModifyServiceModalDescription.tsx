@@ -107,14 +107,14 @@ export default function ModifyServiceModalDesciption({
           Modify Service
         </Heading>
         <Heading fontSize="sm" fontWeight="light">
-          Enter your service description here.
+          Modify your service description here.
         </Heading>
 
         <FormControl isInvalid={inputError.nameError}>
           <Input
             size="lg"
-            autoCapitalize="none"
             placeholder="Service Name"
+            value={service.service_name ? service.service_name : ''}
             onChangeText={(text) => handleNameChange(text)}
           />
           <FormControl.ErrorMessage
@@ -128,6 +128,9 @@ export default function ModifyServiceModalDesciption({
           <Input
             size="lg"
             placeholder="Description"
+            value={
+              service.service_description ? service.service_description : ''
+            }
             onChangeText={(text) => handleDescriptionChange(text)}
           />
           <FormControl.ErrorMessage
@@ -162,7 +165,7 @@ export default function ModifyServiceModalDesciption({
 
           <Box w="100%">
             <Slider
-              defaultValue={20}
+              defaultValue={service.service_price ? service.service_price : 20}
               minValue={minMoney}
               maxValue={maxMoney}
               accessibilityLabel="Price"
