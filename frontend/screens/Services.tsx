@@ -16,7 +16,7 @@ import {
   Service,
   User,
 } from '@/types';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { RefreshControl, ScrollView } from 'react-native';
 import CreateServiceModalDescription from './CreateServiceModalDescription';
@@ -26,6 +26,8 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import { useAppSelector } from '@/hooks/react-redux';
 import { whoAmI } from '@/services/account';
 import { getVerifiedServices } from '@/services/services';
+import ModifyServiceModalDescription from './ModifyServiceModalDescription';
+import ModifyServiceModalContact from './ModifyServiceModalContact';
 
 function ServicesIndexScreen({
   navigation,
@@ -34,28 +36,12 @@ function ServicesIndexScreen({
   const token = useAppSelector((state) => state.userCredential.userToken);
   const toast = useToast();
   const [services, setServices] = useState<Service[]>([]);
-  const [filter, setFilter] = useState<'All' | 'My'>('All');
+  const [filter, setFilter] = useState<'All' | 'My'>();
   const [filteredServices, setFilteredServices] = useState<Service[]>([]);
   const [thisUser, setThisUser] = useState<User>();
 
-  const updateServices = async () => {
-    setIsLoading(true);
-
-    whoAmI(token).then((res) => {
-      setThisUser(res.data);
-    });
-
-    const verifiedServices = await getVerifiedServices();
-    setServices(verifiedServices);
-
-    setIsLoading(false);
-  };
-
-  React.useEffect(() => {
-    updateServices();
-  }, []);
-
   const setStatusFilter = (status: 'All' | 'My') => {
+    console.log('setting filter');
     if (status === 'My') {
       setFilteredServices([
         ...services.filter((s) => s.user_id === thisUser?._id),
@@ -66,9 +52,30 @@ function ServicesIndexScreen({
     setFilter(status);
   };
 
-  const displayDetail = async (service: Service) => {
+  const updateServices = async () => {
+    setIsLoading(true);
+
+    await whoAmI(token).then((res) => {
+      setThisUser(res.data);
+    });
+
+    const verifiedServices = await getVerifiedServices();
+    setServices(verifiedServices);
+
+    setIsLoading(false);
+  };
+
+  useEffect(() => {
+    updateServices();
+  }, []);
+
+  const displayDetail = async (
+    service: Service,
+    belongsToThisUser: boolean
+  ) => {
     navigation.navigate('ServiceDetailModal', {
       service: service,
+      belongsToThisUser: belongsToThisUser,
     });
     return;
   };
@@ -80,7 +87,9 @@ function ServicesIndexScreen({
           <Pressable
             key={index}
             width={'100%'}
-            onPress={() => displayDetail(service)}
+            onPress={() =>
+              displayDetail(service, thisUser?._id === service.user_id)
+            }
           >
             {({ isPressed }) => {
               return (
@@ -260,6 +269,16 @@ export default function Services() {
         <ServiceStack.Screen
           name="ServiceDetailModal"
           component={ServiceDetailModal}
+          options={{ headerShown: false }}
+        />
+        <ServiceStack.Screen
+          name="ModifyServiceModalDescription"
+          component={ModifyServiceModalDescription}
+          options={{ headerShown: false }}
+        />
+        <ServiceStack.Screen
+          name="ModifyServiceModalContact"
+          component={ModifyServiceModalContact}
           options={{ headerShown: false }}
         />
       </ServiceStack.Group>
