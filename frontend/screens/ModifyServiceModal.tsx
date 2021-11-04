@@ -11,12 +11,15 @@ import {
   useToast,
 } from 'native-base';
 import { ServiceStackScreenProps } from '@/types';
+import modifyService from '@/services/modifyService';
+import { useAppSelector } from '@/hooks/react-redux';
 
 export default function ModifyServiceModal({
   navigation,
   route,
 }: ServiceStackScreenProps<'ModifyServiceModal'>) {
   const toast = useToast();
+  const token = useAppSelector((state) => state.userCredential.userToken);
   const { service } = route.params;
   const [sliderMoney, setSliderMoney] = useState(service.service_price);
   const maxMoney = 100;
@@ -127,36 +130,36 @@ export default function ModifyServiceModal({
     console.log(price);
     console.log(contactNumber);
 
-    // const serviceModification = await modifyService(
-    //   name,
-    //   description,
-    //   String(price),
-    //   contactNumber,
-    //   token
-    // ).catch((err) => {
-    //   let feedback = err.response.status;
+    const serviceModification = await modifyService(
+      name,
+      description,
+      String(price),
+      contactNumber,
+      token
+    ).catch((err) => {
+      let feedback = err.response.status;
 
-    //   if (feedback === 400 || feedback === 500) {
-    //     toast.show({
-    //       status: 'error',
-    //       title: 'Error occured, please try again later.',
-    //       placement: 'top',
-    //     });
-    //   }
+      if (feedback === 400 || feedback === 500) {
+        toast.show({
+          status: 'error',
+          title: 'Error occured, please try again later.',
+          placement: 'top',
+        });
+      }
 
-    //   return null;
-    // });
+      return null;
+    });
 
-    // if (serviceModification != null) {
-    //   toast.show({
-    //     status: 'success',
-    //     title: 'Service modification request has been sent.',
-    //     placement: 'top',
-    //   });
-    //   navigation.navigate('ServiceIndexScreen');
-    // }
+    if (serviceModification != null) {
+      toast.show({
+        status: 'success',
+        title: 'Service modification request has been sent.',
+        placement: 'top',
+      });
+      navigation.navigate('ServiceIndexScreen');
+    }
 
-    // return;
+    return;
   };
 
   return (
