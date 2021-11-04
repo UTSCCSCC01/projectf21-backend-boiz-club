@@ -124,12 +124,6 @@ export default function ModifyServiceModal({
       return;
     }
 
-    console.log('Modification');
-    console.log(name);
-    console.log(description);
-    console.log(price);
-    console.log(contactNumber);
-
     const serviceModification = await modifyService(
       name,
       description,
@@ -145,6 +139,7 @@ export default function ModifyServiceModal({
           title: 'Error occured, please try again later.',
           placement: 'top',
         });
+        navigation.navigate('ServiceIndexScreen');
       }
 
       return null;
@@ -284,7 +279,11 @@ export default function ModifyServiceModal({
           key="cancelModifyButton"
           width="100%"
           onPress={() => {
-            navigation.goBack();
+            navigation.pop();
+            navigation.navigate('ServiceDetailModal', {
+              service: service,
+              belongsToThisUser: true,
+            });
           }}
           justifyContent="center"
         >

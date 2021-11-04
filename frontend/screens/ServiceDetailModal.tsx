@@ -50,7 +50,8 @@ export default function ServiceDetailModal({
 
   const modifyService = () => {
     console.log('Modify Service');
-    navigation.navigate('ModifyServiceModal', { service: service });
+    navigation.pop();
+    navigation.push('ModifyServiceModal', { service: service });
   };
 
   return (
@@ -111,7 +112,11 @@ export default function ServiceDetailModal({
           key="MPButton"
           justifyContent="center"
           onPress={() => {
-            modifyService();
+            if (belongsToThisUser) {
+              modifyService();
+            } else {
+              console.log('Purchase Service');
+            }
           }}
         >
           {belongsToThisUser ? 'Modify Service' : 'Purchase Service'}
