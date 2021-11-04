@@ -107,6 +107,9 @@ export type User = {
   authentication_lvl: 'verified' | 'unverified' | 'admin';
   createdAt: string;
   updatedAt: string;
+  num_cats: string | null;
+  num_dogs: string | null;
+  profile_pic: string | null;
 };
 
 export type Service = {

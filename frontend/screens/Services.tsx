@@ -14,7 +14,9 @@ import {
   ServiceStackParamList,
   ServiceStackScreenProps,
   Service,
+  User,
 } from '@/types';
+import { useState } from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { RefreshControl, ScrollView } from 'react-native';
 import CreateServiceModalDescription from './CreateServiceModalDescription';
@@ -28,13 +30,20 @@ import { getVerifiedServices } from '@/services/services';
 function ServicesIndexScreen({
   navigation,
 }: ServiceStackScreenProps<'ServiceIndexScreen'>) {
-  const [isLoading, setIsLoading] = React.useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   const token = useAppSelector((state) => state.userCredential.userToken);
   const toast = useToast();
-  const [services, setServices] = React.useState<Service[]>([]);
+  const [services, setServices] = useState<Service[]>([]);
+  const [filter, setFilter] = useState<'All' | 'My'>('All');
+  const [filteredServices, setFilteredServices] = useState<Service[]>([]);
+  const [thisUser, setThisUser] = useState<User>();
 
   const updateServices = async () => {
     setIsLoading(true);
+
+    whoAmI(token).then((res) => {
+      setThisUser(res.data);
+    });
 
     const verifiedServices = await getVerifiedServices();
     setServices(verifiedServices);
@@ -46,6 +55,17 @@ function ServicesIndexScreen({
     updateServices();
   }, []);
 
+  const setStatusFilter = (status: 'All' | 'My') => {
+    if (status === 'My') {
+      setFilteredServices([
+        ...services.filter((s) => s.user_id === thisUser?._id),
+      ]);
+    } else {
+      setFilteredServices(services);
+    }
+    setFilter(status);
+  };
+
   const displayDetail = async (service: Service) => {
     navigation.navigate('ServiceDetailModal', {
       service: service,
@@ -55,7 +75,7 @@ function ServicesIndexScreen({
 
   const DisplayServices = () => (
     <View flex={1} alignItems="center" width={'100%'}>
-      {services.map((service, index) => {
+      {filteredServices.map((service, index) => {
         return (
           <Pressable
             key={index}
@@ -174,10 +194,26 @@ function ServicesIndexScreen({
       >
         Create
       </Button>
-      <Button size="lg" key="ServicesButton" justifyContent="center">
+      <Button
+        size="lg"
+        key="AllServicesButton"
+        justifyContent="center"
+        variant={filter === 'All' ? 'subtle' : 'solid'}
+        onPress={() => {
+          setStatusFilter('All');
+        }}
+      >
         All Services
       </Button>
-      <Button size="lg" key="MyServicesButton" justifyContent="center">
+      <Button
+        size="lg"
+        key="MyServicesButton"
+        justifyContent="center"
+        variant={filter === 'My' ? 'subtle' : 'solid'}
+        onPress={() => {
+          setStatusFilter('My');
+        }}
+      >
         My Services
       </Button>
     </HStack>
@@ -194,10 +230,8 @@ function ServicesIndexScreen({
       }
       stickyHeaderIndices={[0]}
     >
-      <View flex={1} alignItems="center">
-        <ServiceButtons />
-        <DisplayServices />
-      </View>
+      <ServiceButtons />
+      <DisplayServices />
     </ScrollView>
   );
 }
