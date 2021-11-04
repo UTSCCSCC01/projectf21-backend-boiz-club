@@ -50,7 +50,7 @@ export default function ServiceDetailModal({
 
   const modifyService = () => {
     console.log('Modify Service');
-    navigation.navigate('ModifyServiceModalDescription', { service: service });
+    navigation.navigate('ModifyServiceModal', { service: service });
   };
 
   return (

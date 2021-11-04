@@ -21,13 +21,12 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { RefreshControl, ScrollView } from 'react-native';
 import CreateServiceModalDescription from './CreateServiceModalDescription';
 import CreateServiceModalContact from './CreateServiceModalContact';
+import ModifyServiceModal from './ModifyServiceModal';
 import ServiceDetailModal from './ServiceDetailModal';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { useAppSelector } from '@/hooks/react-redux';
 import { whoAmI } from '@/services/account';
 import { getVerifiedServices } from '@/services/services';
-import ModifyServiceModalDescription from './ModifyServiceModalDescription';
-import ModifyServiceModalContact from './ModifyServiceModalContact';
 
 function ServicesIndexScreen({
   navigation,
@@ -269,17 +268,12 @@ export default function Services() {
         <ServiceStack.Screen
           name="ServiceDetailModal"
           component={ServiceDetailModal}
-          options={{ headerShown: false }}
+          options={{ headerShown: false, presentation: 'modal' }}
         />
         <ServiceStack.Screen
-          name="ModifyServiceModalDescription"
-          component={ModifyServiceModalDescription}
-          options={{ headerShown: false }}
-        />
-        <ServiceStack.Screen
-          name="ModifyServiceModalContact"
-          component={ModifyServiceModalContact}
-          options={{ headerShown: false }}
+          name="ModifyServiceModal"
+          component={ModifyServiceModal}
+          options={{ headerShown: false, presentation: 'modal' }}
         />
       </ServiceStack.Group>
     </ServiceStack.Navigator>

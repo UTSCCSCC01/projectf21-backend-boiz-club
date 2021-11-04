@@ -8,27 +8,31 @@ import {
   Heading,
   Slider,
   HStack,
+  useToast,
 } from 'native-base';
 import { ServiceStackScreenProps } from '@/types';
 
-export default function ModifyServiceModalDesciption({
+export default function ModifyServiceModal({
   navigation,
   route,
-}: ServiceStackScreenProps<'ModifyServiceModalDescription'>) {
+}: ServiceStackScreenProps<'ModifyServiceModal'>) {
+  const toast = useToast();
   const { service } = route.params;
-  const [sliderMoney, setSliderMoney] = useState(20);
+  const [sliderMoney, setSliderMoney] = useState(service.service_price);
   const maxMoney = 100;
   const minMoney = 0;
 
   interface serviceDescription {
     name: string;
     description: string;
+    contactNumber: string;
     price: number;
   }
 
   const [serviceData, setServiceData] = useState<serviceDescription>({
     name: service.service_name ? service.service_name : '',
     description: service.service_description ? service.service_description : '',
+    contactNumber: service.contact_number ? service.contact_number : '',
     price: service.service_price ? service.service_price : 0,
   });
 
@@ -46,6 +50,13 @@ export default function ModifyServiceModalDesciption({
     });
   };
 
+  const handleContactNumberChange = (input: string) => {
+    setServiceData({
+      ...serviceData,
+      contactNumber: input,
+    });
+  };
+
   const handlePriceChange = (input: number) => {
     setServiceData({
       ...serviceData,
@@ -56,14 +67,20 @@ export default function ModifyServiceModalDesciption({
   const [inputError, setInputError] = useState({
     nameError: false,
     descriptionError: false,
+    contactNumberError: false,
   });
 
-  const validateInput = (name: string, description: string) => {
+  const validateInput = (
+    name: string,
+    description: string,
+    contactNumber: string
+  ) => {
     // Check whether service name is entered.
     if (name == null || name.length === 0) {
       setInputError({
         nameError: true,
         descriptionError: false,
+        contactNumberError: false,
       });
     }
 
@@ -72,32 +89,74 @@ export default function ModifyServiceModalDesciption({
       setInputError({
         nameError: false,
         descriptionError: true,
+        contactNumberError: false,
+      });
+    }
+
+    // Check whether service contact number is entered.
+    else if (contactNumber == null || contactNumber.length === 0) {
+      setInputError({
+        nameError: false,
+        descriptionError: false,
+        contactNumberError: true,
       });
     } else {
       setInputError({
         nameError: false,
         descriptionError: false,
+        contactNumberError: false,
       });
       return true;
     }
     return false;
   };
 
-  const proceedContact = async (
+  const modifyServiceHandle = async (
     name: string,
     description: string,
-    price: number
+    price: number,
+    contactNumber: string
   ) => {
-    if (!validateInput(name, description)) {
+    if (!validateInput(name, description, contactNumber)) {
       return;
     }
-    navigation.navigate('ModifyServiceModalContact', {
-      serviceName: name,
-      serviceDescription: description,
-      servicePrice: String(price),
-      service: service,
-    });
-    return;
+
+    console.log('Modification');
+    console.log(name);
+    console.log(description);
+    console.log(price);
+    console.log(contactNumber);
+
+    // const serviceModification = await modifyService(
+    //   name,
+    //   description,
+    //   String(price),
+    //   contactNumber,
+    //   token
+    // ).catch((err) => {
+    //   let feedback = err.response.status;
+
+    //   if (feedback === 400 || feedback === 500) {
+    //     toast.show({
+    //       status: 'error',
+    //       title: 'Error occured, please try again later.',
+    //       placement: 'top',
+    //     });
+    //   }
+
+    //   return null;
+    // });
+
+    // if (serviceModification != null) {
+    //   toast.show({
+    //     status: 'success',
+    //     title: 'Service modification request has been sent.',
+    //     placement: 'top',
+    //   });
+    //   navigation.navigate('ServiceIndexScreen');
+    // }
+
+    // return;
   };
 
   return (
@@ -114,7 +173,7 @@ export default function ModifyServiceModalDesciption({
           <Input
             size="lg"
             placeholder="Service Name"
-            value={service.service_name ? service.service_name : ''}
+            value={serviceData.name ? serviceData.name : ''}
             onChangeText={(text) => handleNameChange(text)}
           />
           <FormControl.ErrorMessage
@@ -128,15 +187,28 @@ export default function ModifyServiceModalDesciption({
           <Input
             size="lg"
             placeholder="Description"
-            value={
-              service.service_description ? service.service_description : ''
-            }
+            value={serviceData.description ? serviceData.description : ''}
             onChangeText={(text) => handleDescriptionChange(text)}
           />
           <FormControl.ErrorMessage
             _text={{ fontSize: 'sm', color: 'error.500', fontWeight: 400 }}
           >
             Please enter description.
+          </FormControl.ErrorMessage>
+        </FormControl>
+
+        <FormControl isInvalid={inputError.contactNumberError}>
+          <Input
+            size="lg"
+            value={serviceData.contactNumber ? serviceData.contactNumber : ''}
+            keyboardType="phone-pad"
+            placeholder="Contact Number"
+            onChangeText={(text) => handleContactNumberChange(text)}
+          />
+          <FormControl.ErrorMessage
+            _text={{ fontSize: 'sm', color: 'error.500', fontWeight: 400 }}
+          >
+            Please enter a contact number.
           </FormControl.ErrorMessage>
         </FormControl>
 
@@ -165,7 +237,9 @@ export default function ModifyServiceModalDesciption({
 
           <Box w="100%">
             <Slider
-              defaultValue={service.service_price ? service.service_price : 20}
+              defaultValue={
+                service.service_price ? Math.floor(service.service_price) : 20
+              }
               minValue={minMoney}
               maxValue={maxMoney}
               accessibilityLabel="Price"
@@ -189,23 +263,26 @@ export default function ModifyServiceModalDesciption({
           size="lg"
           key="proceedContanctButton"
           width="100%"
-          onPress={() =>
-            proceedContact(
+          onPress={() => {
+            modifyServiceHandle(
               serviceData.name,
               serviceData.description,
-              serviceData.price
-            )
-          }
+              serviceData.price,
+              serviceData.contactNumber
+            );
+          }}
           justifyContent="center"
         >
-          Continue
+          Modify
         </Button>
 
         <Button
           size="lg"
           key="cancelModifyButton"
           width="100%"
-          onPress={() => navigation.navigate('ServiceIndexScreen')}
+          onPress={() => {
+            navigation.goBack();
+          }}
           justifyContent="center"
         >
           Cancel

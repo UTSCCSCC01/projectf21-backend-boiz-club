@@ -61,13 +61,7 @@ export type ServiceStackParamList = {
     servicePrice: string;
   };
   ViewServiceModal: undefined;
-  ModifyServiceModalDescription: {
-    service: Service;
-  };
-  ModifyServiceModalContact: {
-    serviceName: string;
-    serviceDescription: string;
-    servicePrice: string;
+  ModifyServiceModal: {
     service: Service;
   };
 };
