@@ -96,7 +96,7 @@ function ServicesIndexScreen({
                           genericServiceImages[Math.floor(Math.random() * 3)]
                         }
                         size={'xl'}
-                        resizeMode="contain"
+                        resizeMode="cover"
                         alt={'Service picture'}
                       />
                     </VStack>
@@ -202,10 +202,8 @@ function ServicesIndexScreen({
       }
       stickyHeaderIndices={[0]}
     >
-      <View flex={1} alignItems="center">
-        <ServiceButtons />
-        <DisplayServices />
-      </View>
+      <ServiceButtons />
+      <DisplayServices />
     </ScrollView>
   );
 }
