@@ -135,7 +135,7 @@ module.exports = {
         {_id: serviceId},
         {service_name: name,
         service_description: description,
-        service_prce: price,
+        service_price: price,
         contact_number: phoneNumber},
       );
   },
