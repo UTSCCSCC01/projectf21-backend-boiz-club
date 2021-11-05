@@ -162,7 +162,7 @@ const getServiceDetails = (app) => {
 };
 
 const updateService=(app)=>{
-  app.put(pathPrefix +'/update',
+  app.put(pathPrefix,// +'/update',
       verifyToken,
       async (req, res, next)=>{
         try {
