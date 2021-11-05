@@ -5,9 +5,10 @@ import { Map } from '../components';
 import { FontAwesome } from '@expo/vector-icons';
 
 export default function ServiceDetailModal({
+  navigation,
   route,
 }: ServiceStackScreenProps<'ServiceDetailModal'>) {
-  const { service } = route.params;
+  const { service, belongsToThisUser } = route.params;
 
   console.log('----------');
   //console.log(service._id);
@@ -45,6 +46,12 @@ export default function ServiceDetailModal({
       dateLine += ')';
     }
     return dateLine;
+  };
+
+  const modifyService = () => {
+    console.log('Modify Service');
+    navigation.pop();
+    navigation.push('ModifyServiceModal', { service: service });
   };
 
   return (
@@ -93,15 +100,26 @@ export default function ServiceDetailModal({
         </Heading>
         <Divider />
         <Heading fontSize="lg">Contact</Heading>
-        <HStack space="3" alignItems="center">
+        <HStack space="md" alignItems="center">
           <FontAwesome name="mobile-phone" size={24} color="black" />
           <Heading fontSize="sm" fontWeight="light">
             {service.contact_number}
           </Heading>
         </HStack>
         <Divider />
-        <Button size="lg" key="PurchaseServiceButton" justifyContent="center">
-          Purchase Service
+        <Button
+          size="lg"
+          key="MPButton"
+          justifyContent="center"
+          onPress={() => {
+            if (belongsToThisUser) {
+              modifyService();
+            } else {
+              console.log('Purchase Service');
+            }
+          }}
+        >
+          {belongsToThisUser ? 'Modify Service' : 'Purchase Service'}
         </Button>
       </VStack>
     </Box>

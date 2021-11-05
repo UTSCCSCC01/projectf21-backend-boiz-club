@@ -54,6 +54,7 @@ export type ServiceStackParamList = {
   ServiceIndexScreen: undefined;
   ServiceDetailModal: {
     service: Service;
+    belongsToThisUser: boolean;
   };
   CreateServiceModalDescription: undefined;
   CreateServiceModalContact: {
@@ -62,6 +63,9 @@ export type ServiceStackParamList = {
     servicePrice: string;
   };
   ViewServiceModal: undefined;
+  ModifyServiceModal: {
+    service: Service;
+  };
 };
 
 export type ServiceStackScreenProps<
