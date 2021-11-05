@@ -28,6 +28,12 @@ import { useAppSelector } from '@/hooks/react-redux';
 import { whoAmI } from '@/services/account';
 import { getVerifiedServices } from '@/services/services';
 
+const genericServiceImages = [
+  require('@/assets/images/generic_service_1.jpg'),
+  require('@/assets/images/generic_service_2.jpg'),
+  require('@/assets/images/generic_service_3.jpg'),
+];
+
 function ServicesIndexScreen({
   navigation,
 }: ServiceStackScreenProps<'ServiceIndexScreen'>) {
@@ -114,9 +120,11 @@ function ServicesIndexScreen({
                   <HStack space={3} justifyContent="space-between">
                     <VStack maxWidth="40%">
                       <Image
-                        backgroundColor="grey"
+                        source={
+                          genericServiceImages[Math.floor(Math.random() * 3)]
+                        }
                         size={'xl'}
-                        resizeMode="contain"
+                        resizeMode="cover"
                         alt={'Service picture'}
                       />
                     </VStack>

@@ -27,7 +27,9 @@ export type HomeStackScreenProps<Screen extends keyof HomeStackParamList> =
 
 export type AccountStackParamList = {
   AccountIndexScreen: undefined;
+  EditProfileScreen: undefined;
   NotificationScreen: undefined;
+  EditProfileScreen: undefined;
   VerificationApprovalModal: {
     user: User;
     request: AccountVerificationRequest;
@@ -109,11 +111,14 @@ export type User = {
   address: string | null;
   phone_number: string | null;
   authentication_lvl: 'verified' | 'unverified' | 'admin';
+  profile_pic: string;
+  num_dogs: number;
+  num_cats: number;
   createdAt: string;
   updatedAt: string;
-  num_cats: string | null;
-  num_dogs: string | null;
-  profile_pic: string | null;
+  profile_pic: string;
+  num_dogs: number;
+  num_cats: number;
 };
 
 export type Service = {
