@@ -124,4 +124,33 @@ module.exports = {
         skip(limit * skip).limit(limit).sort('_id');
   },
 
+  updateService: async (body) => {
+    const {serviceId: serviceId,
+      service_name: name,
+      service_description: description,
+      service_price: price,
+      contact_number: phoneNumber} = body;
+
+    const session = await mongoose.startSession();
+    session.startTransaction();
+    try {
+      // verify service
+      await Service.findOneAndUpdate(
+          {_id: serviceId},
+          {service_name: name},
+          {service_description: description},
+          {service_prce: price},
+          {contact_number: phoneNumber},
+      );
+
+      // send changes
+      await session.commitTransaction();
+    } catch (error) {
+      await session.abortTransaction();
+      throw error;
+    } finally {
+      await session.endSession();
+    }
+  },
+
 };

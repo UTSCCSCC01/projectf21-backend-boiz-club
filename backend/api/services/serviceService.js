@@ -66,4 +66,18 @@ module.exports = {
     return await serviceDal.getServiceFees();
   },
 
+  updateService: async (userId, body) =>{
+    const {serviceId: serviceId} = body;
+    const service = await serviceDal.getService(serviceId);
+
+    if (!service) {
+      throw ApiError.notFoundError('Service not found');
+    } else if (userId!=service.user_id) {
+      throw ApiError.badRequestError(
+          'Cannot modify service that doesnt belong to you');
+    }
+
+    await serviceDal.updateService(body);
+  },
+
 };
