@@ -38,6 +38,14 @@ const serviceSchema = new Schema({
     type: String,
     required: true,
   },
+  latitude: {
+    type: String,
+    required: true,
+  },
+  longitude: {
+    type: String,
+    required: true,
+  },
   verified: {
     type: Boolean,
     required: false,

@@ -26,7 +26,7 @@ function upload(file) {
 }
 /**
  * retrieve a file to from s3.
- * @param {file} file File to retrieve from aws s3.
+ * @param {key} key File to retrieve from aws s3.
  * @return {promise<data>} data ===null if retrieval failed
  */
 function getFile(key) {

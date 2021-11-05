@@ -7,7 +7,8 @@ const ServiceFee=require('../models/modelServiceFee');
 
 module.exports = {
 
-  createServiceAndVerificationRequest: async (serviceInfo, userId) => {
+  createServiceAndVerificationRequest:
+  async (serviceInfo, locationData, userId) => {
     const service = new Service(
         {
           user_id: userId,
@@ -19,6 +20,8 @@ module.exports = {
           city: serviceInfo.city,
           postal_code: serviceInfo.postal_code,
           address: serviceInfo.address,
+          latitude: locationData.latitude,
+          longitude: locationData.longitude,
         },
     );
     const serviceId = service._id;
@@ -71,14 +74,14 @@ module.exports = {
     await ServiceVerificationRequest.findOneAndRemove({service_id: serviceId});
     return await Service.findOneAndRemove({_id: serviceId});
   },
-  
-  updateCostomerFee: async(fee) =>{
+
+  updateCostomerFee: async (fee) =>{
     const session = await mongoose.startSession();
     session.startTransaction();
     try {
       // update costumer fee
       await ServiceFee.findOneAndUpdate(
-          {type: "customer"},
+          {type: 'customer'},
           {fee: fee},
       );
 
@@ -92,13 +95,13 @@ module.exports = {
     }
   },
 
-  updateProviderFee: async(fee) =>{
+  updateProviderFee: async (fee) =>{
     const session = await mongoose.startSession();
     session.startTransaction();
     try {
       // update costumer fee
       await ServiceFee.findOneAndUpdate(
-          {type: "provider"},
+          {type: 'provider'},
           {fee: fee},
       );
 
@@ -113,12 +116,28 @@ module.exports = {
   },
 
   getServiceFees: async () => {
-    return await ServiceFee.findOne({type: "provider"});
+    return await ServiceFee.findOne({type: 'provider'});
   },
 
   retrieveVerifiedServicesList: async (limit, skip) => {
     return await Service.find({verified: true}).
         skip(limit * skip).limit(limit).sort('_id');
+  },
+
+  updateService: async (body) => {
+    const {serviceId: serviceId,
+      service_name: name,
+      service_description: description,
+      service_price: price,
+      contact_number: phoneNumber} = body;
+      // verify service
+    return await Service.findOneAndUpdate(
+        {_id: serviceId},
+        {service_name: name,
+        service_description: description,
+        service_price: price,
+        contact_number: phoneNumber},
+      );
   },
 
 };

@@ -161,49 +161,68 @@ const getServiceDetails = (app) => {
   });
 };
 
-//update service endpoint
+const updateService=(app)=>{
+  app.put(pathPrefix,// +'/update',
+      verifyToken,
+      async (req, res, next)=>{
+        try {
+          const {user}=req;
+          const serviceId=req.body.serviceId;
+          const update =
+          await serviceService.updateService(user.user_id, req.body);
+          if (!update) {
+            throw ApiError.badRequestError('Update cannot be performed');
+          }
+
+          const updatedInfo = await serviceService.getService(serviceId);
+
+          res.status(200).json(updatedInfo);
+        } catch (error) {
+          next(error);
+        }
+      });
+};
+
+// update service endpoint
 const updateServiceFees=(app) =>{
-  app.put(pathPrefix +"/updateFees",
-    verifyToken,
-    async(req,res,next)=>{
-      const{user}=req;
-      const{fee}=req.body;
-      try{
-        await userService.assertAdmin(user.user_id);
-        // console.log(fee);
-        await serviceService.updateServiceFees(fee);
-        res.status(200).send({
+  app.put(pathPrefix +'/updateFees',
+      verifyToken,
+      async (req, res, next)=>{
+        const {user}=req;
+        const {fee}=req.body;
+        try {
+          await userService.assertAdmin(user.user_id);
+          // console.log(fee);
+          await serviceService.updateServiceFees(fee);
+          res.status(200).send({
             status: 200,
             message: 'Updated fees',
           });
-      }
-      catch(e){
-       next(e) 
-      }
-    });
+        } catch (e) {
+          next(e);
+        }
+      });
 };
 
-//get service endpoint
+// get service endpoint
 const getServiceFees=(app) =>{
-  app.get(pathPrefix +"/getFees",
-    verifyToken,
-    async(req,res,next)=>{
-      const{user}=req;
-      try{
-        await userService.assertAdmin(user.user_id);
-        feeObj = await serviceService.getServiceFees();
-        // console.log(feeObj.fee)
-        res.status(200).send({
-          status: 200,
-          fee: feeObj.fee.toString()
-        });
-      }
-      catch(e){
-       next(e) 
-      }
-    });
+  app.get(pathPrefix +'/getFees',
+      verifyToken,
+      async (req, res, next)=>{
+        const {user}=req;
+        try {
+          await userService.assertAdmin(user.user_id);
+          feeObj = await serviceService.getServiceFees();
+          // console.log(feeObj.fee)
+          res.status(200).send({
+            status: 200,
+            fee: feeObj.fee.toString(),
+          });
+        } catch (e) {
+          next(e);
+        }
+      });
 };
-
 
 
 module.exports = (app) => {
@@ -212,6 +231,7 @@ module.exports = (app) => {
   verifyService(app);
   getServicesList(app);
   getServiceFees(app);
+  updateService(app);
   getServiceDetails(app);
   updateServiceFees(app);
 };

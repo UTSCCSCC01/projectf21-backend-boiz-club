@@ -1,10 +1,11 @@
 import { useAppSelector } from '@/hooks/react-redux';
+import EditProfileScreen from '@/screens/EditProfileScreen';
 import NotificationScreen from '@/screens/NotificationScreen';
 import VerificationApprovalModal from '@/screens/VerificationApprovalModal';
 import VerificationUploadModal from '@/screens/VerificationUploadModal';
 import FeesAdministrationModal from '@/screens/FeesAdministrationModal';
 import ServiceApprovalModal from '@/screens/ServiceApprovalModal';
-import { whoAmI } from '@/services/account';
+import { getProfilePic, whoAmI } from '@/services/account';
 import { AccountStackParamList, AccountStackScreenProps, User } from '@/types';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -20,10 +21,12 @@ import {
   View,
 } from 'native-base';
 import * as React from 'react';
+import { useState } from 'react';
 import { RefreshControl } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { clearToken } from '@/redux/userCredential';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
 function AccountIndexScreen({
   navigation,
 }: AccountStackScreenProps<'AccountIndexScreen'>) {
@@ -31,10 +34,12 @@ function AccountIndexScreen({
   const token = useAppSelector((state) => state.userCredential.userToken);
   const [isLoading, setIsLoading] = React.useState(true);
   const [userInfo, setUserInfo] = React.useState<User | null>(null);
+  const [profilePic, setProfilePic] = useState('');
   const updateUserInfo = async () => {
     setIsLoading(true);
-    whoAmI(token).then((res) => {
+    whoAmI(token).then(async (res) => {
       setUserInfo(res.data);
+      setProfilePic(await getProfilePic(res.data));
       setIsLoading(false);
     });
   };
@@ -53,7 +58,13 @@ function AccountIndexScreen({
     <Center padding={5}>
       <Row>
         <Column>
-          <Avatar bg="lightBlue.400" size="xl" />
+          <Avatar
+            bg="lightBlue.400"
+            size="xl"
+            source={{
+              uri: profilePic,
+            }}
+          />
         </Column>
       </Row>
       <Row>
@@ -84,11 +95,14 @@ function AccountIndexScreen({
               size={20}
               style={{ padding: 10 }}
             />
-            &nbsp; Toronto, Canada
+            &nbsp;{' '}
+            {userInfo?.address != null ? userInfo.address : 'Toronto, Canada'}
           </Text>
           <Text fontSize="md">
-            3 <FontAwesome5 name="dog" size={24} color="blue" />
-            3 <FontAwesome5 name="cat" size={24} color="purple" />
+            {userInfo?.num_dogs != null ? userInfo.num_dogs : ' '}{' '}
+            <FontAwesome5 name="dog" size={24} color="#779ecb" />
+            {userInfo?.num_cats != null ? userInfo.num_cats : ' '}{' '}
+            <FontAwesome5 name="cat" size={24} color="#966fd6" />
           </Text>
         </Column>
       </Row>
@@ -98,15 +112,16 @@ function AccountIndexScreen({
     <View justifyContent="center" alignItems="center" marginBottom={5}>
       <Button
         size="lg"
-        key="personalInformationBtn"
+        key="editProfileBtn"
         width="70%"
         style={{ justifyContent: 'flex-start' }}
         marginBottom={5}
         startIcon={
-          <FontAwesome5 style={{ color: 'white' }} name="home" size={18} />
+          <FontAwesome5 style={{ color: 'white' }} name="user-edit" size={18} />
         }
+        onPress={() => navigation.navigate('EditProfileScreen')}
       >
-        Personal Information
+        Edit Profile
       </Button>
 
       <Button
@@ -241,6 +256,11 @@ export default function Account() {
       <AccountStack.Screen
         name="AccountIndexScreen"
         component={AccountIndexScreen}
+        options={{ headerShown: false }}
+      />
+      <AccountStack.Screen
+        name="EditProfileScreen"
+        component={EditProfileScreen}
         options={{ headerShown: false }}
       />
       <AccountStack.Screen

@@ -27,7 +27,9 @@ export type HomeStackScreenProps<Screen extends keyof HomeStackParamList> =
 
 export type AccountStackParamList = {
   AccountIndexScreen: undefined;
+  EditProfileScreen: undefined;
   NotificationScreen: undefined;
+  EditProfileScreen: undefined;
   VerificationApprovalModal: {
     user: User;
     request: AccountVerificationRequest;
@@ -50,6 +52,10 @@ export type AccountStackScreenProps<
 
 export type ServiceStackParamList = {
   ServiceIndexScreen: undefined;
+  ServiceDetailModal: {
+    service: Service;
+    belongsToThisUser: boolean;
+  };
   CreateServiceModalDescription: undefined;
   CreateServiceModalContact: {
     serviceName: string;
@@ -57,6 +63,9 @@ export type ServiceStackParamList = {
     servicePrice: string;
   };
   ViewServiceModal: undefined;
+  ModifyServiceModal: {
+    service: Service;
+  };
 };
 
 export type ServiceStackScreenProps<
@@ -102,8 +111,14 @@ export type User = {
   address: string | null;
   phone_number: string | null;
   authentication_lvl: 'verified' | 'unverified' | 'admin';
+  profile_pic: string;
+  num_dogs: number;
+  num_cats: number;
   createdAt: string;
   updatedAt: string;
+  profile_pic: string;
+  num_dogs: number;
+  num_cats: number;
 };
 
 export type Service = {
@@ -120,6 +135,8 @@ export type Service = {
   verified: boolean;
   createdAt?: string;
   updatedAt?: string;
+  latitude: string | undefined;
+  longitude: string | undefined;
 };
 
 export type AccountVerificationRequest = {
