@@ -137,10 +137,10 @@ module.exports = {
       // verify service
       await Service.findOneAndUpdate(
           {_id: serviceId},
-          {service_name: name},
-          {service_description: description},
-          {service_prce: price},
-          {contact_number: phoneNumber},
+          {service_name: name,
+          service_description: description,
+          service_prce: price,
+          contact_number: phoneNumber},
       );
 
       // send changes
