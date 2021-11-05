@@ -1,22 +1,22 @@
 import * as React from 'react';
+import { useEffect, useState } from 'react';
 import {
+  Box,
   Button,
   HStack,
+  Image,
+  Pressable,
   Text,
   useToast,
-  Pressable,
-  Box,
-  VStack,
-  Image,
   View,
+  VStack,
 } from 'native-base';
 import {
+  Service,
   ServiceStackParamList,
   ServiceStackScreenProps,
-  Service,
   User,
 } from '@/types';
-import { useState, useEffect } from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { RefreshControl, ScrollView } from 'react-native';
 import CreateServiceModalDescription from './CreateServiceModalDescription';
@@ -41,31 +41,17 @@ function ServicesIndexScreen({
   const token = useAppSelector((state) => state.userCredential.userToken);
   const toast = useToast();
   const [services, setServices] = useState<Service[]>([]);
-  const [filter, setFilter] = useState<'All' | 'My'>();
-  const [filteredServices, setFilteredServices] = useState<Service[]>([]);
+  const [showAllServices, setShowAllServices] = useState<boolean>(true);
   const [thisUser, setThisUser] = useState<User>();
-
-  const setStatusFilter = (status: 'All' | 'My') => {
-    console.log('setting filter');
-    if (status === 'My') {
-      setFilteredServices([
-        ...services.filter((s) => s.user_id === thisUser?._id),
-      ]);
-    } else {
-      setFilteredServices(services);
-    }
-    setFilter(status);
-  };
 
   const updateServices = async () => {
     setIsLoading(true);
-
     await whoAmI(token).then((res) => {
       setThisUser(res.data);
     });
 
     const verifiedServices = await getVerifiedServices();
-    setServices(verifiedServices);
+    setServices([...verifiedServices]);
 
     setIsLoading(false);
   };
@@ -87,89 +73,91 @@ function ServicesIndexScreen({
 
   const DisplayServices = () => (
     <View flex={1} alignItems="center" width={'100%'}>
-      {filteredServices.map((service, index) => {
-        return (
-          <Pressable
-            key={index}
-            width={'100%'}
-            onPress={() =>
-              displayDetail(service, thisUser?._id === service.user_id)
-            }
-          >
-            {({ isPressed }) => {
-              return (
-                <Box
-                  p="5"
-                  rounded="8"
-                  style={{
-                    transform: [
-                      {
-                        scale: isPressed ? 0.96 : 1,
-                      },
-                    ],
-                  }}
-                  borderBottomWidth="1"
-                  _dark={{
-                    borderColor: 'gray.600',
-                  }}
-                  borderColor="coolGray.200"
-                  pl="4"
-                  pr="5"
-                  py="2"
-                >
-                  <HStack space={3} justifyContent="space-between">
-                    <VStack maxWidth="40%">
-                      <Image
-                        source={
-                          genericServiceImages[Math.floor(Math.random() * 3)]
-                        }
-                        size={'xl'}
-                        resizeMode="cover"
-                        alt={'Service picture'}
-                      />
-                    </VStack>
-                    <VStack maxWidth="60%" flex={1}>
-                      <HStack space={3} justifyContent="space-between">
-                        <Text
-                          _dark={{
-                            color: 'warmGray.50',
-                          }}
-                          color="coolGray.800"
-                          bold
-                        >
-                          {service.service_name}
-                        </Text>
-                        <Text
-                          noOfLines={3}
-                          fontSize="xs"
-                          _dark={{
-                            color: 'warmGray.50',
-                          }}
-                          color="coolGray.800"
-                          alignSelf="flex-start"
-                        >
-                          {'$'}
-                          {service.service_price}
-                        </Text>
-                      </HStack>
-                      <HStack space={3} justifyContent="space-between">
-                        <Text
-                          color="coolGray.600"
-                          _dark={{
-                            color: 'warmGray.200',
-                          }}
-                        >
-                          {service.service_description}
-                        </Text>
-                      </HStack>
-                    </VStack>
-                  </HStack>
-                </Box>
-              );
-            }}
-          </Pressable>
-        );
-      })}
+      {services
+        .filter((x) => (showAllServices ? true : x.user_id === thisUser?._id))
+        .map((service, index) => {
+          return (
+            <Pressable
+              key={index}
+              width={'100%'}
+              onPress={() =>
+                displayDetail(service, thisUser?._id === service.user_id)
+              }
+            >
+              {({ isPressed }) => {
+                return (
+                  <Box
+                    p="5"
+                    rounded="8"
+                    style={{
+                      transform: [
+                        {
+                          scale: isPressed ? 0.96 : 1,
+                        },
+                      ],
+                    }}
+                    borderBottomWidth="1"
+                    _dark={{
+                      borderColor: 'gray.600',
+                    }}
+                    borderColor="coolGray.200"
+                    pl="4"
+                    pr="5"
+                    py="2"
+                  >
+                    <HStack space={3} justifyContent="space-between">
+                      <VStack maxWidth="40%">
+                        <Image
+                          source={
+                            genericServiceImages[Math.floor(Math.random() * 3)]
+                          }
+                          size={'xl'}
+                          resizeMode="cover"
+                          alt={'Service picture'}
+                        />
+                      </VStack>
+                      <VStack maxWidth="60%" flex={1}>
+                        <HStack space={3} justifyContent="space-between">
+                          <Text
+                            _dark={{
+                              color: 'warmGray.50',
+                            }}
+                            color="coolGray.800"
+                            bold
+                          >
+                            {service.service_name}
+                          </Text>
+                          <Text
+                            noOfLines={3}
+                            fontSize="xs"
+                            _dark={{
+                              color: 'warmGray.50',
+                            }}
+                            color="coolGray.800"
+                            alignSelf="flex-start"
+                          >
+                            {'$'}
+                            {service.service_price}
+                          </Text>
+                        </HStack>
+                        <HStack space={3} justifyContent="space-between">
+                          <Text
+                            color="coolGray.600"
+                            _dark={{
+                              color: 'warmGray.200',
+                            }}
+                          >
+                            {service.service_description}
+                          </Text>
+                        </HStack>
+                      </VStack>
+                    </HStack>
+                  </Box>
+                );
+              }}
+            </Pressable>
+          );
+        })}
     </View>
   );
 
@@ -214,9 +202,9 @@ function ServicesIndexScreen({
         size="lg"
         key="AllServicesButton"
         justifyContent="center"
-        variant={filter === 'All' ? 'subtle' : 'solid'}
+        variant={showAllServices ? 'subtle' : 'solid'}
         onPress={() => {
-          setStatusFilter('All');
+          setShowAllServices(true);
         }}
       >
         All Services
@@ -225,9 +213,9 @@ function ServicesIndexScreen({
         size="lg"
         key="MyServicesButton"
         justifyContent="center"
-        variant={filter === 'My' ? 'subtle' : 'solid'}
+        variant={!showAllServices ? 'subtle' : 'solid'}
         onPress={() => {
-          setStatusFilter('My');
+          setShowAllServices(false);
         }}
       >
         My Services
@@ -237,12 +225,7 @@ function ServicesIndexScreen({
   return (
     <ScrollView
       refreshControl={
-        <RefreshControl
-          refreshing={isLoading}
-          onRefresh={() => {
-            updateServices();
-          }}
-        />
+        <RefreshControl refreshing={isLoading} onRefresh={updateServices} />
       }
       stickyHeaderIndices={[0]}
     >
