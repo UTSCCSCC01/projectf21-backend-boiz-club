@@ -21,7 +21,9 @@ export default function ModifyServiceModal({
   const toast = useToast();
   const token = useAppSelector((state) => state.userCredential.userToken);
   const { service } = route.params;
-  const [sliderMoney, setSliderMoney] = useState(service.service_price);
+  const [sliderMoney, setSliderMoney] = useState(
+    Math.floor(service.service_price ? service.service_price : 0)
+  );
   const maxMoney = 100;
   const minMoney = 0;
 
@@ -130,6 +132,7 @@ export default function ModifyServiceModal({
     console.log(description);
     console.log(String(price));
     console.log(contactNumber);
+    console.log(token);
 
     const serviceModification = await modifyService(
       serviceId,
@@ -176,6 +179,7 @@ export default function ModifyServiceModal({
         </Heading>
 
         <FormControl isInvalid={inputError.nameError}>
+          <FormControl.Label>Name</FormControl.Label>
           <Input
             size="lg"
             placeholder="Service Name"
@@ -190,6 +194,7 @@ export default function ModifyServiceModal({
         </FormControl>
 
         <FormControl isInvalid={inputError.descriptionError}>
+          <FormControl.Label>Description</FormControl.Label>
           <Input
             size="lg"
             placeholder="Description"
@@ -204,6 +209,7 @@ export default function ModifyServiceModal({
         </FormControl>
 
         <FormControl isInvalid={inputError.contactNumberError}>
+          <FormControl.Label>Contact Number</FormControl.Label>
           <Input
             size="lg"
             value={serviceData.contactNumber ? serviceData.contactNumber : ''}
@@ -219,7 +225,7 @@ export default function ModifyServiceModal({
         </FormControl>
 
         <Box w="100%">
-          <Heading fontSize="xs" fontWeight="medium">
+          <Heading fontSize="sm" fontWeight="semibold">
             {' '}
             Service Price ($CAD/day){' '}
           </Heading>
@@ -243,9 +249,7 @@ export default function ModifyServiceModal({
 
           <Box w="100%">
             <Slider
-              defaultValue={
-                service.service_price ? Math.floor(service.service_price) : 20
-              }
+              defaultValue={sliderMoney ? sliderMoney : 0}
               minValue={minMoney}
               maxValue={maxMoney}
               accessibilityLabel="Price"
