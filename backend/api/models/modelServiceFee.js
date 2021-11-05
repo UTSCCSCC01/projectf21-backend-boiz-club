@@ -6,10 +6,10 @@ const FeeSchema = new Schema({
     type: String,
     required: true,
   },
-  fee:{
+  fee: {
     type: mongoose.Decimal128,
-    required: true
-  }
+    required: true,
+  },
 });
 
 const Fee = mongoose.model('Fee', FeeSchema);

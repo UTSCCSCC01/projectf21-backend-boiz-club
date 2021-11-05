@@ -124,4 +124,20 @@ module.exports = {
         skip(limit * skip).limit(limit).sort('_id');
   },
 
+  updateService: async (body) => {
+    const {serviceId: serviceId,
+      service_name: name,
+      service_description: description,
+      service_price: price,
+      contact_number: phoneNumber} = body;
+      // verify service
+    return await Service.findOneAndUpdate(
+        {_id: serviceId},
+        {service_name: name,
+        service_description: description,
+        service_price: price,
+        contact_number: phoneNumber},
+      );
+  },
+
 };
