@@ -15,6 +15,7 @@ import {
   Spinner,
 } from 'native-base';
 import React, { useEffect, useState } from 'react';
+import { getProfilePic } from '@/services/account';
 
 const normalizedKeys = {
   username: 'Username',
@@ -29,12 +30,15 @@ export default function VerificationApprovalModal({
 }: AccountStackScreenProps<'VerificationApprovalModal'>) {
   const { user, request } = route.params;
   const token = useAppSelector((state) => state.userCredential.userToken);
-
+  const [profilePic, setProfilePic] = useState('');
   const toast = useToast();
   const [isPageLoading, setIsPageLoading] = useState(true);
   const [isProcessing, setIsProcessing] = useState(false);
   const [IDbase64, setIDbase64] = useState('');
   useEffect(() => {
+    getProfilePic(user).then((profilePic) => {
+      setProfilePic(profilePic);
+    });
     getIDPhotoData(request.img_key).then((resp) => {
       setIDbase64(`data:image/png;base64,${resp.data.image}`);
       setIsPageLoading(false);
@@ -76,9 +80,9 @@ export default function VerificationApprovalModal({
           <Center flex={1}>
             <Avatar
               size="150px"
-              // source={{
-              //   uri: '',
-              // }}
+              source={{
+                uri: profilePic,
+              }}
             />
             {Object.keys(normalizedKeys).map((key) => (
               <Center key={key}>
