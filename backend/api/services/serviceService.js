@@ -77,7 +77,8 @@ module.exports = {
           'Cannot modify service that doesnt belong to you');
     }
 
-    await serviceDal.updateService(body);
+    return await serviceDal.updateService(body);
+
   },
 
 };
