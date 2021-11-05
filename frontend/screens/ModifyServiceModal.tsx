@@ -115,22 +115,28 @@ export default function ModifyServiceModal({
   };
 
   const modifyServiceHandle = async (
+    serviceId: string,
     name: string,
     description: string,
     price: number,
-    contactNumber: string,
-    serviceId: string
+    contactNumber: string
   ) => {
     if (!validateInput(name, description, contactNumber)) {
       return;
     }
 
+    console.log(serviceId);
+    console.log(name);
+    console.log(description);
+    console.log(String(price));
+    console.log(contactNumber);
+
     const serviceModification = await modifyService(
+      serviceId,
       name,
       description,
       String(price),
       contactNumber,
-      serviceId,
       token
     ).catch((err) => {
       let feedback = err.response.status;
@@ -174,7 +180,7 @@ export default function ModifyServiceModal({
             size="lg"
             placeholder="Service Name"
             value={serviceData.name ? serviceData.name : ''}
-            onChangeText={(text) => handleNameChange(text)}
+            onChangeText={(text: string) => handleNameChange(text)}
           />
           <FormControl.ErrorMessage
             _text={{ fontSize: 'sm', color: 'error.500', fontWeight: 400 }}
@@ -188,7 +194,7 @@ export default function ModifyServiceModal({
             size="lg"
             placeholder="Description"
             value={serviceData.description ? serviceData.description : ''}
-            onChangeText={(text) => handleDescriptionChange(text)}
+            onChangeText={(text: string) => handleDescriptionChange(text)}
           />
           <FormControl.ErrorMessage
             _text={{ fontSize: 'sm', color: 'error.500', fontWeight: 400 }}
@@ -203,7 +209,7 @@ export default function ModifyServiceModal({
             value={serviceData.contactNumber ? serviceData.contactNumber : ''}
             keyboardType="phone-pad"
             placeholder="Contact Number"
-            onChangeText={(text) => handleContactNumberChange(text)}
+            onChangeText={(text: string) => handleContactNumberChange(text)}
           />
           <FormControl.ErrorMessage
             _text={{ fontSize: 'sm', color: 'error.500', fontWeight: 400 }}
@@ -265,11 +271,11 @@ export default function ModifyServiceModal({
           width="100%"
           onPress={() => {
             modifyServiceHandle(
+              service._id,
               serviceData.name,
               serviceData.description,
               serviceData.price,
-              serviceData.contactNumber,
-              service._id
+              serviceData.contactNumber
             );
           }}
           justifyContent="center"

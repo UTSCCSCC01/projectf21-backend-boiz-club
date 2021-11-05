@@ -1,30 +1,30 @@
 import axios from 'axios';
 
 /**
- * type modifyService = (service_name: string,
+ * type modifyService = (service_id: string,
+ *                       service_name: string,
  *                       service_description: string,
  *                       service_price: string,
  *                       contact_number: string,
- *                       service_id: string,
  *                       token: any
  */
 
 async function modifyService(
+  service_id: string,
   service_name: string,
   service_description: string,
   service_price: string,
   contact_number: string,
-  service_id: string,
   token: any
 ) {
   const res = await axios
-    .post(
-      'https://pawsup-dev-oznda.ondigitalocean.app/api/v1/services/request-verification',
+    .put(
+      'https://pawsup-dev-oznda.ondigitalocean.app/api/v1/services/update',
       {
+        service_id: service_id,
         service_name: service_name,
         service_description: service_description,
         service_price: service_price,
-        service_id: service_id,
         contact_number: contact_number,
       },
       {
