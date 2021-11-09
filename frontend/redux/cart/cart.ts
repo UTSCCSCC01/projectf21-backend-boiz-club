@@ -3,14 +3,19 @@ import { Service } from '../../types';
 
 // Add Product, when Product is defined in types.
 interface CartState {
-  items: {
+  services: {
     id: string;
-    item: Service | number;
+    data: Service;
   }[];
+  // products: {
+  //   id: string;
+  //   product: Product;
+  // }[];
 }
 
 const initialState: CartState = {
-  items: [],
+  services: [],
+  //products: [],
 };
 
 export const cartSlice = createSlice({
@@ -18,11 +23,24 @@ export const cartSlice = createSlice({
   initialState,
   reducers: {
     // Add Product to types, when Product is defined in types.
-    addToCart: (state, action: PayloadAction<Service>) => {
-      state.items.push({ id: action.payload._id, item: action.payload });
+    addToCart: (
+      state,
+      action: PayloadAction<{ isService: boolean; item: Service }>
+    ) => {
+      if (action.payload.isService) {
+        state.services.push({
+          id: action.payload.item._id,
+          data: action.payload.item,
+        });
+      }
     },
-    removeFromCart: (state, action: PayloadAction<string>) => {
-      state.items.filter((item) => item.id !== action.payload);
+    removeFromCart: (
+      state,
+      action: PayloadAction<{ isService: boolean; id: string }>
+    ) => {
+      if (action.payload.isService) {
+        state.services.filter((item) => item.id !== action.payload.id);
+      }
     },
   },
 });

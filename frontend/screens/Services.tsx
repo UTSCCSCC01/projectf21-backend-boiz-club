@@ -67,6 +67,7 @@ function ServicesIndexScreen({
     navigation.navigate('ServiceDetailModal', {
       service: service,
       belongsToThisUser: belongsToThisUser,
+      openedFromCart: false,
     });
     return;
   };

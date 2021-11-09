@@ -1,31 +1,43 @@
 import * as React from 'react';
-import { Box, Heading, VStack, Divider, Button, HStack } from 'native-base';
+import {
+  Box,
+  Heading,
+  VStack,
+  Divider,
+  Button,
+  HStack,
+  useToast,
+} from 'native-base';
 import { ServiceStackScreenProps } from '@/types';
 import { Map } from '../components';
 import { FontAwesome } from '@expo/vector-icons';
+import { useDispatch } from 'react-redux';
+import { addToCart, removeFromCart } from '@/redux/cart';
 
 export default function ServiceDetailModal({
   navigation,
   route,
 }: ServiceStackScreenProps<'ServiceDetailModal'>) {
-  const { service, belongsToThisUser } = route.params;
+  const dispatch = useDispatch();
+  const toast = useToast();
+  const { service, belongsToThisUser, openedFromCart } = route.params;
 
-  console.log('----------');
-  //console.log(service._id);
-  //console.log(service.user_id);
-  //console.log(service.verified);
-  console.log(service.createdAt);
-  console.log(service.updatedAt);
-  console.log(service.service_name);
-  console.log(service.service_description);
-  console.log(service.service_price);
-  console.log(service.contact_number);
-  console.log(service.country);
-  console.log(service.city);
-  console.log(service.postal_code);
-  console.log(service.address);
-  console.log(service.latitude);
-  console.log(service.longitude);
+  // console.log('----------');
+  // //console.log(service._id);
+  // //console.log(service.user_id);
+  // //console.log(service.verified);
+  // console.log(service.createdAt);
+  // console.log(service.updatedAt);
+  // console.log(service.service_name);
+  // console.log(service.service_description);
+  // console.log(service.service_price);
+  // console.log(service.contact_number);
+  // console.log(service.country);
+  // console.log(service.city);
+  // console.log(service.postal_code);
+  // console.log(service.address);
+  // console.log(service.latitude);
+  // console.log(service.longitude);
 
   const extractDate = (
     creationDate: string | undefined,
@@ -52,6 +64,28 @@ export default function ServiceDetailModal({
     console.log('Modify Service');
     navigation.pop();
     navigation.push('ModifyServiceModal', { service: service });
+  };
+
+  const addServiceToCart = () => {
+    console.log('Added Service to Cart');
+    dispatch(addToCart({ isService: true, item: service }));
+    navigation.pop();
+    toast.show({
+      status: 'success',
+      title: 'Added Service to the Cart',
+      placement: 'top',
+    });
+  };
+
+  const removeServiceFromCart = () => {
+    console.log('Removed Service from Cart');
+    dispatch(removeFromCart({ isService: true, id: service._id }));
+    navigation.pop();
+    toast.show({
+      status: 'success',
+      title: 'Removed Service from the Cart',
+      placement: 'top',
+    });
   };
 
   return (
@@ -112,14 +146,20 @@ export default function ServiceDetailModal({
           key="MPButton"
           justifyContent="center"
           onPress={() => {
-            if (belongsToThisUser) {
+            if (openedFromCart) {
+              removeServiceFromCart();
+            } else if (belongsToThisUser) {
               modifyService();
             } else {
-              console.log('Purchase Service');
+              addServiceToCart();
             }
           }}
         >
-          {belongsToThisUser ? 'Modify Service' : 'Purchase Service'}
+          {openedFromCart
+            ? 'Remove from Cart'
+            : belongsToThisUser
+            ? 'Modify Service'
+            : 'Add to Cart'}
         </Button>
       </VStack>
     </Box>

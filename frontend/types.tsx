@@ -55,6 +55,7 @@ export type ServiceStackParamList = {
   ServiceDetailModal: {
     service: Service;
     belongsToThisUser: boolean;
+    openedFromCart: boolean;
   };
   CreateServiceModalDescription: undefined;
   CreateServiceModalContact: {
@@ -74,6 +75,22 @@ export type ServiceStackScreenProps<
   NativeStackScreenProps<ServiceStackParamList, Screen>,
   BottomTabScreenProps<HomeTabParamList>
 >;
+
+export type CartStackParamList = {
+  CartIndexScreen: undefined;
+  CartServiceDetailModal: {
+    // Replace 'item: Service | Product' with the line below, when Product is defined.
+    service: Service;
+    belongsToThisUser: boolean;
+    openedFromCart: boolean;
+  };
+};
+
+export type CartStackScreenProps<Screen extends keyof CartStackParamList> =
+  CompositeScreenProps<
+    NativeStackScreenProps<CartStackParamList, Screen>,
+    BottomTabScreenProps<HomeTabParamList>
+  >;
 
 export type HomeTabParamList = {
   Home: undefined;
