@@ -20,7 +20,7 @@
 
     Your Mark: _ 
 
-  Planning Meetings Total Mark: _ / 4
+  Planning Meetings Total Mark: 4_ / 4
 
 ---
 ## Daily Stand-ups (max 10 marks)
@@ -40,7 +40,7 @@
     - 1 mark  = At least 2 group members or more have not sent their updates or is low-quality
     - 0 marks = At least 3 group members or more have not sent their updates or is low-quality
 
-  Daily Stand-ups Total Mark: __ / 10
+  Daily Stand-ups Total Mark: _10_ / 10
 
 ---
 ## User Stories (Tracked in Jira) (max 10 marks) 
@@ -49,37 +49,37 @@
     - 1 mark  = two or more stories in Jira Backlog do not follow the template
     - 0 marks = the majority of stories in Jira Backlog do not follow the template or no stories at all
 
-    Your Mark: _
+    Your Mark: _2
 
   - Broken down into tasks/subtasks (max 2 marks)
     - 2 marks = all Sprint 1 stories estimated, broken into tasks/subtasks, tasks assigned to all team members
     - 1 mark = one or more Sprint 1 stories are not recorded Jira, or not estimated, or nor broken into tasks, or at least one task not assigned, or at least one team member unassigned a task
     - 0 marks = the majority of Sprint 1 stories not recorded in Jira or not estimated, or nor broken into tasks, or tasks not assigned, or team members unassigned a task
 
-    Your Mark: _ 
+    Your Mark: _ 2
 
   - Estimated (max 2 marks)
     - 2 marks = all stories in Jira Backlog are point estimated and the point value is recorded in Jira
     - 1 mark  = two or more stories in Jira Backlog are not point estimated or the point value is not recorded in Jira
     - 0 marks = the majority of stories in Jira Backlog are not point estimated or the point value is not recorded in Jira
 
-    Your Mark: _
+    Your Mark: _2
 
   - Prioritized	(max 2 marks)
     - 2 marks = all stories in Jira Backlog are prioritized in the order which matches the priority of their associated milestones
     - 1 mark  = two or more stories in Jira Backlog not are prioritized in the order which matches the priority of their associated milestones]
     - 0 marks = the majority of stories in Jira Backlog appear to be not prioritized in the order which matches the priority of their associated milestones
 
-    Your Mark: _ 
+    Your Mark: _ 2
 
   - Clearly Defined Acceptance Criteria (max 2 marks)
     - 2 marks = all Sprint 1 stories have clearly defined and testable acceptance criteria
     - 1 mark  = one or more Sprint 1 stories do not have clearly defined or testable acceptance criteria
     - 0 marks = the majority of the Sprint1 stories do not have clearly defined or testable acceptance criteria
 
-    Your Mark: _ 
+    Your Mark: _ 1 https://mcsapps.utm.utoronto.ca/jira/browse/BAC-118 no description
 
-  User Stories Total Mark: __ / 10
+  User Stories Total Mark: _9_ / 10
 
 ---
 ## Tracking on Jira  (max 24 marks) 
@@ -88,28 +88,28 @@
     - 1 = part of the stories missing
     - 0 = no stories on Active Sprint Board
 
-    Your Mark: _ 
+    Your Mark: _ 2
   
   - Did you start all stories for the sprint? (max 2 marks)
     - 2 marks = all stories started or some stories not started, but logical explanation provided as a story comment
     - 1 mark  = part of the stories not started and explanation why not is not provided
     - 0 marks = no story started
     
-    Your Mark: _ 
+    Your Mark: _ 1 some of the stories didn't start
 
   - Do the pull request on GitHub match the tasks listed on Jira Active Sprint Board? (max 2 marks)
     - 2 marks = no tasks are missing
     - 1 mark  = two or more tasks are missing
     - 0 marks = no tasks or tasks do not match at all
     
-    Your Mark: _ 
+    Your Mark: _ 2
 
   - Is the pull request done by the person to whom the task has been assigned to?  (max 2 marks)
     - 2 marks = all assigned tasks are completed
     - 1 mark  = two or more tasks were not completed as assigned
     - 0 marks = no task was completed by anyone
 
-    Your Mark: _ 
+    Your Mark: _ 2
 
   - Is each pull request made from a separate branch for each individual task? (max 5 marks)
     - 5 marks = pull request for each task made from own separate branch
@@ -119,14 +119,14 @@
     - 1 mark  = pull request for 4 or more tasks not made from own separate branch
     - 0 marks = pull request for the majority of tasks not made from own separate branch
   
-    Your Mark: _
+    Your Mark: _5
     
   - Is the git commit message clear? (max 2 marks)
     - 2 marks = all commit message begin with the ticket number of the task followed by a short description of commit changes
     - 1 mark  = one or more commit messages do not begin with the ticket number of the task followed by a short description of commit changes
     - 0 marks = majority of commit message do not begin with the ticket number of the task followed by a short description of commit changes
   
-    Your Mark: _
+    Your Mark: _1 unclear commit msg. sha `5437feb0e041ec9d04aba16166a6bb2a9d9a2051`, test
     
   - Tasks Distribution (max 3 marks)
     - 3 marks = every team member had at least one task assigned and completed
@@ -134,30 +134,30 @@
     - 1 mark  = at least one team member did not complete any task or did not have any task assigned
     - 0 marks = most of team members have no tasks assigned and/or completed
 
-    Your Mark: _
+    Your Mark: _3
 
   - Branch Naming (max 2 marks)
     - 2 marks = every team branch is named after the associated single ticket number
     - 1 mark  = at least one branch is not named after the associated single ticket number
     - 0 marks = most branch names are not named after the associated single ticket number
     
-    Your Mark: _
+    Your Mark: _2
 
   - Burndown chart (max 2 marks)
     - 2 marks = burndown chart present, matched jira chart, and explantions are adequate.
     - 1 mark  = burndown chart present, matches Jira chart, but no explanations provided, or explanations are not adequate.
     - 0 marks = document not available or not containing a valid burndown chart
     
-    Your Mark: _
+    Your Mark: _2
 
   - Schedule (max 2 marks)
     - 2 marks = diagram present, critical path computed, and explantions are adequate.
     - 1 mark  = diagram present, but no critical path or explanations provided, or explanations are not adequate.
     - 0 marks = document not available or not containing a valid diagram
 
-    Your Mark: _
+    Your Mark: _2
 
-Tracking on Jira Total Mark: __ / 24
+Tracking on Jira Total Mark: _23_ / 24
 
 ---
 ## Sprint Completion (Max 20 marks) 
@@ -167,7 +167,7 @@ Tracking on Jira Total Mark: __ / 24
   - Started stories that are incomplete will be counted
   - Mark Breakdown: [x = Percentage of story points completed * 20]
 
-  Your Mark: __ / 20
+  Your Mark: _20_ / 20
 
 ---
 ## System Design (PDF or MD file or another suitable format) (max 10 marks) 
@@ -176,7 +176,7 @@ Tracking on Jira Total Mark: __ / 24
     1 mark  = at least one is present
     0 marks = None present
     
-    Your Mark: _ 
+    Your Mark: _ 2
   
   - CRC Cards [or equivalent, if the team is not using CRC) (max 4 marks)
     - 4 marks = Class names and Collaborators have matching names and responsibilities are stated clearly
@@ -185,7 +185,7 @@ Tracking on Jira Total Mark: __ / 24
     - 1 mark  = The majority of class names do not match the collaborator names or the responsibilities of the majority of the classes are not stated or are unclear
     - 0 marks = No CRC provided or the provided document does not match the CRC model
 
-    Your Mark: _
+    Your Mark: _4
 
   - Software Architecture Diagram (max 4 marks)
     - 4 marks = The Architecture Diagram is present, it is formatted using proper graphic symbols, and it follows a known Architecture diagram.
@@ -198,9 +198,9 @@ Tracking on Jira Total Mark: __ / 24
     There is no web link or other reference lending support to the presented diagram.
     - 0 marks = No diagram present or the presented document does not look like a software architecture diagram
 
-    Your Mark: _
+    Your Mark: _4
 
-  System Design Total: __ / 10  
+  System Design Total: _10_ / 10  
 
 ---
 
@@ -208,7 +208,7 @@ Tracking on Jira Total Mark: __ / 24
 	- 1 mark = documentation is updated, is concise & informative for contributors
   - 0 marks = documentation has not been updated or is unclear & not maintained properly
    
-  Your Mark: __ / 1
+  Your Mark: _1_ / 1
 
 ---
 
@@ -242,4 +242,4 @@ Notes:
 
 ## Total Mark
 
-__ / 89
+_87_ / 89
