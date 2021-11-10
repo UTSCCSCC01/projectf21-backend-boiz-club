@@ -38,6 +38,9 @@ const genericServiceImages = [
 function ServicesIndexScreen({
   navigation,
 }: ServiceStackScreenProps<'ServiceIndexScreen'>) {
+  const servicesInCart: { id: string; data: Service; count: number }[] =
+    useAppSelector((state) => state.cart.services);
+
   const [isLoading, setIsLoading] = useState(true);
   const token = useAppSelector((state) => state.userCredential.userToken);
   const toast = useToast();
@@ -76,7 +79,11 @@ function ServicesIndexScreen({
   const DisplayServices = () => (
     <View flex={1} alignItems="center" width={'100%'}>
       {services
-        .filter((x) => (showAllServices ? true : x.user_id === thisUser?._id))
+        .filter(
+          (x) =>
+            servicesInCart.every((s) => s.id !== x._id) &&
+            (showAllServices ? true : x.user_id === thisUser?._id)
+        )
         .map((service, index) => {
           return (
             <Pressable
