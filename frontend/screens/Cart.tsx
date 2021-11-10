@@ -9,6 +9,8 @@ import {
   Heading,
   Collapse,
   Button,
+  Modal,
+  useToast,
 } from 'native-base';
 import { useAppSelector } from '@/hooks/react-redux';
 import { CartStackParamList, CartStackScreenProps, Service } from '@/types';
@@ -17,11 +19,15 @@ import ServiceDetailModal from './ServiceDetailModal';
 import { ScrollView } from 'react-native';
 import { useState } from 'react';
 import { Feather } from '@expo/vector-icons';
+import { removeFromCart } from '@/redux/cart';
+import { useDispatch } from 'react-redux';
 
 function CartIndexScreen({
   navigation,
 }: CartStackScreenProps<'CartIndexScreen'>) {
-  // const dispatch = useDispatch(); // Will be used to remove items.
+  const dispatch = useDispatch();
+  const toast = useToast();
+
   const services: { id: string; data: Service }[] = useAppSelector(
     (state) => state.cart.services
   );
@@ -32,6 +38,9 @@ function CartIndexScreen({
 
   const [servicesOpen, setServicesOpen] = useState(false);
   const [productsOpen, setProductsOpen] = useState(false);
+  const [askToRemoveOpen, setAskToRemoveOpen] = useState(false);
+  const [isRemoveService, setIsRemoveService] = useState(false);
+  const [currentItemId, setCurrentItemId] = useState<string>('');
 
   const genericServiceImages = [
     require('@/assets/images/generic_service_1.jpg'),
@@ -52,6 +61,15 @@ function CartIndexScreen({
 
   const calculateTotalCost = () => {
     return calculateServiceCost();
+  };
+
+  const removeItem = () => {
+    dispatch(removeFromCart({ isService: isRemoveService, id: currentItemId }));
+    toast.show({
+      status: 'success',
+      title: isRemoveService ? 'Removed Service' : 'Removed Product',
+      placement: 'top',
+    });
   };
 
   const purchaseCart = () => {
@@ -114,9 +132,22 @@ function CartIndexScreen({
                           {service.data.service_price} $
                         </Heading>
                       </VStack>
-                      <Box justifyContent="flex-end">
-                        <Feather name="trash-2" size={24} color="orange" />
-                      </Box>
+                      <Button
+                        size="lg"
+                        key="removeService"
+                        onPress={() => {
+                          setAskToRemoveOpen(true);
+                          setIsRemoveService(true);
+                          setCurrentItemId(service.id);
+                        }}
+                        justifyContent="center"
+                        variant="subtle"
+                        leftIcon={
+                          <Feather name="trash-2" size={24} color="orange" />
+                        }
+                      >
+                        Remove
+                      </Button>
                     </VStack>
                   </HStack>
                 </Box>
@@ -154,6 +185,43 @@ function CartIndexScreen({
 
   return (
     <View flex="1" justifyContent="space-between">
+      <Modal
+        isOpen={askToRemoveOpen}
+        onClose={() => {
+          setAskToRemoveOpen(false);
+        }}
+        size="xl"
+      >
+        <Modal.Content padding="3">
+          <Modal.Body>
+            <Heading fontSize="lg">
+              Are you sure you want to remove this item?
+            </Heading>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button.Group space="md" size="lg">
+              <Button
+                colorScheme="teal"
+                onPress={() => {
+                  setAskToRemoveOpen(false);
+                  removeItem();
+                }}
+              >
+                Yes
+              </Button>
+              <Button
+                colorScheme="danger"
+                onPress={() => {
+                  setAskToRemoveOpen(false);
+                }}
+              >
+                No
+              </Button>
+            </Button.Group>
+          </Modal.Footer>
+        </Modal.Content>
+      </Modal>
+
       <ScrollView>
         <VStack margin="5" space="md" height="90%">
           <VStack space="sm">
@@ -224,7 +292,7 @@ function CartIndexScreen({
               paddingBottom="1"
               alignItems="flex-end"
             >
-              <Heading fontSize="xl">Products Total</Heading>
+              <Heading fontSize="xl">Products Subtotal : [some] CAD$</Heading>
             </Box>
           </VStack>
         </VStack>

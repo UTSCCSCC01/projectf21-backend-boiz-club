@@ -39,7 +39,9 @@ export const cartSlice = createSlice({
       action: PayloadAction<{ isService: boolean; id: string }>
     ) => {
       if (action.payload.isService) {
-        state.services.filter((item) => item.id !== action.payload.id);
+        state.services = state.services.filter(
+          (item) => item.id !== action.payload.id
+        );
       }
     },
   },
