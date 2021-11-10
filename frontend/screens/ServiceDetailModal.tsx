@@ -1,25 +1,13 @@
 import * as React from 'react';
-import {
-  Box,
-  Heading,
-  VStack,
-  Divider,
-  Button,
-  HStack,
-  useToast,
-} from 'native-base';
+import { Box, Heading, VStack, Divider, Button, HStack } from 'native-base';
 import { ServiceStackScreenProps } from '@/types';
 import { Map } from '../components';
 import { FontAwesome } from '@expo/vector-icons';
-import { useDispatch } from 'react-redux';
-import { addToCart, removeFromCart } from '@/redux/cart';
 
 export default function ServiceDetailModal({
   navigation,
   route,
 }: ServiceStackScreenProps<'ServiceDetailModal'>) {
-  const dispatch = useDispatch();
-  const toast = useToast();
   const { service, belongsToThisUser, openedFromCart } = route.params;
 
   // console.log('----------');
@@ -67,30 +55,19 @@ export default function ServiceDetailModal({
   };
 
   const addServiceToCart = () => {
-    console.log('Added Service to Cart');
-    dispatch(addToCart({ isService: true, item: service }));
+    console.log('Modify Service');
     navigation.pop();
-    toast.show({
-      status: 'success',
-      title: 'Added Service to the Cart',
-      placement: 'top',
+    navigation.push('ServiceProductSetCount', {
+      item: service,
+      isService: true,
     });
   };
 
-  const removeServiceFromCart = () => {
-    console.log('Removed Service from Cart');
-    dispatch(removeFromCart({ isService: true, id: service._id }));
-    navigation.pop();
-    toast.show({
-      status: 'success',
-      title: 'Removed Service from the Cart',
-      placement: 'top',
-    });
-  };
+  const removeServiceFromCart = () => {};
 
   return (
     <Box safeArea flex={1} paddingTop="5" paddingX="10">
-      <VStack space={3}>
+      <VStack space="md">
         <Box justifyContent="space-between" flexDirection="row">
           <Heading fontSize="2xl" flex="1">
             {service.service_name}
@@ -111,7 +88,7 @@ export default function ServiceDetailModal({
         </Heading>
         <Divider />
         <Heading fontSize="lg">Location</Heading>
-        <Box width="100%" height="32%">
+        <Box width="100%" height="10%">
           <Map
             lat={
               typeof service.latitude !== 'undefined'

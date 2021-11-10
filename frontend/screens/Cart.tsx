@@ -28,9 +28,8 @@ function CartIndexScreen({
   const dispatch = useDispatch();
   const toast = useToast();
 
-  const services: { id: string; data: Service }[] = useAppSelector(
-    (state) => state.cart.services
-  );
+  const services: { id: string; data: Service; count: number }[] =
+    useAppSelector((state) => state.cart.services);
   const products;
   // const products: { id: string; data: Product }[] = useAppSelector(
   //   (state) => state.cart.products
@@ -53,7 +52,7 @@ function CartIndexScreen({
     services.forEach(
       (service) =>
         (cost += service.data.service_price
-          ? Math.floor(service.data.service_price)
+          ? Math.floor(service.data.service_price) * Math.floor(service.count)
           : 0)
     );
     return cost;
@@ -124,12 +123,15 @@ function CartIndexScreen({
                       />
                     </Box>
                     <VStack justifyContent="space-between">
-                      <VStack space={3}>
+                      <VStack space="2xs">
                         <Heading fontSize="xl">
                           {service.data.service_name}
                         </Heading>
-                        <Heading fontSize="xl">
-                          {service.data.service_price} $
+                        <Heading fontSize="lg" fontWeight="normal">
+                          {service.count} hours
+                        </Heading>
+                        <Heading fontSize="lg" fontWeight="normal">
+                          ({service.data.service_price} CAD$ per hour)
                         </Heading>
                       </VStack>
                       <Button

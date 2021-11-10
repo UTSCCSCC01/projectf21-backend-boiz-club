@@ -6,6 +6,7 @@ interface CartState {
   services: {
     id: string;
     data: Service;
+    count: number;
   }[];
   // products: {
   //   id: string;
@@ -25,12 +26,17 @@ export const cartSlice = createSlice({
     // Add Product to types, when Product is defined in types.
     addToCart: (
       state,
-      action: PayloadAction<{ isService: boolean; item: Service }>
+      action: PayloadAction<{
+        isService: boolean;
+        item: Service;
+        count: number;
+      }>
     ) => {
       if (action.payload.isService) {
         state.services.push({
           id: action.payload.item._id,
           data: action.payload.item,
+          count: action.payload.count,
         });
       }
     },

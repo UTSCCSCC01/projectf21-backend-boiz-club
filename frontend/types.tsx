@@ -67,6 +67,10 @@ export type ServiceStackParamList = {
   ModifyServiceModal: {
     service: Service;
   };
+  ServiceProductSetCount: {
+    item: Service;
+    isService: boolean;
+  };
 };
 
 export type ServiceStackScreenProps<
