@@ -55,15 +55,13 @@ export default function ServiceDetailModal({
   };
 
   const addServiceToCart = () => {
-    console.log('Modify Service');
+    console.log('addServiceToCart');
     navigation.pop();
     navigation.push('ServiceProductSetCount', {
       item: service,
       isService: true,
     });
   };
-
-  const removeServiceFromCart = () => {};
 
   return (
     <Box safeArea flex={1} paddingTop="5" paddingX="10">
@@ -118,26 +116,22 @@ export default function ServiceDetailModal({
           </Heading>
         </HStack>
         <Divider />
-        <Button
-          size="lg"
-          key="MPButton"
-          justifyContent="center"
-          onPress={() => {
-            if (openedFromCart) {
-              removeServiceFromCart();
-            } else if (belongsToThisUser) {
-              modifyService();
-            } else {
-              addServiceToCart();
-            }
-          }}
-        >
-          {openedFromCart
-            ? 'Remove from Cart'
-            : belongsToThisUser
-            ? 'Modify Service'
-            : 'Add to Cart'}
-        </Button>
+        {!openedFromCart ? (
+          <Button
+            size="lg"
+            key="MPButton"
+            justifyContent="center"
+            onPress={() => {
+              if (belongsToThisUser) {
+                modifyService();
+              } else {
+                addServiceToCart();
+              }
+            }}
+          >
+            {belongsToThisUser ? 'Modify Service' : 'Add to Cart'}
+          </Button>
+        ) : null}
       </VStack>
     </Box>
   );

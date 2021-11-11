@@ -50,9 +50,23 @@ export const cartSlice = createSlice({
         );
       }
     },
+    changeCartCount: (
+      state,
+      action: PayloadAction<{
+        isService: boolean;
+        id: string;
+        newCount: number;
+      }>
+    ) => {
+      if (action.payload.isService) {
+        let index = state.services.findIndex((s) => s.id === action.payload.id);
+
+        state.services[index].count = action.payload.newCount;
+      }
+    },
   },
 });
 
-export const { addToCart, removeFromCart } = cartSlice.actions;
+export const { addToCart, removeFromCart, changeCartCount } = cartSlice.actions;
 
 export default cartSlice.reducer;

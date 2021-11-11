@@ -19,8 +19,9 @@ import ServiceDetailModal from './ServiceDetailModal';
 import { ScrollView } from 'react-native';
 import { useState } from 'react';
 import { Feather } from '@expo/vector-icons';
-import { removeFromCart } from '@/redux/cart';
+import { changeCartCount, removeFromCart } from '@/redux/cart';
 import { useDispatch } from 'react-redux';
+import { FontAwesome5 } from '@expo/vector-icons';
 
 function CartIndexScreen({
   navigation,
@@ -30,7 +31,6 @@ function CartIndexScreen({
 
   const services: { id: string; data: Service; count: number }[] =
     useAppSelector((state) => state.cart.services);
-  const products;
   // const products: { id: string; data: Product }[] = useAppSelector(
   //   (state) => state.cart.products
   // );
@@ -39,7 +39,13 @@ function CartIndexScreen({
   const [productsOpen, setProductsOpen] = useState(false);
   const [askToRemoveOpen, setAskToRemoveOpen] = useState(false);
   const [isRemoveService, setIsRemoveService] = useState(false);
+  const [askToChangeCountOpen, setAskToChangeCountOpen] = useState(false);
+  const [isChangeServiceCount, setIsChangeServiceCount] = useState(false);
   const [currentItemId, setCurrentItemId] = useState<string>('');
+
+  const [counterCount, setCounterCount] = useState<number>(1); // Hour for service, count for product.
+  const minCount = 1;
+  const maxCount = 10;
 
   const genericServiceImages = [
     require('@/assets/images/generic_service_1.jpg'),
@@ -71,9 +77,24 @@ function CartIndexScreen({
     });
   };
 
-  const purchaseCart = () => {
+  const changeItemCount = () => {
+    dispatch(
+      changeCartCount({
+        isService: isChangeServiceCount,
+        id: currentItemId,
+        newCount: counterCount,
+      })
+    );
+    toast.show({
+      status: 'success',
+      title: isChangeServiceCount ? 'Changed Duration' : 'Changed Amount',
+      placement: 'top',
+    });
+  };
+
+  const checkoutCart = () => {
     // Navigation stuff goes here
-    console.log('Purchase');
+    console.log('Checkout');
   };
 
   const displayServiceDetail = async (service: Service) => {
@@ -134,22 +155,36 @@ function CartIndexScreen({
                           ({service.data.service_price} CAD$ per hour)
                         </Heading>
                       </VStack>
-                      <Button
-                        size="lg"
-                        key="removeService"
-                        onPress={() => {
-                          setAskToRemoveOpen(true);
-                          setIsRemoveService(true);
-                          setCurrentItemId(service.id);
-                        }}
-                        justifyContent="center"
-                        variant="subtle"
-                        leftIcon={
-                          <Feather name="trash-2" size={24} color="orange" />
-                        }
-                      >
-                        Remove
-                      </Button>
+                      <HStack space="md">
+                        <Button
+                          size="lg"
+                          key="removeService"
+                          onPress={() => {
+                            setAskToRemoveOpen(true);
+                            setIsRemoveService(true);
+                            setCurrentItemId(service.id);
+                          }}
+                          justifyContent="center"
+                          variant="subtle"
+                          leftIcon={
+                            <Feather name="trash-2" size={24} color="orange" />
+                          }
+                        />
+                        <Button
+                          size="lg"
+                          key="changeServiceCount"
+                          onPress={() => {
+                            setAskToChangeCountOpen(true);
+                            setIsChangeServiceCount(true);
+                            setCurrentItemId(service.id);
+                            setCounterCount(service.count);
+                          }}
+                          justifyContent="center"
+                          variant="subtle"
+                        >
+                          Set Duration
+                        </Button>
+                      </HStack>
                     </VStack>
                   </HStack>
                 </Box>
@@ -179,8 +214,8 @@ function CartIndexScreen({
       <Heading fontSize="xl">
         Total Cost: {String(calculateTotalCost())} CAD$
       </Heading>
-      <Button size="lg" key="purchase" onPress={purchaseCart}>
-        Purchase
+      <Button size="lg" key="checkout" onPress={checkoutCart}>
+        Checkout
       </Button>
     </HStack>
   );
@@ -193,6 +228,7 @@ function CartIndexScreen({
           setAskToRemoveOpen(false);
         }}
         size="xl"
+        key="remove"
       >
         <Modal.Content padding="3">
           <Modal.Body>
@@ -218,6 +254,80 @@ function CartIndexScreen({
                 }}
               >
                 No
+              </Button>
+            </Button.Group>
+          </Modal.Footer>
+        </Modal.Content>
+      </Modal>
+
+      <Modal
+        isOpen={askToChangeCountOpen}
+        onClose={() => {
+          setAskToChangeCountOpen(false);
+        }}
+        size="xl"
+        key="changeCount"
+      >
+        <Modal.Content padding="3">
+          <Modal.Body>
+            <VStack width="100%" space="md">
+              <Heading fontSize="lg">
+                Please specify{' '}
+                {isChangeServiceCount
+                  ? 'the number of hours you want to benefit from this service'
+                  : 'the total amount you want to buy this product'}
+              </Heading>
+              <HStack
+                justifyContent="center"
+                alignItems="center"
+                width="100%"
+                space="md"
+              >
+                <Heading fontSize="xs" fontWeight="light">
+                  Min: {minCount}
+                </Heading>
+                <Button
+                  leftIcon={
+                    <FontAwesome5 name="minus" size={16} color="white" />
+                  }
+                  onPress={() => {
+                    setCounterCount(Math.max(counterCount - 1, minCount));
+                  }}
+                />
+                <Heading> {counterCount} </Heading>
+                <Button
+                  leftIcon={
+                    <FontAwesome5 name="plus" size={16} color="white" />
+                  }
+                  onPress={() => {
+                    setCounterCount(Math.min(counterCount + 1, maxCount));
+                  }}
+                />
+                <Heading fontSize="xs" fontWeight="light">
+                  Max: {maxCount}
+                </Heading>
+              </HStack>
+            </VStack>
+          </Modal.Body>
+
+          <Modal.Footer>
+            <Button.Group space="md" size="lg">
+              <Button
+                colorScheme="teal"
+                onPress={() => {
+                  setAskToChangeCountOpen(false);
+                  changeItemCount();
+                }}
+              >
+                Confirm
+              </Button>
+              <Button
+                colorScheme="danger"
+                onPress={() => {
+                  setAskToChangeCountOpen(false);
+                }}
+              >
+                Cancel
               </Button>
             </Button.Group>
           </Modal.Footer>
