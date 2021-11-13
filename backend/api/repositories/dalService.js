@@ -153,4 +153,8 @@ module.exports = {
     return await ServicePurchaseRequest.find({service_owner_id: userId}).
         skip(limit * skip).limit(limit).sort('createdAt');
   },
+
+  retrievePurchaseRequestById: async (purchaseId) => {
+    return await ServicePurchaseRequest.findById(purchaseId);
+  },
 };
