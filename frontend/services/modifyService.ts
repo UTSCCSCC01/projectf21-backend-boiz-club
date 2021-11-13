@@ -1,4 +1,8 @@
 import axios from 'axios';
+import Constants from 'expo-constants';
+
+// @ts-ignore
+const { BACKEND_ENDPOINT } = Constants.manifest?.extra;
 
 /**
  * type modifyService = (service_id: string,
@@ -19,7 +23,7 @@ async function modifyService(
 ) {
   const res = await axios
     .put(
-      'http://pawsup-dev-oznda.ondigitalocean.app/api/v1/services',
+      `${BACKEND_ENDPOINT}/api/v1/services`,
       {
         serviceId: serviceId,
         service_name: service_name,

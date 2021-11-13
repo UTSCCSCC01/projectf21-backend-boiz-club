@@ -1,12 +1,14 @@
 import axios from 'axios';
 import * as FileSystem from 'expo-file-system';
 import { FileSystemUploadType } from 'expo-file-system';
+import Constants from 'expo-constants';
+
+// @ts-ignore
+const { BACKEND_ENDPOINT } = Constants.manifest?.extra;
 
 async function getMedia(key: string) {
   return axios
-    .get(
-      `https://pawsup-dev-oznda.ondigitalocean.app/api/v1/storage/media/${key}`
-    )
+    .get(`${BACKEND_ENDPOINT}/api/v1/storage/media/${key}`)
     .catch((err) => {
       console.log(`[GET] for media failed: ${err}`);
       throw err;
@@ -20,7 +22,7 @@ async function uploadMedia(uri: string) {
   };
 
   return FileSystem.uploadAsync(
-    'https://pawsup-dev-oznda.ondigitalocean.app/api/v1/storage/media',
+    `${BACKEND_ENDPOINT}/api/v1/storage/media`,
     uri,
     options
   ).catch((err) => {

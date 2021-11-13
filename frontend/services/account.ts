@@ -1,6 +1,10 @@
 import axios from 'axios';
 import { User } from '@/types';
 import { getMedia, uploadMedia } from '@/services/storage';
+import Constants from 'expo-constants';
+
+// @ts-ignore
+const { BACKEND_ENDPOINT } = Constants.manifest?.extra;
 
 const whoAmI = async (token: string) => {
   return axios
@@ -18,7 +22,7 @@ const whoAmI = async (token: string) => {
 const updateAccountInfo = async (token: string, info: User) => {
   return axios
     .put(
-      'https://pawsup-dev-oznda.ondigitalocean.app/api/v1/users/self',
+      `${BACKEND_ENDPOINT}/api/v1/users/self`,
       {
         ...info,
       },
@@ -49,7 +53,7 @@ const updateProfilePic = async (uri: string, token: string) => {
 
   axios
     .put(
-      'https://pawsup-dev-oznda.ondigitalocean.app/api/v1/users/self',
+      `${BACKEND_ENDPOINT}/api/v1/users/self`,
       {
         profile_pic: JSON.parse(resp.body).mediaId,
       },

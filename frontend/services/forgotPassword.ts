@@ -7,7 +7,7 @@ const { BACKEND_ENDPOINT } = Constants.manifest?.extra;
 // type forgotPassword = (email: string) => any;
 
 async function forgotPassword(email: string) {
-  const url = `${BACKEND_ENDPOINT}/api/v1/users/forgot-password/` + email;
+  const url = `${BACKEND_ENDPOINT}/api/v1/users/forgot-password/${email}`;
   const res = await axios
     .post(url, {
       email: email,

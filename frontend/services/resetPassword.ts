@@ -19,7 +19,7 @@ async function resetPassword(
   otp: string,
   password: string
 ) {
-  const url = `${BACKEND_ENDPOINT}/api/v1/users/reset-password/` + email;
+  const url = `${BACKEND_ENDPOINT}/api/v1/users/reset-password/${email}`;
   const res = await axios
     .post(url, {
       encryptedEmail: encryptedEmail,
