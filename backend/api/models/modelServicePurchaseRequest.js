@@ -10,6 +10,10 @@ const servicePurchaseRequestSchema = new Schema({
     type: String,
     required: true,
   },
+  service_owner_id: {
+    type: String,
+    required: true,
+  },
   createdAt: {
     type: Date,
     default: Date.now(),

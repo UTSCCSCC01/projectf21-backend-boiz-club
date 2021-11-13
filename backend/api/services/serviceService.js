@@ -85,7 +85,12 @@ module.exports = {
     if (!service) {
       throw ApiError.notFoundError('Service not found');
     }
-    return await serviceDal.sendPurchaseRequest(serviceId, userId);
+    return await serviceDal
+        .sendPurchaseRequest(serviceId, service.user_id, userId);
+  },
+
+  getPagablePurchaseRequests: async (userId, limit, skip) => {
+    return await serviceDal.getPagablePurchaseRequests(userId, limit, skip);
   },
 
 };

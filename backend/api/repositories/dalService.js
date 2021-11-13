@@ -140,10 +140,17 @@ module.exports = {
           contact_number: phoneNumber},
     );
   },
-  sendPurchaseRequest: async (serviceId, userId) => {
+  sendPurchaseRequest: async (serviceId, serviceOnwerId, userId) => {
     const servicePurchaseRequest = new ServicePurchaseRequest(
-        {service_id: serviceId, user_id: userId},
+        {user_id: userId,
+          service_id: serviceId,
+          service_owner_id: serviceOnwerId},
     );
     return await servicePurchaseRequest.save();
+  },
+
+  getPagablePurchaseRequests: async (userId, limit, skip) => {
+    return await ServicePurchaseRequest.find({service_owner_id: userId}).
+        skip(limit * skip).limit(limit).sort('createdAt');
   },
 };
