@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const ServiceVerificationRequest =
 require('../models/modelServiceVerificationRequest');
 const ServiceFee=require('../models/modelServiceFee');
+const ServicePurchaseRequest=require('../models/modelServicePurchaseRequest');
 
 module.exports = {
 
@@ -134,10 +135,13 @@ module.exports = {
     return await Service.findOneAndUpdate(
         {_id: serviceId},
         {service_name: name,
-        service_description: description,
-        service_price: price,
-        contact_number: phoneNumber},
-      );
+          service_description: description,
+          service_price: price,
+          contact_number: phoneNumber},
+    );
   },
 
+  retrievePurchaseRequestById: async (purchaseId) => {
+    return await ServicePurchaseRequest.findById(purchaseId);
+  },
 };

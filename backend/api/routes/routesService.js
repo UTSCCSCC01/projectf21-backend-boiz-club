@@ -49,6 +49,33 @@ const newServiceSchema = {
   },
 };
 
+const acceptPurchaseRequest = (app) => {
+  app.post(
+      pathPrefix + '/accept-purchase',
+      verifyToken,
+      async (req, res, next) => {
+        try {
+          const {user} = req;
+          const userId = user.user_id;
+
+          const purchaseId = req.purchaseId;
+          await serviceService.verifyPurchaseRequest(userId, purchaseId);
+
+          const accept = req.accept;
+          if (accept == true) {
+            res.status(200).send(
+                {message: 'The request has been successfully accepted'});
+          } else if (accept == false) {
+            res.status(200).send(
+                {message: 'The request has been successfully declined'});
+          }
+        } catch (error) {
+          next(error);
+        }
+      },
+  );
+};
+
 const postServiceAndRequestVerification = (app) => {
   app.post(
       pathPrefix + '/request-verification',
@@ -162,7 +189,7 @@ const getServiceDetails = (app) => {
 };
 
 const updateService=(app)=>{
-  app.put(pathPrefix,// +'/update',
+  app.put(pathPrefix, // +'/update',
       verifyToken,
       async (req, res, next)=>{
         try {
@@ -226,6 +253,7 @@ const getServiceFees=(app) =>{
 
 
 module.exports = (app) => {
+  acceptPurchaseRequest(app);
   postServiceAndRequestVerification(app);
   retrieveVerification(app);
   verifyService(app);
