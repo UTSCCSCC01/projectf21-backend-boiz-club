@@ -149,6 +149,10 @@ module.exports = {
     return await servicePurchaseRequest.save();
   },
 
+  deletePurchaseRequest: async (purchaseId) => {
+    await servicePurchaseRequest.findOneAndRemove(purchaseId);
+  },
+
   getPagablePurchaseRequests: async (userId, limit, skip) => {
     return await ServicePurchaseRequest.find({service_owner_id: userId}).
         skip(limit * skip).limit(limit).sort('createdAt');

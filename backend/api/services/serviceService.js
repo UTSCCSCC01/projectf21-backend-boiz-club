@@ -1,5 +1,8 @@
 const serviceDal = require('../repositories/dalService');
+const userDal = require('../repositories/dalUser');
 const ApiError = require('../../error/ApiError');
+const {transporter, emailAcceptRejectRequest} =
+require('../../api/utils/emailConfig');
 const axios = require('axios');
 
 module.exports = {
@@ -102,5 +105,19 @@ module.exports = {
       throw ApiError.badRequestError(
           `The user ${userId} does not own the service ${purchaseId}`);
     }
+  },
+
+  sendEmailPurchaseResult: async (userID, purchaseID, email, accept) => {
+    const user = userDal.getUser(userID);
+    const firstName = user.first_name;
+
+    const emailTemplate =
+    emailAcceptRejectRequest(email, firstName, purchaseID, accept);
+    await transporter.verify();
+    await transporter.sendMail(emailTemplate);
+  },
+
+  deletePurchaseRequest: async (purchaseId) => {
+    await serviceDal.deletePurchaseRequest(purchaseId);
   },
 };

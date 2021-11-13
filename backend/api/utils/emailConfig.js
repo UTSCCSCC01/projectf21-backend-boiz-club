@@ -34,4 +34,20 @@ const emailForgotPassword = (user, otp) => {
   return {from, to, subject, html};
 };
 
-module.exports = {transporter, emailForgotPassword};
+const emailAcceptRejectRequest = (email, firstName, purchaseID, accept) => {
+  const from = process.env.EMAIL_LOGIN;
+  const to = email;
+  const subject = `Regarding Your Purchase Request for Service ${purchaseID}`;
+  const html = `
+    <p>Dear ${firstName},</p>
+    <p>Your purchase request for service ${purchaseID} has been ${accept}</p>
+
+
+    <p>Best Regards,</p>
+    <p>Pawsup Admin Team</p>
+    `;
+  return {from, to, subject, html};
+};
+
+
+module.exports = {transporter, emailForgotPassword, emailAcceptRejectRequest};

@@ -61,14 +61,20 @@ const acceptPurchaseRequest = (app) => {
           const purchaseId = req.body.purchase_id;
           await serviceService.verifyPurchaseRequest(userId, purchaseId);
 
+          const email = user.email;
+
           const accept = req.body.accept;
+
           if (accept === true) {
-            res.status(200).send(
-                {message: 'The request has been successfully accepted'});
+            sendEmailPurchaseResult(userId, purchaseId, email, 'accepted');
           } else if (accept === false) {
-            res.status(200).send(
-                {message: 'The request has been successfully declined'});
+            sendEmailPurchaseResult(userId, purchaseId, email, 'declined');
           }
+
+          serviceService.deletePurchaseRequest(purchaseId);
+
+          res.status(200).send(
+              {message: 'Successfully accept or reject a purchase request'});
         } catch (error) {
           next(error);
         }
