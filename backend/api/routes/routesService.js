@@ -51,7 +51,7 @@ const newServiceSchema = {
 
 const acceptPurchaseRequest = (app) => {
   app.post(
-      pathPrefix + '/accept-purchase',
+      pathPrefix + '/verify-purchase',
       verifyToken,
       async (req, res, next) => {
         try {
@@ -62,10 +62,10 @@ const acceptPurchaseRequest = (app) => {
           await serviceService.verifyPurchaseRequest(userId, purchaseId);
 
           const accept = req.accept;
-          if (accept == true) {
+          if (accept === true) {
             res.status(200).send(
                 {message: 'The request has been successfully accepted'});
-          } else if (accept == false) {
+          } else if (accept === false) {
             res.status(200).send(
                 {message: 'The request has been successfully declined'});
           }
