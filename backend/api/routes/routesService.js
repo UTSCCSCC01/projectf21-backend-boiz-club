@@ -58,10 +58,10 @@ const acceptPurchaseRequest = (app) => {
           const {user} = req;
           const userId = user.user_id;
 
-          const purchaseId = req.purchaseId;
+          const purchaseId = req.body.purchase_id;
           await serviceService.verifyPurchaseRequest(userId, purchaseId);
 
-          const accept = req.accept;
+          const accept = req.body.accept;
           if (accept === true) {
             res.status(200).send(
                 {message: 'The request has been successfully accepted'});
