@@ -161,6 +161,28 @@ const getServiceDetails = (app) => {
   });
 };
 
+const updateService=(app)=>{
+  app.put(pathPrefix,// +'/update',
+      verifyToken,
+      async (req, res, next)=>{
+        try {
+          const {user}=req;
+          const serviceId=req.body.serviceId;
+          const update =
+          await serviceService.updateService(user.user_id, req.body);
+          if (!update) {
+            throw ApiError.badRequestError('Update cannot be performed');
+          }
+
+          const updatedInfo = await serviceService.getService(serviceId);
+
+          res.status(200).json(updatedInfo);
+        } catch (error) {
+          next(error);
+        }
+      });
+};
+
 // update service endpoint
 const updateServiceFees=(app) =>{
   app.put(pathPrefix +'/updateFees',
@@ -209,6 +231,7 @@ module.exports = (app) => {
   verifyService(app);
   getServicesList(app);
   getServiceFees(app);
+  updateService(app);
   getServiceDetails(app);
   updateServiceFees(app);
 };

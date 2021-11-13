@@ -233,4 +233,13 @@ module.exports = {
   getPagableVerificationRequests: async (limit, skip) => {
     return await userDal.getPageableVerificationRequests(limit, skip);
   },
+
+  /**
+   * Update a user account's info
+   * @param {String} userId - the user's ID
+   * @param {String} newInfo - the new information to be updated
+   */
+  updateUserInfo: async (userId, newInfo) => {
+    return await userDal.updateAccountInfo(userId, newInfo);
+  },
 };
