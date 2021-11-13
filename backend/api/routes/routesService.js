@@ -162,7 +162,7 @@ const getServiceDetails = (app) => {
 };
 
 const updateService=(app)=>{
-  app.put(pathPrefix,// +'/update',
+  app.put(pathPrefix, // +'/update',
       verifyToken,
       async (req, res, next)=>{
         try {
@@ -224,8 +224,54 @@ const getServiceFees=(app) =>{
       });
 };
 
+// Send purchase request
+const purchaseService=(app)=>{
+  app.post(pathPrefix +'/purchase',
+      verifyToken,
+      async (req, res, next)=>{
+        const {user}=req;
+        const serviceId=req.body.service_id;
+        try {
+          await serviceService.sendPurchaseRequest(serviceId, user.user_id);
+          res.status(200).send({
+            status: 200,
+            message: 'Purchase request sent',
+          });
+        } catch (e) {
+          next(e);
+        }
+      });
+};
+
+// Start get purchase requests
+const retrievePurchaseRequests = (app) => {
+  app.get(pathPrefix+ '/purchase-request',
+      verifyToken,
+      async (req, res, next) => {
+        try {
+          const {user} = req;
+          const userObj = await userService.getUser(user.user_id);
+          if (!(userObj.authentication_lvl === 'verified' ||
+          userObj.authentication_lvl === 'admin')) {
+            throw ApiError.accessDeniedError();
+          }
+          const limit = parseInt(req.query.limit);
+          const skip = parseInt(req.query.skip);
+          const purchaseRequestList =
+          await serviceService.getPagablePurchaseRequests(
+              user.user_id, limit, skip,
+          );
+          res.status(200).send({status: 200, data: purchaseRequestList});
+        } catch (error) {
+          next(error);
+        }
+      },
+  );
+};
 
 module.exports = (app) => {
+  retrievePurchaseRequests(app);
+  purchaseService(app);
   postServiceAndRequestVerification(app);
   retrieveVerification(app);
   verifyService(app);

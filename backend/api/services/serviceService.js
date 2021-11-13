@@ -78,7 +78,19 @@ module.exports = {
     }
 
     return await serviceDal.updateService(body);
+  },
 
+  sendPurchaseRequest: async (serviceId, userId) => {
+    const service = await serviceDal.getService(serviceId);
+    if (!service) {
+      throw ApiError.notFoundError('Service not found');
+    }
+    return await serviceDal
+        .sendPurchaseRequest(serviceId, service.user_id, userId);
+  },
+
+  getPagablePurchaseRequests: async (userId, limit, skip) => {
+    return await serviceDal.getPagablePurchaseRequests(userId, limit, skip);
   },
 
 };
