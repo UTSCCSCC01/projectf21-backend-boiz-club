@@ -49,6 +49,33 @@ const newServiceSchema = {
   },
 };
 
+const acceptPurchaseRequest = (app) => {
+  app.post(
+      pathPrefix + '/verify-purchase',
+      verifyToken,
+      async (req, res, next) => {
+        try {
+          const {user} = req;
+          const userId = user.user_id;
+
+          const purchaseId = req.body.purchase_id;
+          await serviceService.verifyPurchaseRequest(userId, purchaseId);
+
+          const accept = req.body.accept;
+          if (accept === true) {
+            res.status(200).send(
+                {message: 'The request has been successfully accepted'});
+          } else if (accept === false) {
+            res.status(200).send(
+                {message: 'The request has been successfully declined'});
+          }
+        } catch (error) {
+          next(error);
+        }
+      },
+  );
+};
+
 const postServiceAndRequestVerification = (app) => {
   app.post(
       pathPrefix + '/request-verification',
@@ -270,6 +297,7 @@ const retrievePurchaseRequests = (app) => {
 };
 
 module.exports = (app) => {
+  acceptPurchaseRequest(app);
   retrievePurchaseRequests(app);
   purchaseService(app);
   postServiceAndRequestVerification(app);
