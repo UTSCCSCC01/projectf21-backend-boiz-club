@@ -162,7 +162,7 @@ const getServiceDetails = (app) => {
 };
 
 const updateService=(app)=>{
-  app.put(pathPrefix,// +'/update',
+  app.put(pathPrefix, // +'/update',
       verifyToken,
       async (req, res, next)=>{
         try {
@@ -224,6 +224,23 @@ const getServiceFees=(app) =>{
       });
 };
 
+const purchaseService=(app)=>{
+  app.post(pathPrefix +'/purchase',
+      verifyToken,
+      async (req, res, next)=>{
+        const {user}=req;
+        const serviceId=req.body.service_id;
+        try {
+          await serviceService.sendPurchaseRequest(serviceId, user.user_id);
+          res.status(200).send({
+            status: 200,
+            message: 'Purchase request sent',
+          });
+        } catch (e) {
+          next(e);
+        }
+      });
+};
 
 module.exports = (app) => {
   postServiceAndRequestVerification(app);
@@ -234,4 +251,5 @@ module.exports = (app) => {
   updateService(app);
   getServiceDetails(app);
   updateServiceFees(app);
+  purchaseService(app);
 };

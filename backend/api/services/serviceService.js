@@ -78,7 +78,14 @@ module.exports = {
     }
 
     return await serviceDal.updateService(body);
+  },
 
+  sendPurchaseRequest: async (serviceId, userId) => {
+    const service = await serviceDal.getService(serviceId);
+    if (!service) {
+      throw ApiError.notFoundError('Service not found');
+    }
+    return await serviceDal.sendPurchaseRequest(serviceId, userId);
   },
 
 };
