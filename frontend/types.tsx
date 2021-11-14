@@ -68,10 +68,24 @@ export type ServiceStackParamList = {
   };
 };
 
+export type ProductStackParamList = {
+  ProductIndexScreen: undefined;
+  ProductDetailModal: {
+    product: Product;
+  };
+};
+
 export type ServiceStackScreenProps<
   Screen extends keyof ServiceStackParamList
 > = CompositeScreenProps<
   NativeStackScreenProps<ServiceStackParamList, Screen>,
+  BottomTabScreenProps<HomeTabParamList>
+>;
+
+export type ProductStackScreenProps<
+  Screen extends keyof ProductStackParamList
+> = CompositeScreenProps<
+  NativeStackScreenProps<ProductStackParamList, Screen>,
   BottomTabScreenProps<HomeTabParamList>
 >;
 

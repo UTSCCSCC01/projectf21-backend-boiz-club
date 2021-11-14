@@ -12,18 +12,21 @@ import {
 import { RefreshControl, ScrollView } from 'react-native';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { getProducts } from '@/services/products';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import ProductDetailModal from './ProductDetailModal';
 import {
-  ServiceStackParamList,
-  ServiceStackScreenProps,
-  User,
+  ProductStackParamList,
   Product,
+  ProductStackScreenProps,
 } from '@/types';
 const genericProductImages = [
   require('@/assets/images/generic_service_1.jpg'),
   require('@/assets/images/generic_service_2.jpg'),
   require('@/assets/images/generic_service_3.jpg'),
 ];
-export default function Store() {
+function ProductIndexScreen({
+  navigation,
+}: ProductStackScreenProps<'ProductIndexScreen'>) {
   const [isLoading, setIsLoading] = React.useState(true);
   const [products, setProducts] = React.useState<Product[]>([]);
 
@@ -43,7 +46,11 @@ export default function Store() {
             <Pressable
               key={index}
               width={'100%'}
-              onPress={() => console.log('display product details')}
+              onPress={() =>
+                navigation.navigate('ProductDetailModal', {
+                  product,
+                })
+              }
             >
               {({ isPressed }) => {
                 return (
@@ -131,5 +138,26 @@ export default function Store() {
     >
       <DisplayProducts />
     </ScrollView>
+  );
+}
+
+const ProductStack = createNativeStackNavigator<ProductStackParamList>();
+createNativeStackNavigator();
+export default function Products() {
+  return (
+    <ProductStack.Navigator>
+      <ProductStack.Screen
+        name="ProductIndexScreen"
+        component={ProductIndexScreen}
+        options={{ headerShown: false }}
+      />
+      <ProductStack.Group screenOptions={{ presentation: 'modal' }}>
+        <ProductStack.Screen
+          name="ProductDetailModal"
+          component={ProductDetailModal}
+          options={{ headerShown: false, presentation: 'modal' }}
+        />
+      </ProductStack.Group>
+    </ProductStack.Navigator>
   );
 }
