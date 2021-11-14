@@ -61,7 +61,7 @@ const acceptPurchaseRequest = (app) => {
           const purchaseId = req.body.purchase_id;
           await serviceService.verifyPurchaseRequest(userId, purchaseId);
 
-          const email = user.email;
+          const email = userService.getUserCredById(userId);
 
           const accept = req.body.accept;
 

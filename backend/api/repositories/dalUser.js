@@ -59,6 +59,10 @@ module.exports = {
     return await UserCredential.findOne({email: email});
   },
 
+  getCredentialById: async (userId) => {
+    return await UserCredential.findById(userId);
+  },
+
   /**
    * Gets user information by user id
    * @param {Object} userId - user id
