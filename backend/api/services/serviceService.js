@@ -78,7 +78,29 @@ module.exports = {
     }
 
     return await serviceDal.updateService(body);
-
   },
 
+  sendPurchaseRequest: async (serviceId, userId) => {
+    const service = await serviceDal.getService(serviceId);
+    if (!service) {
+      throw ApiError.notFoundError('Service not found');
+    }
+    return await serviceDal
+        .sendPurchaseRequest(serviceId, service.user_id, userId);
+  },
+
+  getPagablePurchaseRequests: async (userId, limit, skip) => {
+    return await serviceDal.getPagablePurchaseRequests(userId, limit, skip);
+  },
+
+  verifyPurchaseRequest: async (userId, purchaseId) => {
+    const purchaseRequest = await
+    serviceDal.retrievePurchaseRequestById(purchaseId);
+    const serviceOwnerId = purchaseRequest.service_owner_id;
+
+    if (userId != serviceOwnerId) {
+      throw ApiError.badRequestError(
+          `The user ${userId} does not own the service ${purchaseId}`);
+    }
+  },
 };
