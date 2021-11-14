@@ -225,14 +225,17 @@ function ServicesIndexScreen({
   return (
     <ScrollView
       refreshControl={
-        <RefreshControl refreshing={isLoading} onRefresh={updateServices} />
+        <RefreshControl
+          refreshing={isLoading}
+          onRefresh={() => {
+            updateServices();
+          }}
+        />
       }
       stickyHeaderIndices={[0]}
     >
-      <View flex={1} alignItems="center">
-        <ServiceButtons />
-        <DisplayServices />
-      </View>
+      <ServiceButtons />
+      <DisplayServices />
     </ScrollView>
   );
 }
