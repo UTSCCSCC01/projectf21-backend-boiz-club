@@ -20,9 +20,9 @@ import {
   ProductStackScreenProps,
 } from '@/types';
 const genericProductImages = [
-  require('@/assets/images/generic_service_1.jpg'),
-  require('@/assets/images/generic_service_2.jpg'),
-  require('@/assets/images/generic_service_3.jpg'),
+  require('@/assets/images/generic_product_1.jpg'),
+  require('@/assets/images/generic_product_2.jpg'),
+  require('@/assets/images/generic_product_3.jpg'),
 ];
 function ProductIndexScreen({
   navigation,

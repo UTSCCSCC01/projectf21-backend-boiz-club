@@ -20,9 +20,9 @@ export default function ProductDetailModal({
 }: ProductStackScreenProps<'ProductDetailModal'>) {
   const { product } = route.params;
   const genericProductImages = [
-    require('@/assets/images/generic_service_1.jpg'),
-    require('@/assets/images/generic_service_2.jpg'),
-    require('@/assets/images/generic_service_3.jpg'),
+    require('@/assets/images/generic_product_1.jpg'),
+    require('@/assets/images/generic_product_2.jpg'),
+    require('@/assets/images/generic_product_3.jpg'),
   ];
   return (
     <Box safeArea flex={1} paddingTop="5" paddingX="10">
@@ -54,10 +54,10 @@ export default function ProductDetailModal({
           key="MPButton"
           justifyContent="center"
           onPress={() => {
-            console.log('Purchase Product');
+            console.log('Add to Cart');
           }}
         >
-          {'Purchase Product'}
+          {'Add to Cart'}
         </Button>
       </VStack>
     </Box>
