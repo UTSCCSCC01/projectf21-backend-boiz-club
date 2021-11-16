@@ -1,16 +1,6 @@
 import * as React from 'react';
-import {
-  View,
-  Text,
-  HStack,
-  Button,
-  Pressable,
-  Box,
-  VStack,
-  Image,
-} from 'native-base';
+import { View, Text, HStack, Pressable, Box, VStack, Image } from 'native-base';
 import { RefreshControl, ScrollView } from 'react-native';
-import { FontAwesome5 } from '@expo/vector-icons';
 import { getProducts } from '@/services/products';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import ProductDetailModal from './ProductDetailModal';
@@ -19,6 +9,9 @@ import {
   Product,
   ProductStackScreenProps,
 } from '@/types';
+import ProductSetCount from './ProductSetCount';
+import { useAppSelector } from '@/hooks/react-redux';
+
 const genericProductImages = [
   require('@/assets/images/generic_product_1.jpg'),
   require('@/assets/images/generic_product_2.jpg'),
@@ -27,6 +20,9 @@ const genericProductImages = [
 function ProductIndexScreen({
   navigation,
 }: ProductStackScreenProps<'ProductIndexScreen'>) {
+  const productsInCart: { id: string; data: Product; count: number }[] =
+    useAppSelector((state) => state.cart.products);
+
   const [isLoading, setIsLoading] = React.useState(true);
   const [products, setProducts] = React.useState<Product[]>([]);
 
@@ -38,94 +34,100 @@ function ProductIndexScreen({
   React.useEffect(() => {
     updateProducts();
   }, []);
+
   const DisplayProducts = () => {
     return (
       <View flex={1} alignItems="center" width={'100%'}>
-        {products.map((product, index) => {
-          return (
-            <Pressable
-              key={index}
-              width={'100%'}
-              onPress={() =>
-                navigation.navigate('ProductDetailModal', {
-                  product,
-                })
-              }
-            >
-              {({ isPressed }) => {
-                return (
-                  <Box
-                    p="5"
-                    rounded="8"
-                    style={{
-                      transform: [
-                        {
-                          scale: isPressed ? 0.96 : 1,
-                        },
-                      ],
-                    }}
-                    borderBottomWidth="1"
-                    _dark={{
-                      borderColor: 'gray.600',
-                    }}
-                    borderColor="coolGray.200"
-                    pl="4"
-                    pr="5"
-                    py="2"
-                  >
-                    <HStack space={3} justifyContent="space-between">
-                      <VStack maxWidth="40%">
-                        <Image
-                          source={
-                            genericProductImages[Math.floor(Math.random() * 3)]
-                          }
-                          size={'xl'}
-                          resizeMode="cover"
-                          alt={'Product picture'}
-                        />
-                      </VStack>
-                      <VStack maxWidth="60%" flex={1}>
-                        <HStack space={3} justifyContent="space-between">
-                          <Text
-                            _dark={{
-                              color: 'warmGray.50',
-                            }}
-                            color="coolGray.800"
-                            bold
-                          >
-                            {product.product_name}
-                          </Text>
-                          <Text
-                            noOfLines={3}
-                            fontSize="xs"
-                            _dark={{
-                              color: 'warmGray.50',
-                            }}
-                            color="coolGray.800"
-                            alignSelf="flex-start"
-                          >
-                            {'$'}
-                            {product.product_price}
-                          </Text>
-                        </HStack>
-                        <HStack space={3} justifyContent="space-between">
-                          <Text
-                            color="coolGray.600"
-                            _dark={{
-                              color: 'warmGray.200',
-                            }}
-                          >
-                            {product.product_description}
-                          </Text>
-                        </HStack>
-                      </VStack>
-                    </HStack>
-                  </Box>
-                );
-              }}
-            </Pressable>
-          );
-        })}
+        {products
+          .filter((x) => productsInCart.every((p) => p.id !== x._id))
+          .map((product, index) => {
+            return (
+              <Pressable
+                key={index}
+                width={'100%'}
+                onPress={() =>
+                  navigation.navigate('ProductDetailModal', {
+                    product: product,
+                    openedFromCart: false,
+                  })
+                }
+              >
+                {({ isPressed }) => {
+                  return (
+                    <Box
+                      p="5"
+                      rounded="8"
+                      style={{
+                        transform: [
+                          {
+                            scale: isPressed ? 0.96 : 1,
+                          },
+                        ],
+                      }}
+                      borderBottomWidth="1"
+                      _dark={{
+                        borderColor: 'gray.600',
+                      }}
+                      borderColor="coolGray.200"
+                      pl="4"
+                      pr="5"
+                      py="2"
+                    >
+                      <HStack space={3} justifyContent="space-between">
+                        <VStack maxWidth="40%">
+                          <Image
+                            source={
+                              genericProductImages[
+                                Math.floor(Math.random() * 3)
+                              ]
+                            }
+                            size={'xl'}
+                            resizeMode="cover"
+                            alt={'Product picture'}
+                          />
+                        </VStack>
+                        <VStack maxWidth="60%" flex={1}>
+                          <HStack space={3} justifyContent="space-between">
+                            <Text
+                              _dark={{
+                                color: 'warmGray.50',
+                              }}
+                              color="coolGray.800"
+                              bold
+                            >
+                              {product.product_name}
+                            </Text>
+                            <Text
+                              noOfLines={3}
+                              fontSize="xs"
+                              _dark={{
+                                color: 'warmGray.50',
+                              }}
+                              color="coolGray.800"
+                              alignSelf="flex-start"
+                            >
+                              {'$'}
+                              {product.product_price}
+                            </Text>
+                          </HStack>
+                          <HStack space={3} justifyContent="space-between">
+                            <Text
+                              color="coolGray.600"
+                              _dark={{
+                                color: 'warmGray.200',
+                              }}
+                            >
+                              {product.product_description}
+                            </Text>
+                          </HStack>
+                        </VStack>
+                      </HStack>
+                    </Box>
+                  );
+                }}
+              </Pressable>
+            );
+          })}
       </View>
     );
   };
@@ -151,11 +153,16 @@ export default function Products() {
         component={ProductIndexScreen}
         options={{ headerShown: false }}
       />
-      <ProductStack.Group screenOptions={{ presentation: 'modal' }}>
+      <ProductStack.Group
+        screenOptions={{ headerShown: false, presentation: 'modal' }}
+      >
         <ProductStack.Screen
           name="ProductDetailModal"
           component={ProductDetailModal}
-          options={{ headerShown: false, presentation: 'modal' }}
+        />
+        <ProductStack.Screen
+          name="ProductSetCount"
+          component={ProductSetCount}
         />
       </ProductStack.Group>
     </ProductStack.Navigator>

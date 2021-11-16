@@ -13,7 +13,12 @@ import {
   useToast,
 } from 'native-base';
 import { useAppSelector } from '@/hooks/react-redux';
-import { CartStackParamList, CartStackScreenProps, Service } from '@/types';
+import {
+  CartStackParamList,
+  CartStackScreenProps,
+  Service,
+  Product,
+} from '@/types';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import ServiceDetailModal from './ServiceDetailModal';
 import { ScrollView } from 'react-native';
@@ -22,6 +27,7 @@ import { Feather } from '@expo/vector-icons';
 import { changeCartCount, removeFromCart } from '@/redux/cart';
 import { useDispatch } from 'react-redux';
 import { FontAwesome5 } from '@expo/vector-icons';
+import ProductDetailModal from './ProductDetailModal';
 
 function CartIndexScreen({
   navigation,
@@ -31,9 +37,8 @@ function CartIndexScreen({
 
   const services: { id: string; data: Service; count: number }[] =
     useAppSelector((state) => state.cart.services);
-  // const products: { id: string; data: Product }[] = useAppSelector(
-  //   (state) => state.cart.products
-  // );
+  const products: { id: string; data: Product; count: number }[] =
+    useAppSelector((state) => state.cart.products);
 
   const [servicesOpen, setServicesOpen] = useState(false);
   const [productsOpen, setProductsOpen] = useState(false);
@@ -53,19 +58,36 @@ function CartIndexScreen({
     require('@/assets/images/generic_service_3.jpg'),
   ];
 
+  const genericProductImages = [
+    require('@/assets/images/generic_product_1.jpg'),
+    require('@/assets/images/generic_product_2.jpg'),
+    require('@/assets/images/generic_product_3.jpg'),
+  ];
+
   const calculateServiceCost = () => {
     let cost: number = 0;
     services.forEach(
       (service) =>
         (cost += service.data.service_price
-          ? Math.floor(service.data.service_price) * Math.floor(service.count)
+          ? +service.data.service_price * +Math.floor(service.count)
+          : 0)
+    );
+    return cost;
+  };
+
+  const calculateProductCost = () => {
+    let cost: number = 0;
+    products.forEach(
+      (product) =>
+        (cost += product.data.product_price
+          ? +product.data.product_price * +product.count
           : 0)
     );
     return cost;
   };
 
   const calculateTotalCost = () => {
-    return calculateServiceCost();
+    return calculateServiceCost() + calculateProductCost();
   };
 
   const removeItem = () => {
@@ -101,6 +123,13 @@ function CartIndexScreen({
     navigation.navigate('CartServiceDetailModal', {
       service: service,
       belongsToThisUser: false,
+      openedFromCart: true,
+    });
+    return;
+  };
+  const displayProductDetail = async (product: Product) => {
+    navigation.navigate('CartProductDetailModal', {
+      product: product,
       openedFromCart: true,
     });
     return;
@@ -149,7 +178,7 @@ function CartIndexScreen({
                           {service.data.service_name}
                         </Heading>
                         <Heading fontSize="lg" fontWeight="normal">
-                          {service.count} hours
+                          Duration: {service.count} hours
                         </Heading>
                         <Heading fontSize="lg" fontWeight="normal">
                           ({service.data.service_price} CAD$ per hour)
@@ -198,10 +227,93 @@ function CartIndexScreen({
 
   const DisplayProducts = () => (
     <View alignItems="center" width={'100%'}>
-      <Heading>No Products...yet...</Heading>
+      {products.map((product, index) => {
+        return (
+          <Pressable
+            key={index}
+            width={'100%'}
+            onPress={() => displayProductDetail(product.data)}
+          >
+            {({ isPressed }) => {
+              return (
+                <Box
+                  p="2"
+                  style={{
+                    transform: [
+                      {
+                        scale: isPressed ? 0.96 : 1,
+                      },
+                    ],
+                  }}
+                  borderBottomWidth="1"
+                  _dark={{
+                    borderColor: 'gray.600',
+                  }}
+                  borderColor="coolGray.200"
+                >
+                  <HStack space={3}>
+                    <Box>
+                      <Image
+                        source={
+                          genericProductImages[Math.floor(Math.random() * 3)]
+                        }
+                        size={'xl'}
+                        resizeMode="cover"
+                        alt={'Service picture'}
+                      />
+                    </Box>
+                    <VStack justifyContent="space-between">
+                      <VStack space="2xs">
+                        <Heading fontSize="xl">
+                          {product.data.product_name}
+                        </Heading>
+                        <Heading fontSize="lg" fontWeight="normal">
+                          Count: {product.count}
+                        </Heading>
+                        <Heading fontSize="lg" fontWeight="normal">
+                          ({product.data.product_price} CAD$ per item)
+                        </Heading>
+                      </VStack>
+                      <HStack space="md">
+                        <Button
+                          size="lg"
+                          key="removeProduct"
+                          onPress={() => {
+                            setAskToRemoveOpen(true);
+                            setIsRemoveService(false);
+                            setCurrentItemId(product.id);
+                          }}
+                          justifyContent="center"
+                          variant="subtle"
+                          leftIcon={
+                            <Feather name="trash-2" size={24} color="orange" />
+                          }
+                        />
+                        <Button
+                          size="lg"
+                          key="changeProductCount"
+                          onPress={() => {
+                            setAskToChangeCountOpen(true);
+                            setIsChangeServiceCount(false);
+                            setCurrentItemId(product.id);
+                            setCounterCount(product.count);
+                          }}
+                          justifyContent="center"
+                          variant="subtle"
+                        >
+                          Set Count
+                        </Button>
+                      </HStack>
+                    </VStack>
+                  </HStack>
+                </Box>
+              );
+            }}
+          </Pressable>
+        );
+      })}
     </View>
   );
-
   const TotalCostBar = () => (
     <HStack
       width="100%"
@@ -233,7 +345,8 @@ function CartIndexScreen({
         <Modal.Content padding="3">
           <Modal.Body>
             <Heading fontSize="lg">
-              Are you sure you want to remove this item?
+              Are you sure you want to remove this{' '}
+              {isRemoveService ? 'service' : 'product'}?
             </Heading>
           </Modal.Body>
           <Modal.Footer>
@@ -275,7 +388,7 @@ function CartIndexScreen({
                 Please specify{' '}
                 {isChangeServiceCount
                   ? 'the number of hours you want to benefit from this service'
-                  : 'the total amount you want to buy this product'}
+                  : 'the amount you want to buy this product'}
               </Heading>
               <HStack
                 justifyContent="center"
@@ -375,13 +488,13 @@ function CartIndexScreen({
 
           <VStack space="sm">
             <Heading fontSize="2xl">Products</Heading>
-            {services.length === 0 ? (
+            {products.length === 0 ? (
               <Heading fontSize="md">No Products in the Cart</Heading>
             ) : (
               <Box>
                 <Button
                   size="lg"
-                  key="ServiceToggle"
+                  key="ProductToggle"
                   justifyContent="flex-start"
                   onPress={() => {
                     setProductsOpen(!productsOpen);
@@ -391,9 +504,9 @@ function CartIndexScreen({
                 </Button>
                 <Collapse isOpen={productsOpen}>
                   <DisplayProducts />
-                  {/* <Heading fontSize="md">
-                  {products.length === 0 ? 'No Products in the Cart' : ''}
-                </Heading> */}
+                  <Heading fontSize="md">
+                    {products.length === 0 ? 'No Products in the Cart' : ''}
+                  </Heading>
                 </Collapse>
               </Box>
             )}
@@ -404,7 +517,9 @@ function CartIndexScreen({
               paddingBottom="1"
               alignItems="flex-end"
             >
-              <Heading fontSize="xl">Products Subtotal : [some] CAD$</Heading>
+              <Heading fontSize="xl">
+                Products Subtotal : {String(calculateProductCost())} CAD$
+              </Heading>
             </Box>
           </VStack>
         </VStack>
@@ -429,6 +544,11 @@ export default function Cart() {
       <CartStack.Screen
         name="CartServiceDetailModal"
         component={ServiceDetailModal}
+        options={{ headerShown: false, presentation: 'modal' }}
+      />
+      <CartStack.Screen
+        name="CartProductDetailModal"
+        component={ProductDetailModal}
         options={{ headerShown: false, presentation: 'modal' }}
       />
     </CartStack.Navigator>

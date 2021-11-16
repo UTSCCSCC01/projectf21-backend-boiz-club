@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Service } from '../../types';
+import { Product } from '../../types';
 
 // Add Product, when Product is defined in types.
 interface CartState {
@@ -8,15 +9,16 @@ interface CartState {
     data: Service;
     count: number;
   }[];
-  // products: {
-  //   id: string;
-  //   product: Product;
-  // }[];
+  products: {
+    id: string;
+    data: Product;
+    count: number;
+  }[];
 }
 
 const initialState: CartState = {
   services: [],
-  //products: [],
+  products: [],
 };
 
 export const cartSlice = createSlice({
@@ -28,12 +30,18 @@ export const cartSlice = createSlice({
       state,
       action: PayloadAction<{
         isService: boolean;
-        item: Service;
+        item: Service | Product;
         count: number;
       }>
     ) => {
       if (action.payload.isService) {
         state.services.push({
+          id: action.payload.item._id,
+          data: action.payload.item,
+          count: action.payload.count,
+        });
+      } else {
+        state.products.push({
           id: action.payload.item._id,
           data: action.payload.item,
           count: action.payload.count,
@@ -46,6 +54,10 @@ export const cartSlice = createSlice({
     ) => {
       if (action.payload.isService) {
         state.services = state.services.filter(
+          (item) => item.id !== action.payload.id
+        );
+      } else {
+        state.products = state.products.filter(
           (item) => item.id !== action.payload.id
         );
       }
@@ -62,6 +74,10 @@ export const cartSlice = createSlice({
         let index = state.services.findIndex((s) => s.id === action.payload.id);
 
         state.services[index].count = action.payload.newCount;
+      } else {
+        let index = state.products.findIndex((s) => s.id === action.payload.id);
+
+        state.products[index].count = action.payload.newCount;
       }
     },
   },

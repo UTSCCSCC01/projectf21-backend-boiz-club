@@ -13,55 +13,51 @@ import { useDispatch } from 'react-redux';
 import { addToCart } from '@/redux/cart';
 import { useState } from 'react';
 
-export default function ServiceProductSetCount({
+export default function ServiceSetCount({
   navigation,
   route,
-}: ServiceStackScreenProps<'ServiceProductSetCount'>) {
+}: ServiceStackScreenProps<'ServiceSetCount'>) {
   const dispatch = useDispatch();
   const toast = useToast();
-  const { item, isService } = route.params;
+  const { service } = route.params;
 
   const [sliderCount, setSliderCount] = useState<number>(1); // Hour for service, count for product.
   const minCount = 1;
   const maxCount = 10;
 
-  const addItemToCart = () => {
-    console.log('Added item to Cart');
+  const addServiceToCart = () => {
+    console.log('Added service to Cart');
     dispatch(
       addToCart({
-        isService: isService,
-        item: item,
+        isService: true,
+        item: service,
         count: Math.floor(sliderCount),
       })
     );
     navigation.pop();
     toast.show({
       status: 'success',
-      title: 'Added item to the Cart',
+      title: 'Added service to the Cart',
       placement: 'top',
     });
   };
 
   const cancel = () => {
     navigation.pop();
-    if (isService) {
-      navigation.navigate('ServiceDetailModal', {
-        service: item,
-        belongsToThisUser: false,
-        openedFromCart: false,
-      });
-    }
+
+    navigation.navigate('ServiceDetailModal', {
+      service: service,
+      belongsToThisUser: false,
+      openedFromCart: false,
+    });
   };
 
   return (
     <Box safeArea flex={1} paddingTop="5" paddingX="10">
       <VStack space="2xl">
         <Heading fontSize="md">
-          Please specify{' '}
-          {isService
-            ? 'the number of hours you want to benefit from this service'
-            : 'the total amount you want to buy this product'}{' '}
-          from the slider below.
+          Please specify the number of hours you want to benefit from this
+          service from the slider below.
         </Heading>
 
         <Box w="100%">
@@ -103,7 +99,7 @@ export default function ServiceProductSetCount({
             size="lg"
             key="AddToCart"
             justifyContent="center"
-            onPress={addItemToCart}
+            onPress={addServiceToCart}
           >
             Add to Cart
           </Button>

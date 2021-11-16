@@ -57,9 +57,8 @@ export default function ServiceDetailModal({
   const addServiceToCart = () => {
     console.log('addServiceToCart');
     navigation.pop();
-    navigation.push('ServiceProductSetCount', {
-      item: service,
-      isService: true,
+    navigation.push('ServiceSetCount', {
+      service: service,
     });
   };
 
@@ -86,7 +85,7 @@ export default function ServiceDetailModal({
         </Heading>
         <Divider />
         <Heading fontSize="lg">Location</Heading>
-        <Box width="100%" height="10%">
+        <Box width="100%" height="32%">
           <Map
             lat={
               typeof service.latitude !== 'undefined'

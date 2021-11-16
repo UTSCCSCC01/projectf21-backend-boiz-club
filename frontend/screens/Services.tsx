@@ -27,7 +27,7 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import { useAppSelector } from '@/hooks/react-redux';
 import { whoAmI } from '@/services/account';
 import { getVerifiedServices } from '@/services/services';
-import ServiceProductSetCount from './ServiceProductSetCount';
+import ServiceSetCount from './ServiceSetCount';
 
 const genericServiceImages = [
   require('@/assets/images/generic_service_1.jpg'),
@@ -276,8 +276,8 @@ export default function Services() {
           options={{ headerShown: false, presentation: 'modal' }}
         />
         <ServiceStack.Screen
-          name="ServiceProductSetCount"
-          component={ServiceProductSetCount}
+          name="ServiceSetCount"
+          component={ServiceSetCount}
           options={{ headerShown: false, presentation: 'modal' }}
         />
       </ServiceStack.Group>
