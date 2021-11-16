@@ -107,12 +107,12 @@ module.exports = {
     }
   },
 
-  sendEmailPurchaseResult: async (userID, purchaseID, email, accept) => {
+  sendEmailPurchaseResult: async (userID, serviceName, email, accept) => {
     const user = await userDal.getUser(userID);
     const firstName = user.first_name;
 
     const emailTemplate =
-    emailAcceptRejectRequest(email, firstName, purchaseID, accept);
+    emailAcceptRejectRequest(email, firstName, serviceName, accept);
     await transporter.verify();
     await transporter.sendMail(emailTemplate);
   },
