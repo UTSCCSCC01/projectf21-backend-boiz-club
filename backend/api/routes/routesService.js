@@ -68,7 +68,8 @@ const acceptPurchaseRequest = (app) => {
           const serviceName = service.service_name;
 
 
-          const userCred = await userService.getUserCredById(userId);
+          const userCred = await
+          userService.getUserCredById(purchaseRequest.user_id);
           const email = userCred.email;
 
           const accept = req.body.accept;
