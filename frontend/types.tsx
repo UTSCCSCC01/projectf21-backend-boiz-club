@@ -73,6 +73,13 @@ export type ServiceStackParamList = {
   };
 };
 
+export type ProductStackParamList = {
+  ProductIndexScreen: undefined;
+  ProductDetailModal: {
+    product: Product;
+  };
+};
+
 export type ServiceStackScreenProps<
   Screen extends keyof ServiceStackParamList
 > = CompositeScreenProps<
@@ -158,6 +165,13 @@ export type Service = {
   updatedAt?: string;
   latitude: string | undefined;
   longitude: string | undefined;
+};
+
+export type Product = {
+  _id: string;
+  product_name: string | null;
+  product_description: string | null;
+  product_price: number | null;
 };
 
 export type AccountVerificationRequest = {
