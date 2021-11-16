@@ -49,7 +49,6 @@ export default function ProductDetailModal({
       placement: 'top',
     });
   };
-
   return (
     <Box safeArea flex={1} paddingTop="5" paddingX="10">
       <VStack space={3}>
