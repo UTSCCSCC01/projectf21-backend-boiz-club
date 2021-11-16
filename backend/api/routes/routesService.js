@@ -66,9 +66,11 @@ const acceptPurchaseRequest = (app) => {
           const accept = req.body.accept;
 
           if (accept === true) {
-            sendEmailPurchaseResult(userId, purchaseId, email, 'accepted');
+            await serviceService.
+                sendEmailPurchaseResult(userId, purchaseId, email, 'accepted');
           } else if (accept === false) {
-            sendEmailPurchaseResult(userId, purchaseId, email, 'declined');
+            await serviceService.
+                sendEmailPurchaseResult(userId, purchaseId, email, 'declined');
           }
 
           serviceService.deletePurchaseRequest(purchaseId);

@@ -60,7 +60,7 @@ module.exports = {
   },
 
   getCredentialById: async (userId) => {
-    return await UserCredential.findById(userId);
+    return await UserCredential.findOne({user_id: userId});
   },
 
   /**
