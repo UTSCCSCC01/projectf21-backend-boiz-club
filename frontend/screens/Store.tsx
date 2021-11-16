@@ -25,7 +25,6 @@ function ProductIndexScreen({
 
   const [isLoading, setIsLoading] = React.useState(true);
   const [products, setProducts] = React.useState<Product[]>([]);
-
   const updateProducts = async () => {
     const newProducts = await getProducts();
     setProducts([...newProducts]);
@@ -147,6 +146,7 @@ const ProductStack = createNativeStackNavigator<ProductStackParamList>();
 createNativeStackNavigator();
 export default function Products() {
   return (
+
     <ProductStack.Navigator>
       <ProductStack.Screen
         name="ProductIndexScreen"

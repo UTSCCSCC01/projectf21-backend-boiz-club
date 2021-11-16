@@ -20,7 +20,6 @@ export default function ProductDetailModal({
       product: product,
     });
   };
-
   return (
     <Box safeArea flex={1} paddingTop="5" paddingX="10">
       <VStack space={3}>
