@@ -95,7 +95,7 @@ export default function ServiceDetailModal({
         </Heading>
         <Divider />
         <Heading fontSize="lg">Location</Heading>
-        <Box width="100%" height="1%">
+        <Box width="100%" height="32%">
           <Map
             lat={
               typeof service.latitude !== 'undefined'
