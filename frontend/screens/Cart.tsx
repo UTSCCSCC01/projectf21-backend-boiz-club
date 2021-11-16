@@ -69,7 +69,7 @@ function CartIndexScreen({
     services.forEach(
       (service) =>
         (cost += service.data.service_price
-          ? +service.data.service_price * +Math.floor(service.count)
+          ? +(+service.data.service_price * service.count).toFixed(2)
           : 0)
     );
     return cost;
@@ -80,7 +80,7 @@ function CartIndexScreen({
     products.forEach(
       (product) =>
         (cost += product.data.product_price
-          ? +product.data.product_price * +product.count
+          ? +(product.data.product_price * +product.count).toFixed(2)
           : 0)
     );
     return cost;

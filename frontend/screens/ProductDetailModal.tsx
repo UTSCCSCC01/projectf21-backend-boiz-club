@@ -1,12 +1,32 @@
 import * as React from 'react';
-import { Box, Heading, VStack, Divider, Button, Image } from 'native-base';
+import {
+  Box,
+  Heading,
+  VStack,
+  Divider,
+  Button,
+  Image,
+  HStack,
+  useToast,
+} from 'native-base';
 import { ProductStackScreenProps } from '@/types';
+import { useState } from 'react';
+import { FontAwesome5 } from '@expo/vector-icons';
+import { useDispatch } from 'react-redux';
+import { addToCart } from '@/redux/cart';
 
 export default function ProductDetailModal({
   navigation,
   route,
 }: ProductStackScreenProps<'ProductDetailModal'>) {
-  const { product, openedFromCart } = route.params;
+  const dispatch = useDispatch();
+  const toast = useToast();
+  const { product } = route.params;
+
+  const [counterCount, setCounterCount] = useState<number>(1); // Hour for service, count for product.
+  const minCount = 1;
+  const maxCount = 50;
+
   const genericProductImages = [
     require('@/assets/images/generic_product_1.jpg'),
     require('@/assets/images/generic_product_2.jpg'),
@@ -14,10 +34,19 @@ export default function ProductDetailModal({
   ];
 
   const addProductToCart = () => {
-    console.log('addProductToCart');
+    console.log('Added product to Cart');
+    dispatch(
+      addToCart({
+        isService: false,
+        item: product,
+        count: Math.floor(counterCount),
+      })
+    );
     navigation.pop();
-    navigation.push('ProductSetCount', {
-      product: product,
+    toast.show({
+      status: 'success',
+      title: 'Added product to the Cart',
+      placement: 'top',
     });
   };
 
@@ -47,16 +76,41 @@ export default function ProductDetailModal({
           {product.product_description}
         </Heading>
         <Divider />
-        {!openedFromCart ? (
+
+        <HStack
+          justifyContent="center"
+          alignItems="center"
+          width="100%"
+          space="md"
+        >
+          <Heading fontSize="xs" fontWeight="light">
+            Min: {minCount}
+          </Heading>
           <Button
-            size="lg"
-            key="MPButton"
-            justifyContent="center"
-            onPress={addProductToCart}
-          >
-            Add to Cart
-          </Button>
-        ) : null}
+            leftIcon={<FontAwesome5 name="minus" size={16} color="white" />}
+            onPress={() => {
+              setCounterCount(Math.max(counterCount - 1, minCount));
+            }}
+          />
+          <Heading> {counterCount} </Heading>
+          <Button
+            leftIcon={<FontAwesome5 name="plus" size={16} color="white" />}
+            onPress={() => {
+              setCounterCount(Math.min(counterCount + 1, maxCount));
+            }}
+          />
+          <Heading fontSize="xs" fontWeight="light">
+            Max: {maxCount}
+          </Heading>
+        </HStack>
+        <Button
+          size="lg"
+          key="MPButton"
+          justifyContent="center"
+          onPress={addProductToCart}
+        >
+          Add to Cart
+        </Button>
       </VStack>
     </Box>
   );

@@ -66,9 +66,6 @@ export type ServiceStackParamList = {
   ModifyServiceModal: {
     service: Service;
   };
-  ServiceSetCount: {
-    service: Service;
-  };
 };
 
 export type ProductStackParamList = {
@@ -76,16 +73,6 @@ export type ProductStackParamList = {
   ProductDetailModal: {
     product: Product;
     openedFromCart: boolean;
-  };
-  ProductSetCount: {
-    product: Product;
-  };
-};
-
-export type ProductStackParamList = {
-  ProductIndexScreen: undefined;
-  ProductDetailModal: {
-    product: Product;
   };
 };
 

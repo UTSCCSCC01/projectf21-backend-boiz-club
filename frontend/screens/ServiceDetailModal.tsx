@@ -1,14 +1,32 @@
 import * as React from 'react';
-import { Box, Heading, VStack, Divider, Button, HStack } from 'native-base';
+import {
+  Box,
+  Heading,
+  VStack,
+  Divider,
+  Button,
+  HStack,
+  useToast,
+} from 'native-base';
 import { ServiceStackScreenProps } from '@/types';
 import { Map } from '../components';
-import { FontAwesome } from '@expo/vector-icons';
+import { FontAwesome, FontAwesome5 } from '@expo/vector-icons';
+import { useDispatch } from 'react-redux';
+import { useState } from 'react';
+import { addToCart } from '@/redux/cart';
 
 export default function ServiceDetailModal({
   navigation,
   route,
 }: ServiceStackScreenProps<'ServiceDetailModal'>) {
   const { service, belongsToThisUser, openedFromCart } = route.params;
+
+  const dispatch = useDispatch();
+  const toast = useToast();
+
+  const [counterCount, setCounterCount] = useState<number>(1);
+  const minCount = 1;
+  const maxCount = 10;
 
   // console.log('----------');
   // //console.log(service._id);
@@ -55,10 +73,19 @@ export default function ServiceDetailModal({
   };
 
   const addServiceToCart = () => {
-    console.log('addServiceToCart');
+    console.log('Added service to Cart');
+    dispatch(
+      addToCart({
+        isService: true,
+        item: service,
+        count: Math.floor(counterCount),
+      })
+    );
     navigation.pop();
-    navigation.push('ServiceSetCount', {
-      service: service,
+    toast.show({
+      status: 'success',
+      title: 'Added service to the Cart',
+      placement: 'top',
     });
   };
 
@@ -85,7 +112,7 @@ export default function ServiceDetailModal({
         </Heading>
         <Divider />
         <Heading fontSize="lg">Location</Heading>
-        <Box width="100%" height="32%">
+        <Box width="100%" height="1%">
           <Map
             lat={
               typeof service.latitude !== 'undefined'
@@ -115,6 +142,34 @@ export default function ServiceDetailModal({
           </Heading>
         </HStack>
         <Divider />
+        {!belongsToThisUser ? (
+          <HStack
+            justifyContent="center"
+            alignItems="center"
+            width="100%"
+            space="md"
+          >
+            <Heading fontSize="xs" fontWeight="light">
+              Min: {minCount}
+            </Heading>
+            <Button
+              leftIcon={<FontAwesome5 name="minus" size={16} color="white" />}
+              onPress={() => {
+                setCounterCount(Math.max(counterCount - 1, minCount));
+              }}
+            />
+            <Heading> {counterCount} </Heading>
+            <Button
+              leftIcon={<FontAwesome5 name="plus" size={16} color="white" />}
+              onPress={() => {
+                setCounterCount(Math.min(counterCount + 1, maxCount));
+              }}
+            />
+            <Heading fontSize="xs" fontWeight="light">
+              Max: {maxCount}
+            </Heading>
+          </HStack>
+        ) : null}
         {!openedFromCart ? (
           <Button
             size="lg"

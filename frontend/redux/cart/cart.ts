@@ -35,17 +35,31 @@ export const cartSlice = createSlice({
       }>
     ) => {
       if (action.payload.isService) {
-        state.services.push({
-          id: action.payload.item._id,
-          data: action.payload.item,
-          count: action.payload.count,
-        });
+        let index = state.services.findIndex(
+          (s) => s.id === action.payload.item._id
+        );
+        if (index === -1) {
+          state.services.push({
+            id: action.payload.item._id,
+            data: action.payload.item,
+            count: action.payload.count,
+          });
+        } else {
+          state.services[index].count += action.payload.count;
+        }
       } else {
-        state.products.push({
-          id: action.payload.item._id,
-          data: action.payload.item,
-          count: action.payload.count,
-        });
+        let index = state.products.findIndex(
+          (s) => s.id === action.payload.item._id
+        );
+        if (index === -1) {
+          state.products.push({
+            id: action.payload.item._id,
+            data: action.payload.item,
+            count: action.payload.count,
+          });
+        } else {
+          state.products[index].count += action.payload.count;
+        }
       }
     },
     removeFromCart: (
