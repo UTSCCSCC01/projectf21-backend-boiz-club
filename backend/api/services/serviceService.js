@@ -108,7 +108,7 @@ module.exports = {
   },
 
   sendEmailPurchaseResult: async (userID, purchaseID, email, accept) => {
-    const user = userDal.getUser(userID);
+    const user = await userDal.getUser(userID);
     const firstName = user.first_name;
 
     const emailTemplate =

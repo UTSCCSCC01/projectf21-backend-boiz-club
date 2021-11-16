@@ -150,7 +150,7 @@ module.exports = {
   },
 
   deletePurchaseRequest: async (purchaseId) => {
-    await servicePurchaseRequest.findOneAndRemove(purchaseId);
+    await ServicePurchaseRequest.findOneAndRemove(purchaseId);
   },
 
   getPagablePurchaseRequests: async (userId, limit, skip) => {
