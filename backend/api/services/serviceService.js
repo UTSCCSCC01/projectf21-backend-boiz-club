@@ -120,4 +120,8 @@ module.exports = {
   deletePurchaseRequest: async (purchaseId) => {
     await serviceDal.deletePurchaseRequest(purchaseId);
   },
+
+  getPurchaseRequestById: async (purchaseId) => {
+    return await serviceDal.retrievePurchaseRequestById(purchaseId);
+  },
 };
