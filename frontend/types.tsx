@@ -95,11 +95,9 @@ export type CartStackParamList = {
   CartServiceDetailModal: {
     service: Service;
     belongsToThisUser: boolean;
-    openedFromCart: boolean;
   };
   CartProductDetailModal: {
     product: Product;
-    openedFromCart: boolean;
   };
 };
 

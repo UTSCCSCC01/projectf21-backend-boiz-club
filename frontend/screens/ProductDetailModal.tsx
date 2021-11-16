@@ -25,7 +25,7 @@ export default function ProductDetailModal({
 
   const [counterCount, setCounterCount] = useState<number>(1); // Hour for service, count for product.
   const minCount = 1;
-  const maxCount = 50;
+  const maxCount = 99;
 
   const genericProductImages = [
     require('@/assets/images/generic_product_1.jpg'),
@@ -76,32 +76,36 @@ export default function ProductDetailModal({
         </Heading>
         <Divider />
 
-        <HStack
-          justifyContent="center"
-          alignItems="center"
-          width="100%"
-          space="md"
-        >
-          <Heading fontSize="xs" fontWeight="light">
-            Min: {minCount}
-          </Heading>
-          <Button
-            leftIcon={<FontAwesome5 name="minus" size={16} color="white" />}
-            onPress={() => {
-              setCounterCount(Math.max(counterCount - 1, minCount));
-            }}
-          />
-          <Heading> {counterCount} </Heading>
-          <Button
-            leftIcon={<FontAwesome5 name="plus" size={16} color="white" />}
-            onPress={() => {
-              setCounterCount(Math.min(counterCount + 1, maxCount));
-            }}
-          />
-          <Heading fontSize="xs" fontWeight="light">
-            Max: {maxCount}
-          </Heading>
-        </HStack>
+        <VStack space="sm">
+          <Heading fontSize="sm">Qty</Heading>
+          <HStack
+            justifyContent="center"
+            alignItems="center"
+            width="100%"
+            space="md"
+          >
+            <Heading fontSize="xs" fontWeight="light">
+              Min: {minCount}
+            </Heading>
+            <Button
+              leftIcon={<FontAwesome5 name="minus" size={16} color="white" />}
+              onPress={() => {
+                setCounterCount(Math.max(counterCount - 1, minCount));
+              }}
+            />
+            <Heading> {counterCount}</Heading>
+            <Button
+              leftIcon={<FontAwesome5 name="plus" size={16} color="white" />}
+              onPress={() => {
+                setCounterCount(Math.min(counterCount + 1, maxCount));
+              }}
+            />
+            <Heading fontSize="xs" fontWeight="light">
+              Max: {maxCount}
+            </Heading>
+          </HStack>
+        </VStack>
+
         <Button
           size="lg"
           key="MPButton"

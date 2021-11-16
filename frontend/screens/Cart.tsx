@@ -69,10 +69,10 @@ function CartIndexScreen({
     services.forEach(
       (service) =>
         (cost += service.data.service_price
-          ? +(+service.data.service_price * service.count).toFixed(2)
+          ? +service.data.service_price * +service.count
           : 0)
     );
-    return cost;
+    return Math.round((cost + Number.EPSILON) * 100) / 100;
   };
 
   const calculateProductCost = () => {
@@ -80,14 +80,18 @@ function CartIndexScreen({
     products.forEach(
       (product) =>
         (cost += product.data.product_price
-          ? +(product.data.product_price * +product.count).toFixed(2)
+          ? product.data.product_price * +product.count
           : 0)
     );
-    return cost;
+    return Math.round((cost + Number.EPSILON) * 100) / 100;
   };
 
   const calculateTotalCost = () => {
-    return calculateServiceCost() + calculateProductCost();
+    return (
+      Math.round(
+        (calculateServiceCost() + calculateProductCost() + Number.EPSILON) * 100
+      ) / 100
+    );
   };
 
   const removeItem = () => {
@@ -123,14 +127,12 @@ function CartIndexScreen({
     navigation.navigate('CartServiceDetailModal', {
       service: service,
       belongsToThisUser: false,
-      openedFromCart: true,
     });
     return;
   };
   const displayProductDetail = async (product: Product) => {
     navigation.navigate('CartProductDetailModal', {
       product: product,
-      openedFromCart: true,
     });
     return;
   };

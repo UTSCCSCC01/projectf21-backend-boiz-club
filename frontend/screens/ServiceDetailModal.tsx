@@ -19,7 +19,7 @@ export default function ServiceDetailModal({
   navigation,
   route,
 }: ServiceStackScreenProps<'ServiceDetailModal'>) {
-  const { service, belongsToThisUser, openedFromCart } = route.params;
+  const { service, belongsToThisUser } = route.params;
 
   const dispatch = useDispatch();
   const toast = useToast();
@@ -27,23 +27,6 @@ export default function ServiceDetailModal({
   const [counterCount, setCounterCount] = useState<number>(1);
   const minCount = 1;
   const maxCount = 10;
-
-  // console.log('----------');
-  // //console.log(service._id);
-  // //console.log(service.user_id);
-  // //console.log(service.verified);
-  // console.log(service.createdAt);
-  // console.log(service.updatedAt);
-  // console.log(service.service_name);
-  // console.log(service.service_description);
-  // console.log(service.service_price);
-  // console.log(service.contact_number);
-  // console.log(service.country);
-  // console.log(service.city);
-  // console.log(service.postal_code);
-  // console.log(service.address);
-  // console.log(service.latitude);
-  // console.log(service.longitude);
 
   const extractDate = (
     creationDate: string | undefined,
@@ -143,49 +126,50 @@ export default function ServiceDetailModal({
         </HStack>
         <Divider />
         {!belongsToThisUser ? (
-          <HStack
-            justifyContent="center"
-            alignItems="center"
-            width="100%"
-            space="md"
-          >
-            <Heading fontSize="xs" fontWeight="light">
-              Min: {minCount}
-            </Heading>
-            <Button
-              leftIcon={<FontAwesome5 name="minus" size={16} color="white" />}
-              onPress={() => {
-                setCounterCount(Math.max(counterCount - 1, minCount));
-              }}
-            />
-            <Heading> {counterCount} </Heading>
-            <Button
-              leftIcon={<FontAwesome5 name="plus" size={16} color="white" />}
-              onPress={() => {
-                setCounterCount(Math.min(counterCount + 1, maxCount));
-              }}
-            />
-            <Heading fontSize="xs" fontWeight="light">
-              Max: {maxCount}
-            </Heading>
-          </HStack>
+          <VStack space="sm">
+            <Heading fontSize="sm">Duration (hour)</Heading>
+            <HStack
+              justifyContent="center"
+              alignItems="center"
+              width="100%"
+              space="md"
+            >
+              <Heading fontSize="xs" fontWeight="light">
+                Min: {minCount}
+              </Heading>
+              <Button
+                leftIcon={<FontAwesome5 name="minus" size={16} color="white" />}
+                onPress={() => {
+                  setCounterCount(Math.max(counterCount - 1, minCount));
+                }}
+              />
+              <Heading>{counterCount}</Heading>
+              <Button
+                leftIcon={<FontAwesome5 name="plus" size={16} color="white" />}
+                onPress={() => {
+                  setCounterCount(Math.min(counterCount + 1, maxCount));
+                }}
+              />
+              <Heading fontSize="xs" fontWeight="light">
+                Max: {maxCount}
+              </Heading>
+            </HStack>
+          </VStack>
         ) : null}
-        {!openedFromCart ? (
-          <Button
-            size="lg"
-            key="MPButton"
-            justifyContent="center"
-            onPress={() => {
-              if (belongsToThisUser) {
-                modifyService();
-              } else {
-                addServiceToCart();
-              }
-            }}
-          >
-            {belongsToThisUser ? 'Modify Service' : 'Add to Cart'}
-          </Button>
-        ) : null}
+        <Button
+          size="lg"
+          key="MPButton"
+          justifyContent="center"
+          onPress={() => {
+            if (belongsToThisUser) {
+              modifyService();
+            } else {
+              addServiceToCart();
+            }
+          }}
+        >
+          {belongsToThisUser ? 'Modify Service' : 'Add to Cart'}
+        </Button>
       </VStack>
     </Box>
   );
