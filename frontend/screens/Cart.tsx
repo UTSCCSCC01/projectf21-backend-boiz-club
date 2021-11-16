@@ -1,33 +1,33 @@
 import * as React from 'react';
+import { useState } from 'react';
 import {
   Box,
+  Button,
+  Collapse,
+  Heading,
   HStack,
+  Image,
+  Modal,
   Pressable,
+  useToast,
   View,
   VStack,
-  Image,
-  Heading,
-  Collapse,
-  Button,
-  Modal,
-  useToast,
 } from 'native-base';
 import { useAppSelector } from '@/hooks/react-redux';
 import {
   CartStackParamList,
   CartStackScreenProps,
-  Service,
   Product,
+  Service,
 } from '@/types';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import ServiceDetailModal from './ServiceDetailModal';
 import { ScrollView } from 'react-native';
-import { useState } from 'react';
-import { Feather } from '@expo/vector-icons';
+import { Feather, FontAwesome5 } from '@expo/vector-icons';
 import { changeCartCount, removeFromCart } from '@/redux/cart';
 import { useDispatch } from 'react-redux';
-import { FontAwesome5 } from '@expo/vector-icons';
 import ProductDetailModal from './ProductDetailModal';
+import round from 'lodash/round';
 
 function CartIndexScreen({
   navigation,
@@ -72,7 +72,7 @@ function CartIndexScreen({
           ? +service.data.service_price * +service.count
           : 0)
     );
-    return Math.round((cost + Number.EPSILON) * 100) / 100;
+    return cost;
   };
 
   const calculateProductCost = () => {
@@ -83,16 +83,11 @@ function CartIndexScreen({
           ? product.data.product_price * +product.count
           : 0)
     );
-    return Math.round((cost + Number.EPSILON) * 100) / 100;
+    return cost;
   };
 
-  const calculateTotalCost = () => {
-    return (
-      Math.round(
-        (calculateServiceCost() + calculateProductCost() + Number.EPSILON) * 100
-      ) / 100
-    );
-  };
+  const calculateTotalCost = () =>
+    calculateProductCost() + calculateServiceCost();
 
   const removeItem = () => {
     dispatch(removeFromCart({ isService: isRemoveService, id: currentItemId }));
@@ -326,7 +321,7 @@ function CartIndexScreen({
       justifyContent="space-between"
     >
       <Heading fontSize="xl">
-        Total Cost: {String(calculateTotalCost())} CAD$
+        Total Cost: {round(calculateTotalCost(), 2).toFixed(2)} CAD$
       </Heading>
       <Button size="lg" key="checkout" onPress={checkoutCart}>
         Checkout
@@ -483,7 +478,8 @@ function CartIndexScreen({
               alignItems="flex-end"
             >
               <Heading fontSize="xl">
-                Services Subtotal : {String(calculateServiceCost())} CAD$
+                Services Subtotal :{' '}
+                {round(calculateServiceCost(), 2).toFixed(2)} CAD$
               </Heading>
             </Box>
           </VStack>
@@ -520,7 +516,8 @@ function CartIndexScreen({
               alignItems="flex-end"
             >
               <Heading fontSize="xl">
-                Products Subtotal : {String(calculateProductCost())} CAD$
+                Products Subtotal :{' '}
+                {round(calculateProductCost(), 2).toFixed(2)} CAD$
               </Heading>
             </Box>
           </VStack>
