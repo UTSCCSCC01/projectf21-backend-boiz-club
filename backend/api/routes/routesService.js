@@ -67,18 +67,21 @@ const acceptPurchaseRequest = (app) => {
           const service = await serviceService.getService(serviceId);
           const serviceName = service.service_name;
 
-
-          const userCred = await userService.getUserCredById(userId);
+          const customerId = purchaseRequest.user_id;
+          const userCred = await
+          userService.getUserCredById(customerId);
           const email = userCred.email;
 
           const accept = req.body.accept;
 
           if (accept === true) {
             await serviceService.
-                sendEmailPurchaseResult(userId, serviceName, email, 'accepted');
+                sendEmailPurchaseResult(
+                    customerId, serviceName, email, 'accepted');
           } else if (accept === false) {
             await serviceService.
-                sendEmailPurchaseResult(userId, serviceName, email, 'declined');
+                sendEmailPurchaseResult(
+                    customerId, serviceName, email, 'declined');
           }
 
           await serviceService.deletePurchaseRequest(purchaseId);
