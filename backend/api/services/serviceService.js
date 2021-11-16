@@ -78,7 +78,6 @@ module.exports = {
     }
 
     return await serviceDal.updateService(body);
-
   },
 
 };

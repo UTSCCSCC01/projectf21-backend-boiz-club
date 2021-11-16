@@ -6,4 +6,5 @@ module.exports = (app) => {
   routes.userRoutes(app);
   routes.storageRoutes(app);
   routes.serviceRoutes(app);
+  routes.productRoutes(app);
 };

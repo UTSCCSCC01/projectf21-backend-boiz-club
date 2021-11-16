@@ -134,10 +134,10 @@ module.exports = {
     return await Service.findOneAndUpdate(
         {_id: serviceId},
         {service_name: name,
-        service_description: description,
-        service_price: price,
-        contact_number: phoneNumber},
-      );
+          service_description: description,
+          service_price: price,
+          contact_number: phoneNumber},
+    );
   },
 
 };
