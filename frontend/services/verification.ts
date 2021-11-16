@@ -133,6 +133,35 @@ export async function verifyUserByID(
     });
 }
 
+export async function verifyServicePurchaseByID(
+  purchaseId: string,
+  accept: boolean,
+  token: string
+) {
+  return axios
+    .post(
+      'https://pawsup-dev-oznda.ondigitalocean.app/api/v1/services/verify-purchase',
+      {
+        purchase_id: purchaseId,
+        accept: accept,
+      },
+      {
+        headers: {
+          'auth-token': token,
+        },
+        validateStatus: function (status) {
+          return status < 500; // Resolve only if the status code is less than 500
+        },
+      }
+    )
+    .catch((err) => {
+      console.log(
+        'Put operation for service verification request failed. ' + err
+      );
+      throw err;
+    });
+}
+
 export async function getIDPhotoData(key: string) {
   return axios
     .get(
