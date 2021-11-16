@@ -137,7 +137,6 @@ const ProductStack = createNativeStackNavigator<ProductStackParamList>();
 createNativeStackNavigator();
 export default function Products() {
   return (
-
     <ProductStack.Navigator>
       <ProductStack.Screen
         name="ProductIndexScreen"
