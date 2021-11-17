@@ -3,10 +3,9 @@ import { Button, HStack, Text } from 'native-base';
 import { getHealth } from '@/services/backend';
 
 import { useAppSelector } from '@/hooks/react-redux';
-import { Alert } from 'react-native';
+import { Alert, View } from 'react-native';
 import EditScreenInfo from '@/components/EditScreenInfo';
-import { View } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+
 export default function Home() {
   const count = useAppSelector((state) => state.counter.value);
 

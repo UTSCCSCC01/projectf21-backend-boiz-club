@@ -52,7 +52,6 @@ function ServicesIndexScreen({
 
     const verifiedServices = await getVerifiedServices();
     setServices([...verifiedServices]);
-
     setIsLoading(false);
   };
 
@@ -74,89 +73,91 @@ function ServicesIndexScreen({
 
   const DisplayServices = () => (
     <View flex={1} alignItems="center" width={'100%'}>
-      {services.map((service, index) => {
-        return (
-          <Pressable
-            key={index}
-            width={'100%'}
-            onPress={() =>
-              displayDetail(service, thisUser?._id === service.user_id)
-            }
-          >
-            {({ isPressed }) => {
-              return (
-                <Box
-                  p="5"
-                  rounded="8"
-                  style={{
-                    transform: [
-                      {
-                        scale: isPressed ? 0.96 : 1,
-                      },
-                    ],
-                  }}
-                  borderBottomWidth="1"
-                  _dark={{
-                    borderColor: 'gray.600',
-                  }}
-                  borderColor="coolGray.200"
-                  pl="4"
-                  pr="5"
-                  py="2"
-                >
-                  <HStack space={3} justifyContent="space-between">
-                    <VStack maxWidth="40%">
-                      <Image
-                        source={
-                          genericServiceImages[Math.floor(Math.random() * 3)]
-                        }
-                        size={'xl'}
-                        resizeMode="cover"
-                        alt={'Service picture'}
-                      />
-                    </VStack>
-                    <VStack maxWidth="60%" flex={1}>
-                      <HStack space={3} justifyContent="space-between">
-                        <Text
-                          _dark={{
-                            color: 'warmGray.50',
-                          }}
-                          color="coolGray.800"
-                          bold
-                        >
-                          {service.service_name}
-                        </Text>
-                        <Text
-                          noOfLines={3}
-                          fontSize="xs"
-                          _dark={{
-                            color: 'warmGray.50',
-                          }}
-                          color="coolGray.800"
-                          alignSelf="flex-start"
-                        >
-                          {'$'}
-                          {service.service_price}
-                        </Text>
-                      </HStack>
-                      <HStack space={3} justifyContent="space-between">
-                        <Text
-                          color="coolGray.600"
-                          _dark={{
-                            color: 'warmGray.200',
-                          }}
-                        >
-                          {service.service_description}
-                        </Text>
-                      </HStack>
-                    </VStack>
-                  </HStack>
-                </Box>
-              );
-            }}
-          </Pressable>
-        );
-      })}
+      {services
+        .filter((x) => (showAllServices ? true : x.user_id === thisUser?._id))
+        .map((service, index) => {
+          return (
+            <Pressable
+              key={index}
+              width={'100%'}
+              onPress={() =>
+                displayDetail(service, thisUser?._id === service.user_id)
+              }
+            >
+              {({ isPressed }) => {
+                return (
+                  <Box
+                    p="5"
+                    rounded="8"
+                    style={{
+                      transform: [
+                        {
+                          scale: isPressed ? 0.96 : 1,
+                        },
+                      ],
+                    }}
+                    borderBottomWidth="1"
+                    _dark={{
+                      borderColor: 'gray.600',
+                    }}
+                    borderColor="coolGray.200"
+                    pl="4"
+                    pr="5"
+                    py="2"
+                  >
+                    <HStack space={3} justifyContent="space-between">
+                      <VStack maxWidth="40%">
+                        <Image
+                          source={
+                            genericServiceImages[Math.floor(Math.random() * 3)]
+                          }
+                          size={'xl'}
+                          resizeMode="cover"
+                          alt={'Service picture'}
+                        />
+                      </VStack>
+                      <VStack maxWidth="60%" flex={1}>
+                        <HStack space={3} justifyContent="space-between">
+                          <Text
+                            _dark={{
+                              color: 'warmGray.50',
+                            }}
+                            color="coolGray.800"
+                            bold
+                          >
+                            {service.service_name}
+                          </Text>
+                          <Text
+                            noOfLines={3}
+                            fontSize="xs"
+                            _dark={{
+                              color: 'warmGray.50',
+                            }}
+                            color="coolGray.800"
+                            alignSelf="flex-start"
+                          >
+                            {'$'}
+                            {service.service_price}
+                          </Text>
+                        </HStack>
+                        <HStack space={3} justifyContent="space-between">
+                          <Text
+                            color="coolGray.600"
+                            _dark={{
+                              color: 'warmGray.200',
+                            }}
+                          >
+                            {service.service_description}
+                          </Text>
+                        </HStack>
+                      </VStack>
+                    </HStack>
+                  </Box>
+                );
+              }}
+            </Pressable>
+          );
+        })}
     </View>
   );
 

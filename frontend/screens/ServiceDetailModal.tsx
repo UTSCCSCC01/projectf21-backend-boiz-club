@@ -1,18 +1,18 @@
 import * as React from 'react';
+import { useState } from 'react';
 import {
   Box,
-  Heading,
-  VStack,
-  Divider,
   Button,
+  Divider,
+  Heading,
   HStack,
   useToast,
+  VStack,
 } from 'native-base';
 import { ServiceStackScreenProps } from '@/types';
 import { Map } from '../components';
-import { FontAwesome, FontAwesome5 } from '@expo/vector-icons';
+import { FontAwesome5 } from '@expo/vector-icons';
 import { useDispatch } from 'react-redux';
-import { useState } from 'react';
 import { addToCart } from '@/redux/cart';
 
 export default function ServiceDetailModal({
@@ -109,21 +109,6 @@ export default function ServiceDetailModal({
             }
           />
         </Box>
-        <Heading fontSize="sm" fontWeight="light">
-          {service.address}
-          {'\n'}
-          {service.city}, {service.postal_code}
-          {'\n'}
-          {service.country}
-        </Heading>
-        <Divider />
-        <Heading fontSize="lg">Contact</Heading>
-        <HStack space="md" alignItems="center">
-          <FontAwesome name="mobile-phone" size={24} color="black" />
-          <Heading fontSize="sm" fontWeight="light">
-            {service.contact_number}
-          </Heading>
-        </HStack>
         <Divider />
         {!belongsToThisUser ? (
           <VStack space="sm">

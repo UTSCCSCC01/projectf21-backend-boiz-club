@@ -99,6 +99,7 @@ export type CartStackParamList = {
   CartProductDetailModal: {
     product: Product;
   };
+  PaymentScreen: undefined;
 };
 
 export type CartStackScreenProps<Screen extends keyof CartStackParamList> =
