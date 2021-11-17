@@ -52,7 +52,6 @@ function ServicesIndexScreen({
 
     const verifiedServices = await getVerifiedServices();
     setServices([...verifiedServices]);
-
     setIsLoading(false);
   };
 
@@ -67,6 +66,7 @@ function ServicesIndexScreen({
     navigation.navigate('ServiceDetailModal', {
       service: service,
       belongsToThisUser: belongsToThisUser,
+      openedFromCart: false,
     });
     return;
   };
