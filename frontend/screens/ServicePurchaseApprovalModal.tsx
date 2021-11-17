@@ -15,7 +15,7 @@ import React, { Fragment, useEffect, useState } from 'react';
 
 const normalizedKeys = {
   service_name: 'Service',
-  service_price: 'Price',
+  service_price: 'Price ($)',
   address: 'Address',
 };
 export default function ServicePurchaseApprovalModal({
