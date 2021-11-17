@@ -1,6 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Service } from '../../types';
-import { Product } from '../../types';
+import { Product, Service } from '../../types';
 
 // Add Product, when Product is defined in types.
 interface CartState {
@@ -94,9 +93,14 @@ export const cartSlice = createSlice({
         state.products[index].count = action.payload.newCount;
       }
     },
+    resetCart: (state) => {
+      state.services = [];
+      state.products = [];
+    },
   },
 });
 
-export const { addToCart, removeFromCart, changeCartCount } = cartSlice.actions;
+export const { addToCart, removeFromCart, changeCartCount, resetCart } =
+  cartSlice.actions;
 
 export default cartSlice.reducer;

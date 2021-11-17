@@ -7,15 +7,21 @@ import {
   Row,
   Stack,
   Text,
+  useToast,
   View,
 } from 'native-base';
 import { CardField } from '@stripe/stripe-react-native';
-import { Product, Service } from '@/types';
+import { CartStackScreenProps, Product, Service } from '@/types';
 import { useAppSelector } from '@/hooks/react-redux';
 import round from 'lodash/round';
 import { getServiceFee } from '@/services/fees';
+import purchaseCart from '@/services/purchase';
+import { useDispatch } from 'react-redux';
+import { resetCart } from '@/redux/cart/cart';
 
-const PaymentScreen = () => {
+const PaymentScreen = ({
+  navigation,
+}: CartStackScreenProps<'PaymentScreen'>) => {
   return (
     <View padding={5}>
       <FormControl>
@@ -76,12 +82,15 @@ const PaymentScreen = () => {
           </Stack>
         </Stack>
       </FormControl>
-      <OrderSummary />
+      <OrderSummary navigation={navigation} />
     </View>
   );
 };
 
-const OrderSummary = () => {
+// @ts-ignore
+const OrderSummary = ({ navigation }) => {
+  const toast = useToast();
+  const dispatch = useDispatch();
   const [fee, setFee] = useState(0);
 
   const token = useAppSelector((state) => state.userCredential.userToken);
@@ -135,6 +144,26 @@ const OrderSummary = () => {
   const calculateFinalTotal = () =>
     calculateTotalCost() + calculateServiceFees() + calculateTaxes();
 
+  const handlePurchase = async () => {
+    const resp = await purchaseCart(token, services).then((x) => x);
+
+    if (resp[0].status === 200) {
+      toast.show({
+        status: 'success',
+        title: 'Purchase Successful',
+        placement: 'top',
+      });
+    } else {
+      toast.show({
+        status: 'error',
+        title: 'Purchase Failed',
+        placement: 'top',
+      });
+    }
+    dispatch(resetCart());
+    navigation.popToTop();
+  };
+
   return (
     <View paddingTop={5}>
       <Row paddingBottom={3}>
@@ -147,11 +176,11 @@ const OrderSummary = () => {
         <Text>${round(calculateTotalCost(), 2).toFixed(2)} CAD</Text>
       </Row>
       <Row>
-        <Text>Service Fees: </Text>
+        <Text>Service Fees ({fee * 100}%): </Text>
         <Text>${round(calculateServiceFees(), 2).toFixed(2)} CAD</Text>
       </Row>
       <Row>
-        <Text>Taxes: </Text>
+        <Text>Taxes (13%): </Text>
         <Text>${round(calculateTaxes(), 2).toFixed(2)} CAD</Text>
       </Row>
       <Row>
@@ -162,7 +191,11 @@ const OrderSummary = () => {
           ${round(calculateFinalTotal(), 2).toFixed(2)} CAD
         </Text>
       </Row>
-      <Button marginY={5} colorScheme="cyan">
+      <Button
+        marginY={5}
+        colorScheme="cyan"
+        onPress={async () => await handlePurchase()}
+      >
         <Text color="white">
           {' '}
           Place Order ${round(calculateFinalTotal(), 2).toFixed(2)} CAD
