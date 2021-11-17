@@ -22,76 +22,15 @@ import { resetCart } from '@/redux/cart/cart';
 const PaymentScreen = ({
   navigation,
 }: CartStackScreenProps<'PaymentScreen'>) => {
-  return (
-    <View padding={5}>
-      <FormControl>
-        <Stack space={5}>
-          <Stack>
-            <FormControl.Label>First Name</FormControl.Label>
-            <Input
-              p={3}
-              size="lg"
-              placeholder="John"
-              variant="filled"
-              style={{ backgroundColor: 'white' }}
-            />
-          </Stack>
-          <Stack>
-            <FormControl.Label>Last Name</FormControl.Label>
-            <Input
-              p={3}
-              size="lg"
-              placeholder="Doe"
-              variant="filled"
-              style={{ backgroundColor: 'white' }}
-            />
-          </Stack>
-          <Stack>
-            <FormControl.Label>Address</FormControl.Label>
-            <Input
-              p={3}
-              size="lg"
-              placeholder="778 Magic Road, Toronto"
-              variant="filled"
-              style={{ backgroundColor: 'white' }}
-            />
-          </Stack>
-          <Stack>
-            <FormControl.Label>Credit Card</FormControl.Label>
-            <CardField
-              postalCodeEnabled={false}
-              placeholder={{
-                number: '4242 4242 4242 4242',
-              }}
-              cardStyle={{
-                backgroundColor: '#FFFFFF',
-                textColor: '#000000',
-              }}
-              style={{
-                width: '100%',
-                height: 40,
-                marginVertical: 0,
-              }}
-              onCardChange={(cardDetails) => {
-                console.log('cardDetails', cardDetails);
-              }}
-              onFocus={(focusedField) => {
-                console.log('focusField', focusedField);
-              }}
-            />
-          </Stack>
-        </Stack>
-      </FormControl>
-      <OrderSummary navigation={navigation} />
-    </View>
-  );
-};
-
-// @ts-ignore
-const OrderSummary = ({ navigation }) => {
   const toast = useToast();
   const dispatch = useDispatch();
-  const [fee, setFee] = useState(0);
+
+  const [fee, setFee] = useState<number>(0);
+  const [btnClicked, setBtnClicked] = useState<boolean>(false);
+  const [fName, setFName] = useState<boolean>(false);
+  const [lName, setLName] = useState<boolean>(false);
+  const [address, setAddress] = useState<boolean>(false);
+  const [card, setCard] = useState<boolean>(false);
 
   const token = useAppSelector((state) => state.userCredential.userToken);
 
@@ -135,9 +74,7 @@ const OrderSummary = ({ navigation }) => {
   const calculateTotalCost = () =>
     calculateProductCost() + calculateServiceCost();
 
-  const calculateServiceFees = () => {
-    return calculateTotalCost() * fee;
-  };
+  const calculateServiceFees = () => calculateTotalCost() * fee;
 
   const calculateTaxes = () => calculateTotalCost() * 0.13;
 
@@ -167,44 +104,121 @@ const OrderSummary = ({ navigation }) => {
     navigation.popToTop();
   };
 
+  const onPressPurchase = async () => {
+    setBtnClicked(true);
+    if (fName && lName && address && card) {
+      await handlePurchase();
+    }
+  };
+
   return (
-    <View paddingTop={5}>
-      <Row paddingBottom={3}>
-        <Text bold fontSize="xl">
-          Order Summary
-        </Text>
-      </Row>
-      <Row>
-        <Text>Subtotal: </Text>
-        <Text>${round(calculateTotalCost(), 2).toFixed(2)} CAD</Text>
-      </Row>
-      <Row>
-        <Text>Service Fees ({fee * 100}%): </Text>
-        <Text>${round(calculateServiceFees(), 2).toFixed(2)} CAD</Text>
-      </Row>
-      <Row>
-        <Text>Taxes (13%): </Text>
-        <Text>${round(calculateTaxes(), 2).toFixed(2)} CAD</Text>
-      </Row>
-      <Row>
-        <Text bold fontSize="lg">
-          Total:{' '}
-        </Text>
-        <Text fontSize="lg" textAlign="right">
-          ${round(calculateFinalTotal(), 2).toFixed(2)} CAD
-        </Text>
-      </Row>
-      <Button
-        marginY={5}
-        colorScheme="cyan"
-        onPress={async () => await handlePurchase()}
-      >
-        <Text color="white">
-          {' '}
-          Place Order ${round(calculateFinalTotal(), 2).toFixed(2)} CAD
-        </Text>
-      </Button>
+    <View padding={5}>
+      <FormControl isRequired>
+        <Stack space={5}>
+          <Stack>
+            <FormControl.Label>First Name</FormControl.Label>
+            <Input
+              p={3}
+              size="lg"
+              placeholder="John"
+              variant="filled"
+              style={{ backgroundColor: 'white' }}
+              onChangeText={(text) => setFName(text.length > 0)}
+              isInvalid={!fName && btnClicked}
+            />
+            <FormControl.ErrorMessage isInvalid={!fName && btnClicked}>
+              This is a required field.
+            </FormControl.ErrorMessage>
+          </Stack>
+          <Stack>
+            <FormControl.Label>Last Name</FormControl.Label>
+            <Input
+              p={3}
+              size="lg"
+              placeholder="Doe"
+              variant="filled"
+              style={{ backgroundColor: 'white' }}
+              isInvalid={!lName && btnClicked}
+              onChangeText={(text) => setLName(text.length > 0)}
+            />
+            <FormControl.ErrorMessage isInvalid={!lName && btnClicked}>
+              This is a required field.
+            </FormControl.ErrorMessage>
+          </Stack>
+          <Stack>
+            <FormControl.Label>Address</FormControl.Label>
+            <Input
+              p={3}
+              size="lg"
+              placeholder="778 Magic Road, Toronto"
+              variant="filled"
+              style={{ backgroundColor: 'white' }}
+              isInvalid={!address && btnClicked}
+              onChangeText={(text) => setAddress(text.length > 0)}
+            />
+            <FormControl.ErrorMessage isInvalid={!address && btnClicked}>
+              This is a required field.
+            </FormControl.ErrorMessage>
+          </Stack>
+          <Stack>
+            <FormControl.Label>Credit Card</FormControl.Label>
+            <CardField
+              postalCodeEnabled={false}
+              placeholder={{
+                number: '4242 4242 4242 4242',
+              }}
+              cardStyle={{
+                backgroundColor: '#FFFFFF',
+                textColor: '#000000',
+              }}
+              style={{
+                width: '100%',
+                height: 40,
+                marginVertical: 0,
+              }}
+              onCardChange={(cardDetails) => setCard(cardDetails.complete)}
+            />
+            <FormControl.ErrorMessage isInvalid={!card && btnClicked}>
+              This is a required field.
+            </FormControl.ErrorMessage>
+          </Stack>
+        </Stack>
+      </FormControl>
+      <View paddingTop={5}>
+        <Row paddingBottom={3}>
+          <Text bold fontSize="xl">
+            Order Summary
+          </Text>
+        </Row>
+        <Row>
+          <Text>Subtotal: </Text>
+          <Text>${round(calculateTotalCost(), 2).toFixed(2)} CAD</Text>
+        </Row>
+        <Row>
+          <Text>Service Fees ({fee * 100}%): </Text>
+          <Text>${round(calculateServiceFees(), 2).toFixed(2)} CAD</Text>
+        </Row>
+        <Row>
+          <Text>Taxes (13%): </Text>
+          <Text>${round(calculateTaxes(), 2).toFixed(2)} CAD</Text>
+        </Row>
+        <Row>
+          <Text bold fontSize="lg">
+            Total:{' '}
+          </Text>
+          <Text fontSize="lg" textAlign="right">
+            ${round(calculateFinalTotal(), 2).toFixed(2)} CAD
+          </Text>
+        </Row>
+        <Button marginY={5} colorScheme="cyan" onPress={onPressPurchase}>
+          <Text color="white">
+            {' '}
+            Place Order ${round(calculateFinalTotal(), 2).toFixed(2)} CAD
+          </Text>
+        </Button>
+      </View>
     </View>
   );
 };
+
 export default PaymentScreen;
