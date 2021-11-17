@@ -324,7 +324,12 @@ function CartIndexScreen({
       <Heading fontSize="xl">
         Total Cost: {round(calculateTotalCost(), 2).toFixed(2)} CAD$
       </Heading>
-      <Button size="lg" key="checkout" onPress={checkoutCart}>
+      <Button
+        size="lg"
+        key="checkout"
+        onPress={checkoutCart}
+        disabled={calculateTotalCost() === 0}
+      >
         Checkout
       </Button>
     </HStack>
