@@ -28,6 +28,7 @@ import { changeCartCount, removeFromCart } from '@/redux/cart';
 import { useDispatch } from 'react-redux';
 import ProductDetailModal from './ProductDetailModal';
 import round from 'lodash/round';
+import PaymentScreen from '@/screens/PaymentScreen';
 
 function CartIndexScreen({
   navigation,
@@ -114,8 +115,8 @@ function CartIndexScreen({
   };
 
   const checkoutCart = () => {
-    // Navigation stuff goes here
-    console.log('Checkout');
+    navigation.navigate('PaymentScreen');
+    return;
   };
 
   const displayServiceDetail = async (service: Service) => {
@@ -549,6 +550,11 @@ export default function Cart() {
         name="CartProductDetailModal"
         component={ProductDetailModal}
         options={{ headerShown: false, presentation: 'modal' }}
+      />
+      <CartStack.Screen
+        name="PaymentScreen"
+        component={PaymentScreen}
+        options={{ headerShown: false }}
       />
     </CartStack.Navigator>
   );

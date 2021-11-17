@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useEffect, useState } from 'react';
 import {
   Button,
   FormControl,
@@ -9,6 +10,10 @@ import {
   View,
 } from 'native-base';
 import { CardField } from '@stripe/stripe-react-native';
+import { Product, Service } from '@/types';
+import { useAppSelector } from '@/hooks/react-redux';
+import round from 'lodash/round';
+import { getServiceFee } from '@/services/fees';
 
 const PaymentScreen = () => {
   return (
@@ -72,14 +77,64 @@ const PaymentScreen = () => {
         </Stack>
       </FormControl>
       <OrderSummary />
-      <Button marginY={5} colorScheme="cyan" style={{ alignSelf: 'stretch' }}>
-        Place Order ($134.44)
-      </Button>
     </View>
   );
 };
 
 const OrderSummary = () => {
+  const [fee, setFee] = useState(0);
+
+  const token = useAppSelector((state) => state.userCredential.userToken);
+
+  const services: { id: string; data: Service; count: number }[] =
+    useAppSelector((state) => state.cart.services);
+
+  const products: { id: string; data: Product; count: number }[] =
+    useAppSelector((state) => state.cart.products);
+
+  useEffect(() => {
+    async function serviceFeeRetrieval() {
+      const data = await getServiceFee(token).then((resp) => resp.fee);
+      setFee(data / 100);
+    }
+
+    serviceFeeRetrieval();
+  }, []);
+
+  const calculateServiceCost = () => {
+    let cost: number = 0;
+    services.forEach(
+      (service) =>
+        (cost += service.data.service_price
+          ? +service.data.service_price * +service.count
+          : 0)
+    );
+    return cost;
+  };
+
+  const calculateProductCost = () => {
+    let cost: number = 0;
+    products.forEach(
+      (product) =>
+        (cost += product.data.product_price
+          ? product.data.product_price * +product.count
+          : 0)
+    );
+    return cost;
+  };
+
+  const calculateTotalCost = () =>
+    calculateProductCost() + calculateServiceCost();
+
+  const calculateServiceFees = () => {
+    return calculateTotalCost() * fee;
+  };
+
+  const calculateTaxes = () => calculateTotalCost() * 0.13;
+
+  const calculateFinalTotal = () =>
+    calculateTotalCost() + calculateServiceFees() + calculateTaxes();
+
   return (
     <View paddingTop={5}>
       <Row paddingBottom={3}>
@@ -89,26 +144,31 @@ const OrderSummary = () => {
       </Row>
       <Row>
         <Text>Subtotal: </Text>
-        <Text>$134.44</Text>
+        <Text>${round(calculateTotalCost(), 2).toFixed(2)} CAD</Text>
       </Row>
       <Row>
         <Text>Service Fees: </Text>
-        <Text>$134.44</Text>
+        <Text>${round(calculateServiceFees(), 2).toFixed(2)} CAD</Text>
       </Row>
       <Row>
         <Text>Taxes: </Text>
-        <Text>$134.44</Text>
+        <Text>${round(calculateTaxes(), 2).toFixed(2)} CAD</Text>
       </Row>
       <Row>
         <Text bold fontSize="lg">
           Total:{' '}
         </Text>
         <Text fontSize="lg" textAlign="right">
-          $134.44
+          ${round(calculateFinalTotal(), 2).toFixed(2)} CAD
         </Text>
       </Row>
+      <Button marginY={5} colorScheme="cyan">
+        <Text color="white">
+          {' '}
+          Place Order ${round(calculateFinalTotal(), 2).toFixed(2)} CAD
+        </Text>
+      </Button>
     </View>
   );
 };
-
 export default PaymentScreen;
