@@ -296,6 +296,7 @@ export default function ModifyServiceModal({
             navigation.navigate('ServiceDetailModal', {
               service: service,
               belongsToThisUser: true,
+              openedFromCart: false,
             });
           }}
           justifyContent="center"

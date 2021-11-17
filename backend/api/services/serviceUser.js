@@ -154,6 +154,10 @@ module.exports = {
     return await userDal.getUser(userId);
   },
 
+  getUserCredById: async (userId) => {
+    return await userDal.getCredentialById(userId);
+  },
+
   /**
      * Resets an existing user's password
      * @param {String} email - email of the user requesting the password reset
