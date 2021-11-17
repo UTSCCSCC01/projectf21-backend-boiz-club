@@ -145,7 +145,10 @@ const OrderSummary = ({ navigation }) => {
     calculateTotalCost() + calculateServiceFees() + calculateTaxes();
 
   const handlePurchase = async () => {
-    const resp = await purchaseCart(token, services).then((x) => x);
+    const resp =
+      services.length > 0
+        ? await purchaseCart(token, services).then((x) => x)
+        : [{ status: 200 }];
 
     if (resp[0].status === 200) {
       toast.show({
