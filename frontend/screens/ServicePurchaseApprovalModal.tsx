@@ -76,7 +76,7 @@ export default function ServicePurchaseApprovalModal({
   };
   return (
     <View flex={1} alignItems="center" backgroundColor="white">
-      <Heading fontSize="sm" p="4" pb="3">
+      <Heading fontSize="xl" p="4" pb="3">
         Service Purchase Request
       </Heading>
       <ScrollView
