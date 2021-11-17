@@ -29,7 +29,6 @@ export type AccountStackParamList = {
   AccountIndexScreen: undefined;
   EditProfileScreen: undefined;
   NotificationScreen: undefined;
-  EditProfileScreen: undefined;
   VerificationApprovalModal: {
     user: User;
     request: AccountVerificationRequest;
@@ -55,6 +54,7 @@ export type ServiceStackParamList = {
   ServiceDetailModal: {
     service: Service;
     belongsToThisUser: boolean;
+    openedFromCart: boolean;
   };
   CreateServiceModalDescription: undefined;
   CreateServiceModalContact: {
@@ -72,6 +72,7 @@ export type ProductStackParamList = {
   ProductIndexScreen: undefined;
   ProductDetailModal: {
     product: Product;
+    openedFromCart: boolean;
   };
 };
 
@@ -88,6 +89,23 @@ export type ProductStackScreenProps<
   NativeStackScreenProps<ProductStackParamList, Screen>,
   BottomTabScreenProps<HomeTabParamList>
 >;
+
+export type CartStackParamList = {
+  CartIndexScreen: undefined;
+  CartServiceDetailModal: {
+    service: Service;
+    belongsToThisUser: boolean;
+  };
+  CartProductDetailModal: {
+    product: Product;
+  };
+};
+
+export type CartStackScreenProps<Screen extends keyof CartStackParamList> =
+  CompositeScreenProps<
+    NativeStackScreenProps<CartStackParamList, Screen>,
+    BottomTabScreenProps<HomeTabParamList>
+  >;
 
 export type HomeTabParamList = {
   Home: undefined;
@@ -130,9 +148,6 @@ export type User = {
   num_cats: number;
   createdAt: string;
   updatedAt: string;
-  profile_pic: string;
-  num_dogs: number;
-  num_cats: number;
 };
 
 export type Service = {

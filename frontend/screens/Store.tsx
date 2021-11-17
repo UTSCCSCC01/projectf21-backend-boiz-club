@@ -1,16 +1,6 @@
 import * as React from 'react';
-import {
-  View,
-  Text,
-  HStack,
-  Button,
-  Pressable,
-  Box,
-  VStack,
-  Image,
-} from 'native-base';
+import { View, Text, HStack, Pressable, Box, VStack, Image } from 'native-base';
 import { RefreshControl, ScrollView } from 'react-native';
-import { FontAwesome5 } from '@expo/vector-icons';
 import { getProducts } from '@/services/products';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import ProductDetailModal from './ProductDetailModal';
@@ -19,6 +9,7 @@ import {
   Product,
   ProductStackScreenProps,
 } from '@/types';
+
 const genericProductImages = [
   require('@/assets/images/generic_product_1.jpg'),
   require('@/assets/images/generic_product_2.jpg'),
@@ -29,7 +20,6 @@ function ProductIndexScreen({
 }: ProductStackScreenProps<'ProductIndexScreen'>) {
   const [isLoading, setIsLoading] = React.useState(true);
   const [products, setProducts] = React.useState<Product[]>([]);
-
   const updateProducts = async () => {
     const newProducts = await getProducts();
     setProducts([...newProducts]);
@@ -38,6 +28,7 @@ function ProductIndexScreen({
   React.useEffect(() => {
     updateProducts();
   }, []);
+
   const DisplayProducts = () => {
     return (
       <View flex={1} alignItems="center" width={'100%'}>
@@ -48,7 +39,8 @@ function ProductIndexScreen({
               width={'100%'}
               onPress={() =>
                 navigation.navigate('ProductDetailModal', {
-                  product,
+                  product: product,
+                  openedFromCart: false,
                 })
               }
             >
@@ -151,11 +143,12 @@ export default function Products() {
         component={ProductIndexScreen}
         options={{ headerShown: false }}
       />
-      <ProductStack.Group screenOptions={{ presentation: 'modal' }}>
+      <ProductStack.Group
+        screenOptions={{ headerShown: false, presentation: 'modal' }}
+      >
         <ProductStack.Screen
           name="ProductDetailModal"
           component={ProductDetailModal}
-          options={{ headerShown: false, presentation: 'modal' }}
         />
       </ProductStack.Group>
     </ProductStack.Navigator>
