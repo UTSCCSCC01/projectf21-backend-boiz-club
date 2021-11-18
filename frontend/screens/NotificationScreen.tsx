@@ -3,11 +3,13 @@ import {
   getAccountVerificationRequests,
   getServiceInfoByID,
   getServiceVerificationRequests,
+  getServicePurchaseRequests,
 } from '@/services/verification';
 import {
   AccountStackScreenProps,
   AccountVerificationRequest,
   ServiceVerificationRequest,
+  ServicePurchaseRequest,
   User,
 } from '@/types';
 import {
@@ -38,7 +40,10 @@ export const NotificationScreen = ({
     date: Date;
     description: string;
     payload: any;
-    type: 'AccountVerificationRequest' | 'ServiceVerificationRequest';
+    type:
+      | 'AccountVerificationRequest'
+      | 'ServiceVerificationRequest'
+      | 'ServicePurchaseRequest';
   };
 
   const [notifications, setNotifications] = useState<Notification[]>([]);
@@ -115,9 +120,42 @@ export const NotificationScreen = ({
         console.log(err);
       }
     };
+    //Parse services purchase requests
+    const parseServicePurchaseRequests = async () => {
+      try {
+        const servicePurchaseRequests = await getServicePurchaseRequests(token);
+        const newNotifications: Notification[] = [];
+        await Promise.all(
+          servicePurchaseRequests.map((request: ServicePurchaseRequest) =>
+            (async () => {
+              const service = await getServiceInfoByID(request.service_id);
+              const user = await getUserInfoByID(request.user_id);
+              const userProfilePic = await getProfilePic(user);
+              newNotifications.push({
+                username: user.username,
+                profilePic: userProfilePic,
+                date: new Date(request.createdAt),
+                description: 'Requested purchase of your service .',
+                payload: { user, request, service },
+                type: 'ServicePurchaseRequest',
+              });
+            })()
+          )
+        );
+        setNotifications((prevNotifications) => {
+          return [...prevNotifications, ...newNotifications].sort(
+            (a: Notification, b: Notification) =>
+              b.date.getTime() - a.date.getTime()
+          );
+        });
+      } catch (err) {
+        console.log(err);
+      }
+    };
     await Promise.all([
       parseAccountVerificationRequests(),
       parseServiceVerificationRequests(),
+      parseServicePurchaseRequests(),
     ]);
     setIsLoading(false);
   };
@@ -168,6 +206,13 @@ export const NotificationScreen = ({
                 case 'AccountVerificationRequest': {
                   navigation.navigate(
                     'VerificationApprovalModal',
+                    item.payload
+                  );
+                  break;
+                }
+                case 'ServicePurchaseRequest': {
+                  navigation.navigate(
+                    'ServicePurchaseApprovalModal',
                     item.payload
                   );
                   break;

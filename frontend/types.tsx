@@ -38,6 +38,11 @@ export type AccountStackParamList = {
     request: ServiceVerificationRequest;
     service: Service;
   };
+  ServicePurchaseApprovalModal: {
+    user: User;
+    request: ServiceVerificationRequest;
+    service: Service;
+  };
   VerificationUploadModal: undefined;
   FeesAdministrationModal: undefined;
 };
@@ -187,6 +192,15 @@ export type AccountVerificationRequest = {
 export type ServiceVerificationRequest = {
   _id: string;
   service_id: string;
+  createdAt: string;
+  __v?: undefined | string | number;
+};
+
+export type ServicePurchaseRequest = {
+  _id: string;
+  user_id: string;
+  service_id: string;
+  service_owner_id: string;
   createdAt: string;
   __v?: undefined | string | number;
 };
