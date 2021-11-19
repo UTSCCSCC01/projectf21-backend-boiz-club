@@ -257,7 +257,7 @@ const getServiceFees=(app) =>{
       async (req, res, next)=>{
         const {user}=req;
         try {
-          await userService.assertAdmin(user.user_id);
+          // await userService.assertAdmin(user.user_id);
           feeObj = await serviceService.getServiceFees();
           // console.log(feeObj.fee)
           res.status(200).send({
