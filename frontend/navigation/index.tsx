@@ -6,9 +6,9 @@
 import { FontAwesome, FontAwesome5 } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import {
-  NavigationContainer,
-  DefaultTheme,
   DarkTheme,
+  DefaultTheme,
+  NavigationContainer,
 } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React, { useEffect, useState } from 'react';
@@ -185,6 +185,7 @@ function BottomTabNavigator() {
           tabBarIcon: ({ color }) => (
             <TabBarIcon name="shopping-cart" color={color} />
           ),
+          unmountOnBlur: true,
         }}
       />
     </BottomTab.Navigator>

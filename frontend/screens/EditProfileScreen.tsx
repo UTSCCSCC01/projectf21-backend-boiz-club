@@ -192,7 +192,7 @@ const EditProfileScreen = ({
         marginBottom="15%"
       >
         <HStack space={1.5} width="100%" alignItems="center">
-          <Text fontSize="lg">first name</Text>
+          <Text fontSize="lg">First name</Text>
           <Input
             width="75%"
             size="lg"
@@ -206,7 +206,7 @@ const EditProfileScreen = ({
           />
         </HStack>
         <HStack space={2} width="100%" alignItems="center">
-          <Text fontSize="lg">last name</Text>
+          <Text fontSize="lg">Last name</Text>
           <Input
             width="75%"
             size="lg"
@@ -217,8 +217,8 @@ const EditProfileScreen = ({
             onChangeText={handleLastName}
           />
         </HStack>
-        <HStack space={5} width="100%" alignItems="center">
-          <Text fontSize="lg">phone #</Text>
+        <HStack space={6} width="100%" alignItems="center">
+          <Text fontSize="lg">Phone #</Text>
           <Input
             width="75%"
             size="lg"
@@ -235,8 +235,8 @@ const EditProfileScreen = ({
             returnKeyType="done"
           />
         </HStack>
-        <HStack space={3} width="100%" alignItems="center">
-          <Text fontSize="lg">address{'  '}</Text>
+        <HStack space={3.5} width="100%" alignItems="center">
+          <Text fontSize="lg">Address{'  '}</Text>
           <Input
             width="75%"
             size="lg"
@@ -247,8 +247,8 @@ const EditProfileScreen = ({
             onChangeText={handleAddress}
           />
         </HStack>
-        <HStack space={4} width="100%" alignItems="center">
-          <Text fontSize="lg"># dogs {'  '}</Text>
+        <HStack space={2} width="100%" alignItems="center">
+          <Text fontSize="lg">Number of dogs</Text>
           <Select
             style={{ fontSize: 15, backgroundColor: 'white' }}
             minWidth="20%"
@@ -264,8 +264,8 @@ const EditProfileScreen = ({
             ))}
           </Select>
         </HStack>
-        <HStack space={9} width="100%" alignItems="center">
-          <Text fontSize="lg"># cats</Text>
+        <HStack space={3.5} width="100%" alignItems="center">
+          <Text fontSize="lg">Number of cats</Text>
           <Select
             style={{ fontSize: 15, backgroundColor: 'white' }}
             minWidth="20%"

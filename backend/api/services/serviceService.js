@@ -1,5 +1,8 @@
 const serviceDal = require('../repositories/dalService');
+const userDal = require('../repositories/dalUser');
 const ApiError = require('../../error/ApiError');
+const {transporter, emailAcceptRejectRequest} =
+require('../../api/utils/emailConfig');
 const axios = require('axios');
 
 module.exports = {
@@ -78,7 +81,47 @@ module.exports = {
     }
 
     return await serviceDal.updateService(body);
-
   },
 
+  sendPurchaseRequest: async (serviceId, userId) => {
+    const service = await serviceDal.getService(serviceId);
+    if (!service) {
+      throw ApiError.notFoundError('Service not found');
+    }
+    return await serviceDal
+        .sendPurchaseRequest(serviceId, service.user_id, userId);
+  },
+
+  getPagablePurchaseRequests: async (userId, limit, skip) => {
+    return await serviceDal.getPagablePurchaseRequests(userId, limit, skip);
+  },
+
+  verifyPurchaseRequest: async (userId, purchaseId) => {
+    const purchaseRequest = await
+    serviceDal.retrievePurchaseRequestById(purchaseId);
+    const serviceOwnerId = purchaseRequest.service_owner_id;
+
+    if (userId != serviceOwnerId) {
+      throw ApiError.badRequestError(
+          `The user ${userId} does not own the service ${purchaseId}`);
+    }
+  },
+
+  sendEmailPurchaseResult: async (userID, serviceName, email, accept) => {
+    const user = await userDal.getUser(userID);
+    const firstName = user.first_name;
+
+    const emailTemplate =
+    emailAcceptRejectRequest(email, firstName, serviceName, accept);
+    await transporter.verify();
+    await transporter.sendMail(emailTemplate);
+  },
+
+  deletePurchaseRequest: async (purchaseId) => {
+    await serviceDal.deletePurchaseRequest(purchaseId);
+  },
+
+  getPurchaseRequestById: async (purchaseId) => {
+    return await serviceDal.retrievePurchaseRequestById(purchaseId);
+  },
 };
